@@ -1,0 +1,14 @@
+# GIT #
+
+- Ignores
+para ignorar archivos agregar el archivo .gitignore
+con los path a ignorar. Se debe agregar al repo.
+
+- Alias
+para agregar alias a comandos agregar
+$HOME/.gitconfig
+[alias]
+        ci = commit
+        st = status
+https://git.wiki.kernel.org/index.php/Aliases
+
