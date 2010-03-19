@@ -11,4 +11,4 @@ $HOME/.gitconfig
         ci = commit
         st = status
 https://git.wiki.kernel.org/index.php/Aliases
-
+http://www.draconianoverlord.com/2010/03/04/git-config.html
