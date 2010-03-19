@@ -31,7 +31,6 @@ int main() {
     cout << "---- " << nimg3 << " ----" << endl;
     img3.get_stats();
     img3.print();
-    cout << endl << "## prop size:" << img3.size() << " bits" << endl;
 
     while( !vimg3.is_closed() && !vimg3.is_keyQ() ){} 
     
