@@ -31,6 +31,7 @@ int main() {
     img1.display(disp);
     //    Cimgdisplay disp( img1, "Tono de grises 0-100", normalizacion );
 
-    while ( !disp.is_closed() && !disp.is_closed() ) {}
+
+    while ( !disp.is_closed() &&  !disp.is_keyQ() ) {}
     return 0;
 }
