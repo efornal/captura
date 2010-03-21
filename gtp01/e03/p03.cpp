@@ -1,5 +1,8 @@
 /**
-   Draw a 1D graph on the instance image.
+   # grafica los valores de la fila completa de la image seleccionada
+   con el mouse.
+
+   # Draw a 1D graph on the instance image.
    draw_graph( data,color,opacity,plot_type,vertex_type,ymin,ymax,expand,pattern)
 
    \param data Image containing the graph values I = f(x).
@@ -26,12 +29,7 @@
    \param pattern Drawing pattern.
    \note
    - if \c ymin==ymax==0, the y-range is computed automatically from the input samples.
-**/
 
-
-/*
-  FIXME: no hay una forma de obtener el display:
-  CImgDisplay disp = img1.get_display(); ??
 */
 #include <CImg.h>
 #include <iostream>
@@ -41,9 +39,11 @@ using namespace std;
 
 int main() {
     unsigned char rojo[] = {255,0,0};
-    //    CImg<unsigned char> img1(400,200,1,1);
+    int plot_type = 1;
+    int vertex_type = 1;
+    //CImg<unsigned char> img1(400,200,1,1);
     CImg<unsigned char> img1("../../imagenes/earth.bmp");
-    CImg<unsigned char> grafica(400,200,1,1);
+    CImg<unsigned char> grafica(img1.width(),100,1,1);
 
     CImgDisplay disp( img1, "Seleccion de fila" );
     CImgDisplay disp_grafica( grafica, "Grafica" );
@@ -51,7 +51,7 @@ int main() {
     while ( !disp.is_closed() && !disp.is_closed() ) {
         disp.wait();
         if ( disp.button() && disp.mouse_y() >= 0 ) {
-            cout << "fila(y):" << disp.mouse_y() << endl;
+            //cout << "fila(y):" << disp.mouse_y();
             grafica.fill(0); //limpia pantalla
             grafica.draw_graph( img1.get_crop( 0, 
                                             disp.mouse_y(), 
@@ -61,8 +61,8 @@ int main() {
                                             disp.mouse_y(),
                                             0,
                                             1),
-                             rojo, 1, 1, 0, 255, 0 ).
-                display( disp_grafica );
+                                rojo, 1, plot_type, vertex_type , 255, 0 );
+            grafica.display( disp_grafica );
         }
     }
 
