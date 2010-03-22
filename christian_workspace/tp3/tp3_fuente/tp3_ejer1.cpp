@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : tp2.cpp
+// Name        : tp3.cpp
 // Author      : Christian Pfarher
 // Version     :
 // Copyright   : GNU Public License
@@ -12,27 +12,29 @@ using namespace cimg_library;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	const char *filename =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.jpg";
+	int width=640;
+	int heigth = 480;
+	int depth =1;
+	int spectrum = 3;
 
-	const char *filename1 =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.tif";
 
-	const char *filename2 =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.bmp";
 
-	CImg<float> imagen(filename);
-	imagen.print();
+	CImg<float> img1 (width, heigth, depth, spectrum);
+	float rojo[] = { 255, 0, 0 };
+	float verde[] = { 0, 255, 0 };
+	float azul[] = { 0, 0, 255 };
 
-	CImg<float> imagen1(filename1);
-	imagen1.print();
+    img1.display("Imagen de intensidad");
 
-	CImg<float> imagen2(filename2);
-	imagen2.print();
 
-	CImgDisplay vent1(imagen, "imagen 0"), vent2 (imagen1, "imagen 1"), vent3 (imagen2, "imagen 2");
-	while (!vent1.is_closed()) {
-	}
+    img1.draw_text(500, 500, "Hello World", rojo);
+    img1.draw_rectangle(100,100,200,200, verde);
+    img1.draw_text(200, 400, "Hello World", verde);
+    img1.draw_text(400, 200, "Hello World", azul);
+
+    cout<<"(200, 200): "<< img1(200,200)<<endl<<" (150,156): "<<img1(150,156); //porque no tira nada??
+    img1.display("Imagen de intensidad");
+
 
 	return 0;
 }
