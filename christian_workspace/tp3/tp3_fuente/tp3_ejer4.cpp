@@ -25,16 +25,44 @@ int main(int argc, char *argv[]) {
 
 	CImgDisplay vent_principal(imagen, "clickeame"), draw_disp(vent_grafico,
 			"Intensity profile");
-
+	//bool two_click = false;
 	while (!vent_principal.is_closed() && !draw_disp.is_closed()) { // mientras no cierra nada
 		vent_principal.wait(); // espera un evento
-		if (vent_principal.button() && vent_principal.mouse_y() >= 0) { // si hay un evento de raton y Y es >=0 ..
-			const int y = vent_principal.mouse_y(); //retorna la coordenada en Y del mouse
+		if (vent_principal.button() && vent_principal.mouse_y() >= 0
+				&& vent_principal.mouse_x() >= 0 /*&& !two_click*/) { // si hay un evento de raton y Y es >=0 ..
+			const int y0 = vent_principal.mouse_y(); //retorna la coordenada en Y del mouse
+			const int x0 = vent_principal.mouse_x(); //coordenada x del mouse
+			cout << "(x0, y0) = " << x0 << ", " << y0 << endl;
+
 			//v=0 ; obtengo color rojo
 			//v=1 ; obtengo color verde
 			//v=2 ; obtengo color azul
-			vent_grafico.fill(0); //fondo negro;
 
+			int x1, y1;
+
+			while (!vent_principal.is_closed() && !draw_disp.is_closed()) {
+				vent_principal.wait();
+				if (vent_principal.button() && vent_principal.mouse_y() >= 0
+						&& vent_principal.mouse_x() >= 0 /*&& two_click*/) {
+					x1 = vent_principal.mouse_x();
+					y1 = vent_principal.mouse_y();
+					cout << "(x1, y1) = " << x1 << ", " << y1 << endl;
+				}
+				vent_grafico.fill(0); //fondo negro;
+				vent_grafico.draw_graph(imagen.get_crop(x0, y0, 0, 0, x1, y1,
+						0, 0), red, 1, 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
+				//					   |-->plot type=3=bars
+
+				vent_grafico.draw_graph(imagen.get_crop(x0, y0, 0, 1, x1, y1,
+						0, 1), green, 1, 1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
+
+
+				vent_grafico.draw_graph(imagen.get_crop(x0, y0, 0, 2, //|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
+						x1, y1, 0, 2), blue, 1, 1, 0, 255, 0).display(draw_disp);
+				//                     color,op,pt,ver,ymin,ymax
+
+			}
+			//		two_click = true;
 			//vent_grafico.draw_graph(imagen.get_crop())
 			//draw_graph( data,color,opacity,plot_type,vertex_type,ymin,ymax,expand,pattern)
 
@@ -52,17 +80,7 @@ int main(int argc, char *argv[]) {
 			 \param border_condition = Dirichlet (false) or Neumann border conditions.
 			 **/
 			//                                     width, height, dept, spec, data,
-			vent_grafico.draw_graph(imagen.get_crop(0, y, 0, 0, imagen.width()
-					- 1, y, 0, 0), red, 1, 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
-			//							   |-->plot type=3=bars
 
-			vent_grafico.draw_graph(imagen.get_crop(0, y, 0, 1, imagen.width()
-					- 1, y, 0, 1), green, 1, 1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
-
-
-			vent_grafico.draw_graph(imagen.get_crop(0, y, 0, 2, imagen.width()//|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
-					- 1, y, 0, 2), blue, 1, 1, 0, 255, 0).display(draw_disp);
-			//                     color,op,pt,ver,ymin,ymax
 			/**
 			 # Draw a 1D graph on the instance image.
 			 draw_graph( data,color,opacity,plot_type,vertex_type,ymin,ymax,expand,pattern)
