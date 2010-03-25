@@ -14,7 +14,8 @@ using namespace cimg_library;
 using namespace std;
 
 //porque no se ven como circulos!!!????
-void generar_patron(int tamanio=3, int radio=0.5, int posicion) {
+void generar_patron(int tamanio=3, int radio=0.5) {
+	//int posicion
 
 	CImg<int> imagen(tamanio, tamanio, 1, 1, 1); //inicializamos los pixeles a 0 (fondo blanco)
 	 int centro = (int) (abs(tamanio) / 2);
@@ -46,7 +47,5 @@ int main(int argc, char *argv[]) {
 	    *ptr = *ptr + 10;
 	    ++ptr;
 	}*/
-
-
 	return 0;
 }
