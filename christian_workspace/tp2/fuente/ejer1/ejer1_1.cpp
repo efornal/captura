@@ -21,10 +21,16 @@ CImg<unsigned char> function_lut(CImg<unsigned char> original, int a, int c) {
 	//retorna una imagen  modificada linealmente
 
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
+	CImg<unsigned char> rango(255,255,1,1);
+	cimg_forXY(rango, x, y){
+		rango(x,y)=y;
+	}
 	cimg_forXY( modificada, x, y )
 		{
 			modificada(x, y) = a * original(x, y) + c;
 		}
+	rango.display("rango");
+
 	return modificada;
 }
 
