@@ -6,13 +6,15 @@
 // Description : Captura 2010, Ansi-style
 //============================================================================
 
+
+//http://usuarios.multimania.es/explorar/halfto/halfto.htm
 #include <CImg.h>
 #include <iostream>
 using namespace cimg_library;
 using namespace std;
 
 //porque no se ven como circulos!!!????
-void generar_patron(int tamanio=3, int radio=0.5) {
+void generar_patron(int tamanio=3, int radio=0.5, int posicion) {
 
 	CImg<int> imagen(tamanio, tamanio, 1, 1, 1); //inicializamos los pixeles a 0 (fondo blanco)
 	 int centro = (int) (abs(tamanio) / 2);
@@ -21,7 +23,6 @@ void generar_patron(int tamanio=3, int radio=0.5) {
 	if (radio > centro ){
 		radio = centro;
 		imagen.draw_circle(centro, centro, abs(radio), color,1);
-
 		imagen.display();
 
 	} else { // dibujar con los parametros tal cual...
