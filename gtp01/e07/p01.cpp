@@ -3,7 +3,7 @@ FIXME: como se escala el nivel de gris de la imagen
 para que ocupe el rango completo de medios tonos?
 */
 #include <CImg.h>
-//#include <unistd.h>
+#include <iostream>
 
 using namespace std;
 using namespace cimg_library;
@@ -12,45 +12,56 @@ using namespace cimg_library;
    pinta el cuadro segun la tonalidad, 
    mas puntos negros o blancos segun
 */
-void pintar( CImg<unsigned char> &cuadro,int tipo ){
+void pintar( CImg<unsigned char>& cuadro,int tipo ){
+
     switch(tipo){
     case 0:
         // no toca, es negro
+        break;
     case 1:
-        cuadro(0,1) = 255;
+        cuadro(1,0) = 255; 
+        break;
     case 2:
-        cuadro(0,1) = 255;
+        cuadro(1,0) = 255;
         cuadro(2,2) = 255;
+        break;
     case 3:
         cuadro(0,0) = 255;
-        cuadro(0,1) = 255;
+        cuadro(1,0) = 255;
         cuadro(2,2) = 255;
+        break;
     case 4:
         cuadro(0,0) = 255;
-        cuadro(0,1) = 255;
+        cuadro(1,0) = 255;
         cuadro(2,2) = 255;
-        cuadro(2,0) = 255;
+        cuadro(0,2) = 255;
+        break;
     case 5:
-        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
-        cuadro(1,0) = 0;
+        cimg_forXY( cuadro, x, y) { cuadro(x,y) = 255; }
+        cuadro(0,1) = 0;
+        cuadro(1,1) = 0;
+        cuadro(2,1) = 0;
+        cuadro(2,2) = 0;
+        break;
+    case 6:
+        cimg_forXY( cuadro, x, y) { cuadro(x,y) = 255; }
+        cuadro(0,1) = 0;
         cuadro(1,1) = 0;
         cuadro(1,2) = 0;
-        cuadro(2,1) = 0;
-    case 6:
-        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
-        cuadro(1,0) = 0;
-        cuadro(1,1) = 0;
-        cuadro(2,1) = 0;
+        break;
     case 7:
-        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
-        cuadro(1,0) = 0;
+        cimg_forXY( cuadro, x, y) { cuadro(x,y) = 255; }
+        cuadro(0,1) = 0;
         cuadro(1,1) = 0;
+        break;
     case 8:
-        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
+        cimg_forXY( cuadro, x, y) { cuadro(x,y) = 255; }
         cuadro(1,1) = 0;
-    case 9: //todo blanco
-        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
-    }
+        break;
+    case 9:
+        cimg_forXY( cuadro, x, y) { cuadro(x,y) = 255; }
+        //cuadro.display();  //ES NEGRO PORQUE!!!
+    };
 }
 
 /**
@@ -58,8 +69,7 @@ void pintar( CImg<unsigned char> &cuadro,int tipo ){
 */
 CImg<unsigned char> tono( int valor ) {
     CImg<unsigned char> cuadro( 3, 3, 1, 1, 0 );
-    int parte = 255 / 10;
-
+    int parte = 256 / 10;
     if( valor < parte) {
         // si es mayor a 9*parte => no hace nada(todo negro)
         pintar( cuadro, 0 ); 
@@ -93,7 +103,6 @@ CImg<unsigned char> tono( int valor ) {
  CImg<unsigned char> to_medio_tono( CImg<unsigned char> img ){
 
     CImg<unsigned char> mediotono( 3*img.width(), 3*img.height(), 1, 1 );
-
     cimg_for_insideXY( img, x, y, 1 ) {
         CImg<unsigned char> cuadro = tono(img(x,y));
         mediotono( 3*x,   3*y )   = cuadro(0,0);
@@ -107,6 +116,14 @@ CImg<unsigned char> tono( int valor ) {
         mediotono( 3*x+2, 3*y+2 ) = cuadro(2,2);
     }
     return mediotono;
+}
+
+void test_cuadros() {
+    CImg<unsigned char> cuadro( 3, 3, 1, 1, 0 );
+    for(int i = 0;i<10;i++){
+        pintar(cuadro,i);
+          cuadro.display();
+    }
 }
 
 int main( int argc, char **argv ) {
