@@ -11,29 +11,63 @@ CImg<unsigned char> to_medio_tono( CImg<unsigned char> img, int x, int y ){
 void pintar( CImg<unsigned char> &cuadro,int tipo ){
     switch(tipo){
     case 1:
-        cuadro(1,1) = 255;
+        cuadro(0,1) = 255;
     case 2:
-        cuadro(0,0) = 255;
-        cuadro(1,1) = 255;
+        cuadro(0,1) = 255;
         cuadro(2,2) = 255;
     case 3:
         cuadro(0,0) = 255;
-        cuadro(1,1) = 255;
+        cuadro(0,1) = 255;
         cuadro(2,2) = 255;
-        cuadro(1,2) = 255;
-        cuadro(2,1) = 255;
+    case 4:
+        cuadro(0,0) = 255;
+        cuadro(0,1) = 255;
+        cuadro(2,2) = 255;
+        cuadro(2,0) = 255;
+    case 5:
+        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
+        cuadro(1,0) = 0;
+        cuadro(1,1) = 0;
+        cuadro(1,2) = 0;
+        cuadro(2,1) = 0;
+    case 6:
+        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
+        cuadro(1,0) = 0;
+        cuadro(1,1) = 0;
+        cuadro(2,1) = 0;
+    case 7:
+        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
+        cuadro(1,0) = 0;
+        cuadro(1,1) = 0;
+    case 8:
+        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
+        cuadro(1,1) = 0;
+    case 9:
+        cimg_for_insideXY( cuadro, x, y, 1) { cuadro(x,y) = 255; }
     }
 }
 
 CImg<unsigned char> tono( int valor ){
     CImg<unsigned char> cuadro( 3, 3, 1, 1, 0 );
-    int parte = 255/3;
+    int parte = 255/10;
     if( valor < parte) {
-        pintar(cuadro,1); 
+        pintar(cuadro,0); 
     } else if( valor < 2*parte) {
-        pintar(cuadro,2); 
+        pintar(cuadro,1); 
     } else if( valor < 3*parte) {
+        pintar(cuadro,2); 
+    } else if( valor < 4*parte) {
         pintar(cuadro,3); 
+    } else if( valor < 5*parte) {
+        pintar(cuadro,4); 
+    } else if( valor < 6*parte) {
+        pintar(cuadro,5); 
+    } else if( valor < 7*parte) {
+        pintar(cuadro,6); 
+    } else if( valor < 8*parte) {
+        pintar(cuadro,7); 
+    } else if( valor < 9*parte) {
+        pintar(cuadro,8); 
     }
     return cuadro;
 }
