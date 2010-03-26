@@ -19,7 +19,7 @@ bool generar_imagen(int tamanio, int radio) {
 	//retorna true si los parametros fueron aceptados
 	//retorna false si el radio y tamanio tuvieron que ajustarse para poder dibujarse
 
-	CImg<int> imagen(tamanio, tamanio, 1, 1, 0); //inicializamos logs pixeles a 0
+	CImg<int> imagen(tamanio, tamanio, 1, 1, 0); //inicializamos los pixeles a 0 (fondo negro)
 	 int centro = (int) (abs(tamanio) / 2);
 
 	 unsigned char color[]={255,0,0};
