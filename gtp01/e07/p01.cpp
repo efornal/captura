@@ -1,3 +1,7 @@
+/**
+FIXME: como se escala el nivel de gris de la imagen 
+para que ocupe el rango completo de medios tonos?
+*/
 #include <CImg.h>
 //#include <unistd.h>
 
@@ -106,15 +110,19 @@ CImg<unsigned char> tono( int valor ) {
 }
 
 int main( int argc, char **argv ) {
+    const char *filename = cimg_option( "-f", 
+                                        "../../imagenes/clown.jpg", 
+                                        "ruta archivo imagen" );
+    const int mostrar = cimg_option( "-p", 0, "mostrar imagen intermedia (!=0)"); 
 
-    CImg<unsigned char> img1( "../../imagenes/clown.jpg" );
+    CImg<unsigned char> img1( filename );
     CImgDisplay disp, disp2;
 
     img1.display(disp);
 
     CImg<unsigned char> mediotono = to_medio_tono( img1 );
 
-    mediotono.display(disp2);
+    if ( mostrar != 0 ) mediotono.display(disp2);
 
     mediotono.resize( (int)(mediotono.width()/3), (int)(mediotono.height()/3) );
     mediotono.display();
