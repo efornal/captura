@@ -13,14 +13,19 @@ CImg<unsigned char> lut( CImg<unsigned char> img1, int a=1, int c=0 ) {
     return img2; 
 }
 
-void ver_mapeo( int a, int c ){
+CImg<unsigned char> mapeo( int a, int c ){
     unsigned char rojo[] = {255,0,0};
     CImg<unsigned char> mapeo(255,1,1,1,0);
     CImg<unsigned char> mapeo_disp(255,255,1,1,0);
+
     cimg_forX( mapeo, x ){ mapeo(x) = x; }
 
     CImg<unsigned char> mapeado = lut( mapeo, a, c );
 
-    mapeo_disp.draw_graph( mapeado, rojo, 1, 1, 1 , 255, 0 ).display();
+    return mapeo_disp.draw_graph( mapeado, rojo, 1, 1, 1 , 255, 0 );
 
+}
+
+void ver_mapeo( int a, int c ){
+    mapeo( a, c ).display();
 }
