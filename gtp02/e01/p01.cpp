@@ -1,16 +1,7 @@
 #include <CImg.h>
-#include <iostream>
+#include <lut.h>
+
 using namespace cimg_library;
-using namespace std;
-
-CImg<unsigned char> lut( CImg<unsigned char> img1, int a=1, int c=0 ) {
-
-    CImg<unsigned char> img2(img1.width(),img1.height(),1,1);
-    cimg_forXY( img1, x, y ) {
-        img2(x,y) =  a*img1(x,y) + c;
-    }
-    return img2; 
-}
 
 int main() {
 
