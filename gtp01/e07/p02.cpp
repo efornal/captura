@@ -21,7 +21,7 @@ int main( int argc, char **argv ) {
     
     img1.display( disp );
 
-    CImg<unsigned char> mediotono = to_medio_tono( img1 );
+    CImg<unsigned char> mediotono = to_medio_tono_unresized( img1 );
 
     mediotono.display();
 

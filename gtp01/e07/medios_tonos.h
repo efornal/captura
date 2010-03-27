@@ -96,7 +96,7 @@ CImg<unsigned char> tono( int valor ) {
 /**
    Convierte la imagen pasada a una de medios tonos
 */
- CImg<unsigned char> to_medio_tono( CImg<unsigned char> img ){
+ CImg<unsigned char> to_medio_tono_unresized( CImg<unsigned char> img ){
 
     CImg<unsigned char> mediotono( 3*img.width(), 3*img.height(), 1, 1 );
     cimg_for_insideXY( img, x, y, 1 ) {
@@ -112,6 +112,16 @@ CImg<unsigned char> tono( int valor ) {
         mediotono( 3*x+2, 3*y+2 ) = cuadro(2,2);
     }
     return mediotono;
+}
+
+
+/**
+   Convierte la imagen pasada a una de medios tonos
+*/
+CImg<unsigned char> to_medio_tono( CImg<unsigned char> img ){
+    CImg<unsigned char> mediotono = to_medio_tono_unresized(img);
+    return mediotono.resize( (int)(mediotono.width()/3), 
+                             (int)(mediotono.height()/3) );     
 }
 
 void test_cuadros() {
