@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : tutorial.cpp
-// Author      : Christina Pfarher
+// Author      : Christian Pfarher
 // Version     :
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style

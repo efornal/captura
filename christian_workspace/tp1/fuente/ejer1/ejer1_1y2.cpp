@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : tutorial.cpp
+// Name        :
 // Author      : Christian Pfarher
 // Version     :
 // Copyright   : GNU Public License
