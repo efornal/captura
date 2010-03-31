@@ -15,7 +15,7 @@ using namespace cimg_library;
 
 int main() {
 	CImg<unsigned char> imagen;
-	imagen.load("../../imagenes/imagenD.tif"); //cargo la imagen
+	imagen.load("../../imagenes/earth.bmp"); //cargo la imagen
 	CImgDisplay disp1, disp2, disp3;
 	int a = 1;
 	imagen.display(disp2);
