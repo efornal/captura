@@ -1,5 +1,5 @@
 //============================================================================
-// Name        : tp2.cpp
+// Name        :
 // Author      : Christian Pfarher
 // Version     :
 // Copyright   : GNU Public License
