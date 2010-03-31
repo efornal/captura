@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	im1.load("../../imagenes/huang1.jpg");
 	im2.load("../../imagenes/huang2.jpg");
 	im3.load("../../imagenes/huang3.jpg");
-	CImgList<float> listaimg(im1, im2, im3);
+	CImgList<unsigned char> listaimg(im1, im2, im3);
 	listaimg.display();
 	pasar_a_medios_tonos(im1, 0).save("./huang1_not_resized.jpg").display("haung 1 sin reducir");
 	pasar_a_medios_tonos(im2, 0).save("./huang2_not_resized.jpg").display("haung 2 sin reducir");
