@@ -10,11 +10,12 @@ int clipp(int valor) {
 	else
 		return valor;
 }
-CImg<unsigned char> lut(CImg<unsigned char> original, int a, int c, bool clip) {
+
+CImg<unsigned char> lut(CImg<unsigned char> original, int a=1, int c=0, bool clip=1) {
 	/*	entrada_r imagen de entrada sobre la cual se aplica la transformacion
 	 a: factor de ganancia
 	 c: offset
-	 clip=1 implica que corte en 0 y 255 los valores
+	 clip=1 implica que corte en 0 y 255 los valores - por defecto clipea
 	 retorna una imagen  modificada linealmente*/
 
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
@@ -32,7 +33,7 @@ CImg<unsigned char> lut(CImg<unsigned char> original, int a, int c, bool clip) {
 }
 
 CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
-	/*retorna en una imagen la grafica de la fucion de mapeo segun los
+	/* retorna en una imagen la grafica de la fucion de mapeo segun los
 	 * coeficientes a y c que se pasan por paremtro
 	 * */
 	unsigned char blanco[] = { 255, 255, 255 };
@@ -84,5 +85,51 @@ CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 		mapeo(x) = x; //escala de 0 a 255
 	}
 	CImg<unsigned char> mapeado = lut_tramos(mapeo, x0,x1, 1, factor);
+	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
+}
+
+/*FUNCIONES EJERCICIO2
+ * */
+CImg<unsigned char> logaritmo(CImg<unsigned char> original) {
+	// transforacion logaritmica
+	// por defecto clipea
+	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
+
+	cimg_forXY(original,x,y){
+		modificada(x,y)=clipp(log(1+original(x,y)));
+	}
+
+	return modificada;
+}
+
+CImg<unsigned char> potencia(CImg<unsigned char> original, int exp) {
+	// transforacion de potencia
+	// por defecto clipea
+	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
+	cimg_forXY(original,x,y){
+		modificada(x,y)=clipp(pow(original(x,y), exp));
+	}
+	return modificada;
+}
+
+CImg<unsigned char> obtener_grafica_mapeo_logaritmo() {
+	unsigned char blanco[] = { 255, 255, 255 };
+	CImg<unsigned char> mapeo(255, 1, 1, 1, 0);
+	CImg<unsigned char> mapeo_disp(255, 255, 1, 1, 0);
+	cimg_forX( mapeo, x ) {
+		mapeo(x) = x; //escala de 0 a 255
+	}
+	CImg<unsigned char> mapeado = (logaritmo(mapeo));
+	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
+}
+
+CImg<unsigned char> obtener_grafica_mapeo_potencia(int exponente) {
+	unsigned char blanco[] = { 255, 255, 255 };
+	CImg<unsigned char> mapeo(255, 1, 1, 1, 0);
+	CImg<unsigned char> mapeo_disp(255, 255, 1, 1, 0);
+	cimg_forX( mapeo, x ) {
+		mapeo(x) = x; //escala de 0 a 255
+	}
+	CImg<unsigned char> mapeado = potencia(mapeo, exponente);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
