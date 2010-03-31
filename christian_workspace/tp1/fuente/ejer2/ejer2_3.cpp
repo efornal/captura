@@ -14,13 +14,13 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	CImg<float>
 			im0(
-					"/home/christian/Documentos/universidad/2010/captura/imagenes/camino.tif");
+					"../../imagenes/camino.tif");
 	CImg<float>
 			im1(
-					"/home/christian/Documentos/universidad/2010/captura/imagenes/rostro0.png"); //cargo imagen
+					"../../imagenes/rostro0.png"); //cargo imagen
 	CImg<float>
 			im2(
-					"/home/christian/Documentos/universidad/2010/captura/imagenes/tablero.png"); //cargo imagen
+					"../../imagenes/tablero.png"); //cargo imagen
 
 	CImgList<float> listaimg(im0, im1, im2);
 

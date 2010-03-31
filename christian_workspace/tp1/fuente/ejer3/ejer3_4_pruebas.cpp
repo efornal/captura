@@ -12,66 +12,100 @@
 using namespace cimg_library;
 using namespace std;
 
-struct punto {
-   int x;
-   int y;
-} p1;
+struct punto { //define un punto
+	int x; //coordenada x
+	int y; //coordenada y
+} p1, p2;
 
+void construir_eje(int x1,int x2,int *ejex, int tam) {
+	int j=x1;
+	cout<<sizeof(ejex);
+	for (int i = 0; i <= tam; i++) {
+		ejex[i]= j++;
+	}
+}
+
+void imprimir_vector(int *vector, int tam){
+	for (int i = 0; i < tam; i++) {
+		std::cout<<vector[i]<<", ";
+	}
+}
 
 int main(int argc, char *argv[]) {
 	CImg<unsigned char>
 			imagen(
-					"../../imagenes/imagenes/parrot.tif");
+					"../../imagenes/parrot.tif");
 	CImg<unsigned char> vent_grafico(500, 400, 1, 3, 0);
+	int vecc[11];
+	construir_eje(5, 15, vecc, 10);
+	//cout<<"truefalse: "<<ando<<endl;
+	imprimir_vector(vecc, 10);
 
 	imagen.blur(2.5);
 
 	const unsigned char red[] = { 255, 0, 0 }, green[] = { 0, 255, 0 },
 			blue[] = { 0, 0, 255 };
 
-	CImgDisplay vent_principal(imagen, "clickeame"), draw_disp(vent_grafico,
+	CImgDisplay vent_principal(imagen, "clien en el primer punto"), draw_disp(vent_grafico,
 			"Intensity profile");
-	const int fila=0;
-	p1.x=fila;
+	//bool two_click = false;
 	while (!vent_principal.is_closed() && !draw_disp.is_closed()) { // mientras no cierra nada
 		vent_principal.wait(); // espera un evento
-		if (vent_principal.button() && vent_principal.mouse_y() >= 0) { // si hay un evento de raton y Y es >=0 ..
+		if (vent_principal.button() && vent_principal.mouse_y() >= 0
+				&& vent_principal.mouse_x() >= 0 /*&& !two_click*/) { // si hay un evento de raton y Y es >=0 ..
+			p1.x = vent_principal.mouse_x(); //coordenada x del mouse
 			p1.y = vent_principal.mouse_y(); //retorna la coordenada en Y del mouse
+			cout << "Primer punto (x0, y0) = " << p1.x << ", " << p1.y << endl;
+
 			//v=0 ; obtengo color rojo
 			//v=1 ; obtengo color verde
 			//v=2 ; obtengo color azul
-			vent_grafico.fill(0); //fondo negro;
 
+			while (!vent_principal.is_closed() && !draw_disp.is_closed()) {
+				vent_principal.wait();
+				if (vent_principal.button() && vent_principal.mouse_y() >= 0
+						&& vent_principal.mouse_x() >= 0 /*&& two_click*/) {
+					p2.x = vent_principal.mouse_x();
+					p2.y = vent_principal.mouse_y();
+					cout << "(x1, y1) = " << p2.x << ", " << p2.y << endl;
+				}
+
+				vent_grafico.fill(0); //fondo negro;
+				imagen.get_crop(p1.x, p1.y, 0, 0, p2.x, p2.y, 0, 0).display();
+
+				vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 0, p2.x,
+						p2.y, 0, 0), red, 1, 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
+				//					   |-->plot type=3=bars
+
+				vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 1, p2.x,
+						p2.y, 0, 1), green, 1, 1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
+
+
+				vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 2, //|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
+						p2.x, p2.y, 0, 2), blue, 1, 1, 0, 255, 0).display(
+						draw_disp);
+				//                     color,op,pt,ver,ymin,ymax
+
+			}
+			//		two_click = true;
 			//vent_grafico.draw_graph(imagen.get_crop())
 			//draw_graph( data,color,opacity,plot_type,vertex_type,ymin,ymax,expand,pattern)
 
 
-			/**     imagen.crop(x0,y0,z0,c0,x1,y1,z1,c1);
-			 imagen.get_crop(x0,y0,z0,c0,x1,y1,z1,c1);
-			 \param x0 = X-coordinate of the upper-left crop rectangle corner.
+			/**     imagen.crop(p1.x,y0,z0,c0,x1,y1,z1,c1);
+			 imagen.get_crop(p1.x,y0,z0,c0,x1,y1,z1,c1);
+			 \param p1.x = X-coordinate of the upper-left crop rectangle corner.
 			 \param y0 = Y-coordinate of the upper-left crop rectangle corner.
 			 \param z0 = Z-coordinate of the upper-left crop rectangle corner.
 			 \param c0 = C-coordinate of the upper-left crop rectangle corner.
-			 \param x1 = X-coordinate of the lower-right crop rectangle corner.
-			 \param y1 = Y-coordinate of the lower-right crop rectangle corner.
+			 \param p2.x = X-coordinate of the lower-right crop rectangle corner.
+			 \param p2.y = Y-coordinate of the lower-right crop rectangle corner.
 			 \param z1 = Z-coordinate of the lower-right crop rectangle corner.
 			 \param c1 = C-coordinate of the lower-right crop rectangle corner.
 			 \param border_condition = Dirichlet (false) or Neumann border conditions.
 			 **/
-
-			imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width() - 1, p1.y, 0, 0).display(); //fila 0, y donde clieckee - toda la fila (imagen.width()-1)
 			//                                     width, height, dept, spec, data,
-			vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width()
-					- 1, p1.y, 0, 0), red, 1, 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
-			//							   |-->plot type=3=bars
 
-			vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 1, imagen.width()
-					- 1, p1.y, 0, 1), green, 1, 1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
-
-
-			vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 2, imagen.width()//|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
-					- 1, p1.y, 0, 2), blue, 1, 1, 0, 255, 0).display(draw_disp);
-			//                     color,op,pt,ver,ymin,ymax
 			/**
 			 # Draw a 1D graph on the instance image.
 			 draw_graph( data,color,opacity,plot_type,vertex_type,ymin,ymax,expand,pattern)

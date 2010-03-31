@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 	cimg_usage("Ejemplo basico.");
 	const char
 			* filename =
-					cimg_option("-i","/home/christian/Documentos/universidad/2010/captura/imagenes/huang2_corrida.tif","Image file\n");
+					cimg_option("-i","../../imagenes/huang2_corrida.tif","Image file\n");
 	//Imagen color, 8 bits de profundidad por componente.
 	CImg<unsigned char> img(640, 400, 1, 3);
 	img.fill(0); //Asigna 0 a todos los p ́xeles

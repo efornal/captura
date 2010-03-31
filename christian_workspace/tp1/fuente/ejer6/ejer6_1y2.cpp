@@ -17,7 +17,7 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	CImg<int>
 			imagen(
-					"/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg");
+					"../../imagenes/huang.jpg");
 	// cuantizar la imagen desde 8 hasta 1 nivel/es
 
 	CImgList<int> lista(imagen.get_quantize(1), imagen.get_quantize(2),

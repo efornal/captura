@@ -13,7 +13,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	const char *filename =
-			"/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg";
+			"../../imagenes/huang.jpg";
 	/*CImg<char>
 	 original_image(
 	 "/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg"); //cargo imagen*/

@@ -24,7 +24,7 @@ CImg<unsigned char> negativo(CImg<unsigned char> & img1)
 }
 
 int main() {
-	CImg <unsigned char> img1("/home/christian/Documentos/universidad/2010/captura/imagenes/letras1.tif");
+	CImg <unsigned char> img1("../../imagenes/letras1.tif");
     CImg<unsigned char> img2 = negativo(img1);
     CImgDisplay vent1(img1, "imagen original", 1), vent2(img2, "negativo de imagen original", 1);
 

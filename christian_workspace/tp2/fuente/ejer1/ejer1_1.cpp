@@ -37,7 +37,7 @@ CImg<unsigned char> function_lut(CImg<unsigned char> original, int a, int c) {
 int main() {
 	CImg<unsigned char> imagen;
 	imagen.load(
-			"/home/christian/Documentos/universidad/2010/captura/imagenes/imagenD.tif"); //cargo la imagen
+			"../../imagenes/imagenD.tif"); //cargo la imagen
 
 	CImg<unsigned char> imagen_modificada = function_lut(imagen, 5, 1);
 

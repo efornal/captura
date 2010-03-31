@@ -18,7 +18,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	CImg<unsigned char> imagen;
-	imagen.load("/home/christian/Documentos/universidad/2010/captura/imagenes/rmn.jpg");
+	imagen.load("../../imagenes/rmn.jpg");
 
 	imagen.display("imagen original");
 	cout<<"Original Size: "<< imagen.width()<< " x "<<imagen.height()<<endl;

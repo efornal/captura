@@ -13,13 +13,14 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	const char *filename =
-			"/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg";
+			"../../imagenes/huang.jpg";
 	/*CImg<char>
 	 original_image(
 	 "/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg"); //cargo imagen*/
 
 
 	CImg<float> imagen(filename);
+
 	imagen.channel(0); //canal 0
 	imagen.crop(37, 14, 52, 32, false);
 

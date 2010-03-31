@@ -11,7 +11,7 @@
 using namespace cimg_library;
 using namespace std;
 int main(int argc, char *argv[]) {
-	CImg <float> original_image("/home/christian/Documentos/universidad/2010/captura/imagenes/chairs.jpg"); //cargo imagen
+	CImg <float> original_image("../../imagenes/chairs.jpg"); //cargo imagen
 	original_image.display("canal por defecto");
 
 
