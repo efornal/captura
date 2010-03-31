@@ -2,6 +2,7 @@
 using namespace std;
 using namespace cimg_library;
 
+
 CImg<unsigned char> lut(CImg<unsigned char> original, int a, int c, bool clip) {
 	/*	entrada_r imagen de entrada sobre la cual se aplica la transformacion
 	 a: factor de ganancia
@@ -39,5 +40,12 @@ CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
 	}
 	CImg<unsigned char> mapeado = lut(mapeo, a, c, false);
 	return mapeo_disp.draw_graph(mapeado, rojo, 1, 1, 1, 255, 0);
+}
+
+CImg<unsigned char> negativo(CImg<unsigned char> & img1)
+{	//retorna el negativo de una imagen
+	int a=-1;
+	unsigned char c=img1.max(); // maximo de la imagen
+    return lut(img1, a, c, 1);
 }
 
