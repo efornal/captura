@@ -19,7 +19,6 @@ int main() {
 	CImgDisplay disp1, disp2, disp3;
 	int a = 1;
 	imagen.display(disp2);
-
 	disp2.set_title("Imagen original");
 
 	for (int c = 0; c <= 255; c++) {
