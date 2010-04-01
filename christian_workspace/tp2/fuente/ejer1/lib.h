@@ -102,6 +102,7 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor=1) {
 	return modificada;
 }
 
+//FIXME: va con clip o sin clip?? va el 1 o no va el 1 en la funcion???
 CImg<unsigned char> potencia(CImg<unsigned char> original, int exp) {
 	// transforacion de potencia
 	// por defecto clipea
