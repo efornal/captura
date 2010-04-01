@@ -5,7 +5,7 @@
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style
 //============================================================================
-
+//FIXME:
 /*mayor nivel de cuantizacion mayor detalle.. fijarse en el punto .. el color...
  * igual que en muestreo :)
  * */

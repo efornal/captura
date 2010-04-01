@@ -1,3 +1,9 @@
+//FIXME:
+/*
+ * cuando despliego las imagenes por separado parecen iguales aunque los valores no lo son
+ * para que la matriz tome colores entre 0 y 255 si tiene valores de 100 x 100 hay que normalizarla?! conclusion
+ * cuando los pongo en la lista se nota la diferencia .. que onda?
+ * */
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
@@ -5,11 +11,7 @@
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style
 //============================================================================
-/*
- * cuando despliego las imagenes por separado parecen iguales aunque los valores no lo son
- * para que la matriz tome colores entre 0 y 255 si tiene valores de 100 x 100 hay que normalizarla?! conclusion
- * cuando los pongo en la lista se nota la diferencia .. que onda?
- * */
+
 #include <CImg.h>
 #include <iostream>
 using namespace cimg_library;

@@ -1,3 +1,4 @@
+//FIXME: esto funciona pero no se si esta bien sacado _todo el tema de la ecuacion de la recta y demas
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher

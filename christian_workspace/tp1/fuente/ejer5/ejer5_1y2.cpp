@@ -5,7 +5,7 @@
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style
 //============================================================================
-
+//FIXME:
 /*
  *submuestrear es lo mismo que reducir el tamanio por el factor
  *resize(50,50) es lo mismo que hacer lo otro??
