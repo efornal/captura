@@ -11,7 +11,8 @@ int clipp(int valor) {
 		return valor;
 }
 
-CImg<unsigned char> lut(CImg<unsigned char> original, int a=1, int c=0, bool clip=1) {
+CImg<unsigned char> lut(CImg<unsigned char> original, int a = 1, int c = 0,
+		bool clip = 1) {
 	/*	entrada_r imagen de entrada sobre la cual se aplica la transformacion
 	 a: factor de ganancia
 	 c: offset
@@ -45,7 +46,6 @@ CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
 	CImg<unsigned char> mapeado = lut(mapeo, a, c, false);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
-
 
 CImg<unsigned char> negativo(CImg<unsigned char> & img1) { //retorna el negativo de una imagen
 	int a = -1;
@@ -84,20 +84,21 @@ CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 	cimg_forX( mapeo, x ) {
 		mapeo(x) = x; //escala de 0 a 255
 	}
-	CImg<unsigned char> mapeado = lut_tramos(mapeo, x0,x1, 1, factor);
+	CImg<unsigned char> mapeado = lut_tramos(mapeo, x0, x1, 1, factor);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
 
 /*FUNCIONES EJERCICIO2
  * */
-CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor=1) {
+CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 	// transforacion logaritmica
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 
-	cimg_forXY(original,x,y){
-		modificada(x,y)=log(1+original(x,y))*factor;
-	}
+	cimg_forXY(original,x,y)
+		{
+			modificada(x, y) = log(1 + original(x, y)) * factor;
+		}
 
 	return modificada;
 }
@@ -107,9 +108,10 @@ CImg<unsigned char> potencia(CImg<unsigned char> original, int exp) {
 	// transforacion de potencia
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
-	cimg_forXY(original,x,y){
-		modificada(x,y)=clipp(pow(original(x,y), exp)+1);
-	}
+	cimg_forXY(original,x,y)
+		{
+			modificada(x, y) = clipp(pow(original(x, y), exp) + 1);
+		}
 	return modificada;
 }
 
@@ -134,3 +136,17 @@ CImg<unsigned char> obtener_grafica_mapeo_potencia(int exponente) {
 	CImg<unsigned char> mapeado = potencia(mapeo, exponente);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
+
+//ejercicio 3:
+//1a-
+//
+template<class T>
+T suma(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la suma de 2 terminos...
+	// para llamarla por ejemplo : suma<double>(l,m);
+	/*return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	if (normalizado)
+		return (primer_termino + segundo_termino) / 2;
+	return (primer_termino + segundo_termino);
+}
+
