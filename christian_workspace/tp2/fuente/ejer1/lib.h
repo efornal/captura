@@ -103,14 +103,14 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 	return modificada;
 }
 
-//FIXME: va con clip o sin clip?? va el 1 o no va el 1 en la funcion???
-CImg<unsigned char> potencia(CImg<unsigned char> original, int exp) {
+//FIXME: va con clip o sin clip??
+CImg<unsigned char> potencia(CImg<unsigned char> original, int exp, int factor=1) {
 	// transforacion de potencia
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 	cimg_forXY(original,x,y)
 		{
-			modificada(x, y) = clipp(pow(original(x, y), exp) + 1);
+			modificada(x, y) = clipp(pow(original(x, y), exp))*factor;
 		}
 	return modificada;
 }
@@ -149,4 +149,12 @@ T suma(T primer_termino, T segundo_termino, bool normalizado = true) {
 		return (primer_termino + segundo_termino) / 2;
 	return (primer_termino + segundo_termino);
 }
-
+template<class T>
+T resta(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
+	// para llamarla por ejemplo :resta<double>(l,m);
+	/*return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	if (normalizado)
+		return (primer_termino - segundo_termino) / 2;
+	return (primer_termino - segundo_termino);
+}
