@@ -24,7 +24,7 @@ int main() {
 		cout<<"Factor: "<<i<<endl;
 		obtener_grafica_mapeo_logaritmo(i).display(disp2);
 		while (!disp1.button()){}
-			sleep(1);
+			sleep(0.8);
 	}
 	return 0;
 }
