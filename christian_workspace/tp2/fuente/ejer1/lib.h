@@ -139,9 +139,9 @@ CImg<unsigned char> obtener_grafica_mapeo_potencia(int exponente) {
 
 //ejercicio 3:
 //1a-
-//
+//suma
 template<class T>
-T suma(T primer_termino, T segundo_termino, bool normalizado = true) {
+T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
 	// para llamarla por ejemplo : suma<double>(l,m);
 	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
@@ -149,8 +149,10 @@ T suma(T primer_termino, T segundo_termino, bool normalizado = true) {
 		return (primer_termino + segundo_termino) / 2;
 	return (primer_termino + segundo_termino);
 }
+
+//resta
 template<class T>
-T resta(T primer_termino, T segundo_termino, bool normalizado = true) {
+T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
 	// para llamarla por ejemplo :resta<double>(l,m);
 	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
@@ -163,4 +165,25 @@ T resta(T primer_termino, T segundo_termino, bool normalizado = true) {
 		return imagen;
 	}
 		return (primer_termino - segundo_termino);
+}
+
+//multiplicacion
+template<class T>
+T multiplicar(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la multiplicacion de 2 terminos...
+	// para llamarla por ejemplo : suma<double>(l,m);
+	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	if (normalizado)
+		return (primer_termino + segundo_termino) / 2;
+	return (primer_termino + segundo_termino);
+}
+//divicion
+template<class T>
+T dividir(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la divicion de 2 terminos...
+	// para llamarla por ejemplo : suma<double>(l,m);
+	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	if (normalizado)
+		return (primer_termino + segundo_termino) / 2;
+	return (primer_termino + segundo_termino);
 }
