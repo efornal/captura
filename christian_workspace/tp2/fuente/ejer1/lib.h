@@ -104,13 +104,14 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 }
 
 //FIXME: va con clip o sin clip??
-CImg<unsigned char> potencia(CImg<unsigned char> original, int exp, int factor=1) {
+CImg<unsigned char> potencia(CImg<unsigned char> original, int exp, int factor =
+		1) {
 	// transforacion de potencia
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 	cimg_forXY(original,x,y)
 		{
-			modificada(x, y) = clipp(pow(original(x, y), exp))*factor;
+			modificada(x, y) = clipp(pow(original(x, y), exp)) * factor;
 		}
 	return modificada;
 }
@@ -143,7 +144,7 @@ CImg<unsigned char> obtener_grafica_mapeo_potencia(int exponente) {
 template<class T>
 T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
-	// para llamarla por ejemplo : suma<double>(l,m);
+	// para llamarla por ejemplo : sumar<double>(l,m);
 	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
 	if (normalizado)
 		return (primer_termino + segundo_termino) / 2;
@@ -154,36 +155,41 @@ T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 template<class T>
 T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
-	// para llamarla por ejemplo :resta<double>(l,m);
-	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	// para llamarla por ejemplo :restar<double>(l,m);
 
-	T imagen =  primer_termino-segundo_termino;
-	if (normalizado){
-		cimg_forXY(imagen, x,y){ //FIXME: esto de sumar por 255 y divir por 2 es lo que pide: ?? porque? no entiendo
-			imagen(x,y)=(imagen(x,y)+255)/2;
-		}
+	T imagen = primer_termino - segundo_termino;
+	if (normalizado) {
+		cimg_forXY(imagen, x,y)
+			{ //FIXME: esto de sumar por 255 y divir por 2 es lo que pide: ?? porque? no entiendo
+				imagen(x, y) = (imagen(x, y) + 255) / 2;
+			}
 		return imagen;
 	}
-		return (primer_termino - segundo_termino);
+	return (primer_termino - segundo_termino);
+}
+
+template<class T>
+T clipp_im (T imagen) {
+	cimg_forXY(imagen, x, y){
+		if ((imagen(x,y))>255) imagen(x,y)=255;
+		if (imagen(x,y)<0) imagen(x,y)=0;
+	}
+	return imagen;
 }
 
 //multiplicacion
 template<class T>
 T multiplicar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la multiplicacion de 2 terminos...
-	// para llamarla por ejemplo : suma<double>(l,m);
-	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
 	if (normalizado)
-		return (primer_termino + segundo_termino) / 2;
-	return (primer_termino + segundo_termino);
+		return clipp_im(primer_termino * segundo_termino);
+	return (primer_termino * segundo_termino);
 }
 //divicion
 template<class T>
 T dividir(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la divicion de 2 terminos...
-	// para llamarla por ejemplo : suma<double>(l,m);
-	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
 	if (normalizado)
-		return (primer_termino + segundo_termino) / 2;
-	return (primer_termino + segundo_termino);
+		return clipp_im(primer_termino / segundo_termino);
+	return (primer_termino / segundo_termino);
 }
