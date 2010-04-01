@@ -35,6 +35,15 @@ int main() {
 	CImgDisplay disp4(lista4,
 			"suma de imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 
+	CImgList<unsigned char> lista5(im1, im1,
+			sumar<CImg<unsigned char> > (im1, im1, false));
+	CImgDisplay disp5(lista5,
+			"suma de imagenes con si misma - NO normalizado"); //muestreo en un display
+
+	CImgList<unsigned char> lista6(im1, im1, sumar<CImg<
+			unsigned char> > (im1, im1, false));
+	CImgDisplay disp6(lista6,
+			"suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 	while (!disp1.is_closed()) {
 	}
 	return 0;

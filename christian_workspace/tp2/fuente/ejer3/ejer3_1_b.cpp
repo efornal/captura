@@ -33,6 +33,14 @@ int main() {
 	CImgDisplay disp4(lista4,
 			"resta de imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 
+	CImgList<unsigned char> lista5(im1, im1, restar<CImg<unsigned char> > (im1,
+			im1, false));
+	CImgDisplay disp5(lista5, "resta de imagen con si misma - NO normalizado"); //muestreo en un display
+
+	CImgList<unsigned char> lista6(im1, im1, restar<CImg<unsigned char> > (im1,
+			im1, false));
+	CImgDisplay disp6(lista6, "resta de imagen con si misma - NO normalizado"); //muestreo en un display
+
 	while (!disp1.is_closed()) {
 	}
 	return 0;
