@@ -5,6 +5,7 @@
 using namespace std;
 using namespace cimg_library;
 //FIXME: que onda con el normalizado?? el tema de los colores que quedan segun lo que sale aca..
+//porque al sumar la imagen con su negativo no se obtiene la imagen negra como dice en el tp2 ejercicio 4?
 int main() {
 	/*	cout << "suma de int: " << suma<int> (3, 4) << endl;
 	 cout << "suma de float: " << suma<float> (3.3, 4.5) << endl;*/
