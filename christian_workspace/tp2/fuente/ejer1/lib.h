@@ -90,13 +90,13 @@ CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 
 /*FUNCIONES EJERCICIO2
  * */
-CImg<unsigned char> logaritmo(CImg<unsigned char> original) {
+CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor=1) {
 	// transforacion logaritmica
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 
 	cimg_forXY(original,x,y){
-		modificada(x,y)=clipp(log(1+original(x,y)));
+		modificada(x,y)=log(1+original(x,y))*factor;
 	}
 
 	return modificada;
@@ -107,19 +107,19 @@ CImg<unsigned char> potencia(CImg<unsigned char> original, int exp) {
 	// por defecto clipea
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 	cimg_forXY(original,x,y){
-		modificada(x,y)=clipp(pow(original(x,y), exp));
+		modificada(x,y)=clipp(pow(original(x,y), exp)+1);
 	}
 	return modificada;
 }
 
-CImg<unsigned char> obtener_grafica_mapeo_logaritmo() {
+CImg<unsigned char> obtener_grafica_mapeo_logaritmo(int factor) {
 	unsigned char blanco[] = { 255, 255, 255 };
 	CImg<unsigned char> mapeo(255, 1, 1, 1, 0);
 	CImg<unsigned char> mapeo_disp(255, 255, 1, 1, 0);
 	cimg_forX( mapeo, x ) {
 		mapeo(x) = x; //escala de 0 a 255
 	}
-	CImg<unsigned char> mapeado = (logaritmo(mapeo));
+	CImg<unsigned char> mapeado = (logaritmo(mapeo, factor));
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
 
