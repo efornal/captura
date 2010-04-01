@@ -144,7 +144,7 @@ template<class T>
 T suma(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
 	// para llamarla por ejemplo : suma<double>(l,m);
-	/*return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
 	if (normalizado)
 		return (primer_termino + segundo_termino) / 2;
 	return (primer_termino + segundo_termino);
@@ -153,8 +153,14 @@ template<class T>
 T resta(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
 	// para llamarla por ejemplo :resta<double>(l,m);
-	/*return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
-	if (normalizado)
-		return (primer_termino - segundo_termino) / 2;
-	return (primer_termino - segundo_termino);
+	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
+
+	T imagen =  primer_termino-segundo_termino;
+	if (normalizado){
+		cimg_forXY(imagen, x,y){ //FIXME: esto de sumar por 255 y divir por 2 es lo que pide: ?? porque? no entiendo
+			imagen(x,y)=(imagen(x,y)+255)/2;
+		}
+		return imagen;
+	}
+		return (primer_termino - segundo_termino);
 }
