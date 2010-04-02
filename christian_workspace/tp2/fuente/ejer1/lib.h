@@ -213,11 +213,11 @@ CImg <unsigned char> dividir (CImg <unsigned char> im1, CImg <unsigned char> im2
 /*CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		true) {
 	funcion que aplica un filtro emboss a una imagen
-	 * im1: imagen a la que se le aplica el filtro
+	  im1: imagen a la que se le aplica el filtro
 	 * c:	parametro de desplazamiento salida=entrada+c
 	 * normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
 	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO
-	 *
+
 	CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
 	if (normalizado)
 		return clipp_im(sumar < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)));
