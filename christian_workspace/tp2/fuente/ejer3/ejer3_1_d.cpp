@@ -5,7 +5,7 @@
 using namespace std;
 using namespace cimg_library;
 //FIXME: al dividir la imagen por sigo misma daria 1 -> por tanto es casi negro?
-// que pasa con lo que sale el pequenio borde? es por los decimales?
+// que pasa con lo que sale el pequenio borde? -> porque como esta dividiendo por cero sale eso?
 int main() {
 
 	CImg<unsigned char> im1, im2;
@@ -13,36 +13,30 @@ int main() {
 	im1.load("../../imagenes/letras1.tif"); //cargo imagenes
 	im2.load("../../imagenes/img.tif");
 
-	CImgList<unsigned char> lista1(im1, im2,
-			dividir<CImg<unsigned char> > (im1, im2, true)); //armo una lista con las imagenes y la multiplicar de las mismas
+	CImgList<unsigned char> lista1(im1, im2, dividir(im1, im2, true)); //armo una lista con las imagenes y la multiplicar de las mismas
 	CImgDisplay disp1(lista1,
 			"divide las imagenes letras1 y letras 2 - normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista2(im1, im2,
-			dividir<CImg<unsigned char> > (im1, im2, false));
+	CImgList<unsigned char> lista2(im1, im2, dividir(im1, im2, false));
 	CImgDisplay disp2(lista2,
 			"divide las imagenes letras1 y letras 2 - NO normalizado"); //muestreo en un display
 
 
-	CImgList<unsigned char> lista3(im1, negativo(im1), dividir<CImg<
-			unsigned char> > (im1, negativo(im1), true));
+	CImgList<unsigned char> lista3(im1, negativo(im1), dividir(im1, negativo(
+			im1), true));
 	CImgDisplay disp3(lista3,
 			"divide las imagenes letras 1 y su negativo - normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista4(im1, negativo(im1), dividir<CImg<
-			unsigned char> > (im1, negativo(im1), false));
+	CImgList<unsigned char> lista4(im1, negativo(im1), dividir(im1, negativo(
+			im1), false));
 	CImgDisplay disp4(lista4,
 			"divide las imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista5(im1, im1,
-			dividir<CImg<unsigned char> > (im1, im1, false));
-	CImgDisplay disp5(lista5,
-			"divide la imagen por si misma - NO normalizado"); //muestreo en un display
+	CImgList<unsigned char> lista5(im1, im1, dividir(im1, im1, false));
+	CImgDisplay disp5(lista5, "divide la imagen por si misma - NO normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista6(im1, im1, dividir<CImg<
-			unsigned char> > (im1, im1, false));
-	CImgDisplay disp6(lista6,
-			"divide la imagen por si misma - NO normalizado"); //muestreo en un display
+	CImgList<unsigned char> lista6(im1, im1, dividir(im1, im1, false));
+	CImgDisplay disp6(lista6, "divide la imagen por si misma - NO normalizado"); //muestreo en un display
 
 	while (!disp1.is_closed()) {
 	}
