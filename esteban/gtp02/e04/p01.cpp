@@ -18,10 +18,9 @@ int main( int argc, char **argv ) {
     CImgDisplay disp, disp2, disp3;
 
     img1.display(disp);
-    repujado(img1,dx,dy,1).display(disp2); // relieve interno?
-    repujado(img1,dx,dy,0).display(disp3); // relieve externo?
+    repujado(img1,dx,dy,1).display("relieve interno"); // relieve interno?
+    repujado(img1,dx,dy,0).display("relieve externo"); // relieve externo?
 
-    while ( (!disp.is_closed() &&  !disp.is_keyQ()) 
-            && (!disp2.is_closed() &&  !disp2.is_keyQ())) {}
+    while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {}
     return 0;
 }
