@@ -51,6 +51,7 @@ CImg<unsigned char> enmascarar( CImg<unsigned char> img1, CImg<unsigned char> im
 CImg<unsigned char> division( CImg<unsigned char> img1, CImg<unsigned char> img2 ) { 
     CImg<unsigned char> result( img1.width(), img1.height(), 1, 1);
     cimg_forXY(img1,x,y){
+    //TODO: si la operacion es cero explota - corregir - preguntar
         result(x,y) = img1(x,y) / img2(x,y);
     }
     return result;
