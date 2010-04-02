@@ -146,7 +146,7 @@ T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
 	// para llamarla por ejemplo : sumar<double>(l,m);
 	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
-	if (normalizado)
+	if (normalizado) //FIXME: normalizado o clipp?
 		return (primer_termino + segundo_termino) / 2;
 	return (primer_termino + segundo_termino);
 }
@@ -158,7 +158,7 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	// para llamarla por ejemplo :restar<double>(l,m);
 
 	T imagen = primer_termino - segundo_termino;
-	if (normalizado) {
+	if (normalizado) { // FIXME: seria normalizado o clip?
 		cimg_forXY(imagen, x,y)
 			{ //FIXME: esto de sumar por 255 y divir por 2 es lo que pide: ?? porque? no entiendo
 				imagen(x, y) = (imagen(x, y) + 255) / 2;
@@ -167,7 +167,6 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	}
 	return (primer_termino - segundo_termino);
 }
-
 
 template<class T>
 T clipp_im(T imagen) {
@@ -183,43 +182,72 @@ T clipp_im(T imagen) {
 
 //multiplicacion
 //*****************************************************************************
-CImg <unsigned char> multiplicar (CImg <unsigned char> im1, CImg <unsigned char> im2, bool normalizar){
-	CImg < unsigned char > imagen(im1.width(), im1.height(), 1, 1);
+CImg<unsigned char> multiplicar(CImg<unsigned char> im1,
+		CImg<unsigned char> im2, bool normalizar) {
+	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
 
-	cimg_forXY(im1, x, y){
-		imagen(x,y)=im1(x,y)*im2(x,y);
-	}
-	if (normalizar)	return imagen.normalize();
-	else return imagen;
+	cimg_forXY(im1, x, y)
+		{
+			imagen(x, y) = im1(x, y) * im2(x, y);
+		}
+	if (normalizar)
+		return imagen.normalize();
+	else
+		return imagen;
 }
 //*****************************************************************************
 //divicion
-CImg <unsigned char> dividir (CImg <unsigned char> im1, CImg <unsigned char> im2, bool normalizar){
-	CImg < unsigned char > imagen(im1.width(), im1.height(), 1, 1);
+CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
+		bool normalizar) {
+	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
 
-	cimg_forXY(im1, x, y){
-		if (floor(im2(x,y))==0) imagen(x,y)=im1(x,y); //TODO: dejo el original --->que hago que es lo correcto?
-		else imagen(x,y)=im1(x,y)/im2(x,y);
-	}
-	if (normalizar)	return imagen.normalize();
-	else return imagen;
+	cimg_forXY(im1, x, y)
+		{
+			if (floor(im2(x, y)) == 0)
+				imagen(x, y) = im1(x, y); //TODO: dejo el original --->que hago que es lo correcto?
+			else
+				imagen(x, y) = im1(x, y) / im2(x, y);
+		}
+	if (normalizar)
+		return imagen.normalize();
+	else
+		return imagen;
 }
 
 //FIXME: varias cosas en todas las fucniones.. confusion entre normalizado y clipp. en vez de hacer el clipp no puedo hacer el
 //normalizado y listo?
 
 
-//TODO:
-/*CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
-		true) {
-	funcion que aplica un filtro emboss a una imagen
-	  im1: imagen a la que se le aplica el filtro
+//WBB: no se que esta mal!
+CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
+		true) { //TODO: hacer para que corte la imagen segun el desplazamiento
+	/*	funcion que aplica un filtro emboss a una imagen
+	 im1: imagen a la que se le aplica el filtro
 	 * c:	parametro de desplazamiento salida=entrada+c
 	 * normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
-	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO
+	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO*/
 
-	CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
+	//CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
 	if (normalizado)
-		return clipp_im(sumar < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)));
-//	return suma < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)); // sin el cipp_im
-}*/
+		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize(); //FIXME: ver lo del false normalizado=clipp hay que sacarlo sino
+	return sumar(im1, lut(negativo(im1), 1, c, false));
+}
+
+/*
+CImg<unsigned char> repujado(CImg<unsigned char> img, int dx = 1, int dy = 0,
+		int relieve = 1) {
+	CImg<unsigned char> corrida(img.width(), img.height(), 1, 1, 0);
+	cimg_forXY( img, x, y )
+		{
+			if (((x + dx) < img.width() && (x + dx) >= 0) && ((y + dy)
+					< img.height() && (y + dy) >= 0)) {
+				corrida(x + dx, y + dy) = img(x, y);
+			}
+		}
+	if (relieve == 1) {
+		return lut(corrida, -1, 0, false) + img;
+	} else {
+		return lut(img, -1, 0, false) + corrida;
+	}
+}
+*/
