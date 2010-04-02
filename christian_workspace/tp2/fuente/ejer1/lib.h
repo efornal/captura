@@ -167,29 +167,54 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	}
 	return (primer_termino - segundo_termino);
 }
-
 template<class T>
-T clipp_im (T imagen) {
-	cimg_forXY(imagen, x, y){
-		if ((imagen(x,y))>255) imagen(x,y)=255;
-		if (imagen(x,y)<0) imagen(x,y)=0;
-	}
+T clipp_im(T imagen) {
+	cimg_forXY(imagen, x, y)
+		{
+			if ((imagen(x, y)) > 255)
+				imagen(x, y) = 255;
+			if (imagen(x, y) < 0)
+				imagen(x, y) = 0;
+		}
 	return imagen;
 }
 
 //multiplicacion
-template<class T>
-T multiplicar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la multiplicacion de 2 terminos...
-	if (normalizado)
-		return clipp_im(primer_termino * segundo_termino);
-	return (primer_termino * segundo_termino);
+//*****************************************************************************
+CImg <unsigned char> multiplicar (CImg <unsigned char> im1, CImg <unsigned char> im2, bool normalizar){
+	CImg < unsigned char > imagen(im1.width(), im1.height(), 1, 1);
+
+	cimg_forXY(im1, x, y){
+		imagen(x,y)=im1(x,y)*im2(x,y);
+	}
+	if (normalizar)	return imagen.normalize();
+	else return imagen;
 }
+//*****************************************************************************
 //divicion
-template<class T>
-T dividir(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la divicion de 2 terminos...
-	if (normalizado)
-		return clipp_im(primer_termino / segundo_termino);
-	return (primer_termino / segundo_termino);
+CImg <unsigned char> dividir (CImg <unsigned char> im1, CImg <unsigned char> im2, bool normalizar){
+	CImg < unsigned char > imagen(im1.width(), im1.height(), 1, 1);
+
+	cimg_forXY(im1, x, y){
+		imagen(x,y)=im1(x,y)/im2(x,y);
+	}
+	if (normalizar)	return imagen.normalize();
+	else return imagen;
 }
+
+//FIXME: varias cosas en todas las fucniones.. confusion entre normalizado y clipp. en vez de hacer el clipp no puedo hacer el
+//normalizado y listo?
+/*
+CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
+		true) {
+	funcion que aplica un filtro emboss a una imagen
+	 * im1: imagen a la que se le aplica el filtro
+	 * c:	parametro de desplazamiento salida=entrada+c
+	 * normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
+	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO
+	 *
+	CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
+	if (normalizado)
+		return clipp_im(sumar < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)));
+	return suma < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)); // sin el cipp_im
+}*/
