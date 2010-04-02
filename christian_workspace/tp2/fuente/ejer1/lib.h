@@ -167,6 +167,8 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	}
 	return (primer_termino - segundo_termino);
 }
+
+
 template<class T>
 T clipp_im(T imagen) {
 	cimg_forXY(imagen, x, y)
@@ -196,7 +198,8 @@ CImg <unsigned char> dividir (CImg <unsigned char> im1, CImg <unsigned char> im2
 	CImg < unsigned char > imagen(im1.width(), im1.height(), 1, 1);
 
 	cimg_forXY(im1, x, y){
-		imagen(x,y)=im1(x,y)/im2(x,y);
+		if (floor(im2(x,y))==0) imagen(x,y)=im1(x,y); //TODO: dejo el original --->que hago que es lo correcto?
+		else imagen(x,y)=im1(x,y)/im2(x,y);
 	}
 	if (normalizar)	return imagen.normalize();
 	else return imagen;
@@ -204,8 +207,10 @@ CImg <unsigned char> dividir (CImg <unsigned char> im1, CImg <unsigned char> im2
 
 //FIXME: varias cosas en todas las fucniones.. confusion entre normalizado y clipp. en vez de hacer el clipp no puedo hacer el
 //normalizado y listo?
-/*
-CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
+
+
+//TODO:
+/*CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		true) {
 	funcion que aplica un filtro emboss a una imagen
 	 * im1: imagen a la que se le aplica el filtro
@@ -216,5 +221,5 @@ CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 	CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
 	if (normalizado)
 		return clipp_im(sumar < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)));
-	return suma < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)); // sin el cipp_im
+//	return suma < CImg <unsigned char > >(im1, lut(negativo(im1), 1, c)); // sin el cipp_im
 }*/
