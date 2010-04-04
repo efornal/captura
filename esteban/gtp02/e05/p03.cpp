@@ -16,11 +16,13 @@ int main( int argc, char **argv ) {
 
     img1.display(disp);
     img2.display(disp2);
+    (img1<img2).display("aaa");
+    /*
     menor(img1,img2).display("img1 Menor img2");
     menor(img2,img1).display("img2 Menor img1");
     mayor(img1,img2).display("img1 Menor img2");
     mayor(img2,img1).display("img2 Menor img1");
-
+    */
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {}
     return 0;
 }
