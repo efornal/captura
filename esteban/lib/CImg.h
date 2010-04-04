@@ -1,4 +1,8 @@
 #include </usr/include/CImg.h>
+#ifdef namestace_captura 
+#else
+#define namestace_captura = cimg_captura;
+
 
 namespace cimg_captura{
 
@@ -22,7 +26,7 @@ namespace cimg_captura{
             : CImg<T>(img) {}
 
     CImg( const CImg<T>& img )
-        : CImg<T>(img) {}
+        : cimg_library::CImg<T>(img) {}
     
         template<typename t> CImg( const CImg<t>& img,
                                    const bool pixel_copy )
@@ -42,8 +46,22 @@ namespace cimg_captura{
     // ================== nueva funcionalidad ================== \\
 
 
-
-
+    //! Operator<().
+        CImg<T> operator<(const CImg<unsigned char> img) const {
+            cimg_forXY( this, x, y ) {
+                this(x,y) = ( this(x,y) < img(x,y) ) ? 0 : 255;
+            }
+        }
+     /*
+     CImg<unsigned char> menor ( CImg<unsigned char>img2 ) {
+         cimg_forXY( *this, x, y ) {
+             this(x,y) = ( this(x,y) < img2(x,y) ) ? 0 : 255;
+         }
+         return *this;
+     }
+     */
 
     }; //fin struct
 };
+
+#endif
