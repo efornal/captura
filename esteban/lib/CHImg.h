@@ -41,5 +41,15 @@ template<typename T> struct CHImg : public CImg<T> {
 
     // *** nueva funcionalidad ***
 
+    // ------------- Operadores relacionales  ------------- \\
+
+    CImg<unsigned char> menor (  CImg<unsigned char>img2 ) {
+        CImg<unsigned char>img1 = *this;
+        cimg_forXY( img1, x, y ) {
+            img1(x,y) = ( img1(x,y) < img2(x,y) ) ? 0 : 255;
+        }
+        return img1;
+    }
+
 };
 
