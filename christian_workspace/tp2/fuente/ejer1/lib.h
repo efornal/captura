@@ -232,22 +232,3 @@ CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize(); //FIXME: ver lo del false normalizado=clipp hay que sacarlo sino
 	return sumar(im1, lut(negativo(im1), 1, c, false));
 }
-
-/*
-CImg<unsigned char> repujado(CImg<unsigned char> img, int dx = 1, int dy = 0,
-		int relieve = 1) {
-	CImg<unsigned char> corrida(img.width(), img.height(), 1, 1, 0);
-	cimg_forXY( img, x, y )
-		{
-			if (((x + dx) < img.width() && (x + dx) >= 0) && ((y + dy)
-					< img.height() && (y + dy) >= 0)) {
-				corrida(x + dx, y + dy) = img(x, y);
-			}
-		}
-	if (relieve == 1) {
-		return lut(corrida, -1, 0, false) + img;
-	} else {
-		return lut(img, -1, 0, false) + corrida;
-	}
-}
-*/
