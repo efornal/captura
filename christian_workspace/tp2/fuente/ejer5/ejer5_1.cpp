@@ -19,34 +19,38 @@ int main(int argc, char **argv) {
 
 	//convertir imagenes a binarias:
 	CImg<unsigned char> im1_bin, im2_bin, im3_bin;
-	im1_bin = get_binary(im1);
-	im2_bin = get_binary(im2);
-	im3_bin = get_binary(gris);
+	im1_bin = get_binary(im1).normalize(0, 255);
+	im2_bin = get_binary(im2).normalize(0, 255);
+	im3_bin = get_binary(gris).normalize(0, 255);
+	//FIXME: si no normalizo, no me muestra nada!! porque?
 
-	//TODO: no funciona!!! porque con im2_bin.display() anda pero como esta aca abajo no!!!! :(
-	CImgDisplay disp1, disp2, disp3, disp4, disp5, disp6;
-	im2_bin.display(disp1);
-	//disp1.set_title("Imagen 1");
-	im1_bin.display(disp2);
-//	disp2.set_title("Imagen 1 binaria");
-	im2.display(disp3);
-	disp3.set_title("Imagen 2");
-	im2_bin.display(disp4);
-	disp4.set_title("Imagen 2 binaria");
-	gris.display(disp5);
-	disp5.set_title("Imagen 3");
-	im3_bin.display(disp6);
-	disp6.set_title("Imagen 3 binaria");
+	CImgList<unsigned char> lista_imagenes(im1, im2, gris, im1_bin, im2_bin,
+			im3_bin);
+	lista_imagenes.display("Originales y sus Imagenes binarias");
 
-	while (!disp1.is_closed()) {
-	}
-	/*//TODO: con listas no funciona!
-	 CImgList <unsigned char> l(im1, im2, gris, im1_bin, im2_bin, im3_bin);
-	 l.display("Originales y sus Imagenes binarias");*/
-	/*
-	 gris.get_threshold(128).display(); // FIXME: porque con el display solo anda y con la lista de abajo no??:
-	 CImgList <unsigned char> lista(gris, gris.get_threshold(0), gris.get_threshold(128), gris.get_threshold(255));
-	 lista.display("Escala de grises 0 a 255 - Aplicando threshold 0 - Aplicando threshold 128 - Aplicando threshold 255");
-	 */
+	unsigned char blanco[] = { 255, 255, 255 };
+
+	CImg<unsigned char> mapeo(256, 256, 1, 1);
+	mapeo.fill(0);//borro fondo
+	CImgList<unsigned char> lista1(gris,
+			gris.get_threshold(0).normalize(0, 255), mapeo.draw_graph(
+					gris.get_threshold(0).normalize(0, 255), blanco, 1, 1, 1));
+	lista1.display(
+			"Tonos grises 0 a 255 -- threshold en 0 -- grafica del threshold");
+
+	mapeo.fill(0);//borro fondo
+	CImgList<unsigned char> lista2(gris, gris.get_threshold(128).normalize(0,
+			255), mapeo.draw_graph(gris.get_threshold(128).normalize(0, 255),
+			blanco, 1, 1, 1));
+	lista2.display(
+			"Tonos grises 0 a 255 -- threshold en 128 -- grafica del threshold");
+
+	mapeo.fill(0); //borro fondo
+
+	CImgList<unsigned char> lista3(gris, gris.get_threshold(255).normalize(0,
+			255), mapeo.draw_graph(gris.get_threshold(255).normalize(0, 255),
+			blanco, 1, 1, 1));
+	lista3.display(
+			"Tonos grises 0 a 255 -- threshold en 255 -- grafica del threshold");
 	return 0;
 }
