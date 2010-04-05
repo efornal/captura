@@ -232,3 +232,28 @@ CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize(); //FIXME: ver lo del false normalizado=clipp hay que sacarlo sino
 	return sumar(im1, lut(negativo(im1), 1, c, false));
 }
+
+CImg<unsigned char> grises() {
+	//retorna una imagen con un degrade de grises de 0 a 255
+	CImg<unsigned char> imagen(255, 255, 1, 1);
+	cimg_forXY(imagen, x,y)
+		{
+			imagen(x, y) = y;
+		}
+	return imagen;
+}
+
+CImg<unsigned char> get_binary (CImg<unsigned char> imagen) {
+	//convierte una imagen en escala de grises a binaria
+	/** by chaco:
+	 CImg<T>& threshold( T value,
+	 bool soft_threshold = false,
+	 bool strict_threshold = false )
+
+	 binariza la imagen segun un valor de umbral, sea valor de umbral=100
+	 para valores menores a 100 toma 0
+	 para valores mayores a 100 toma 1
+	 */
+	return imagen.threshold(imagen.max()/2);
+
+}
