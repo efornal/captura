@@ -1,4 +1,4 @@
-//FIXME: no hbace nada el stats!??
+//FIXME: que hace la funcion stats? parece no hacer nada!
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher

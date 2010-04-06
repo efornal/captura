@@ -7,7 +7,7 @@
 //============================================================================
 //FIXME:
 /*
- *submuestrear es lo mismo que reducir el tamanio por el factor
+ *submuestrear es lo mismo que reducir el tamanio por el factor --> creo que no!
  *resize(50,50) es lo mismo que hacer lo otro??
  *resize(100,100) // no tiene efecto alguno sobre la imagen?????-???*/
 
