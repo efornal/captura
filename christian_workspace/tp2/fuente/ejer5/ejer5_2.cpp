@@ -3,6 +3,7 @@
  *
  *  Created on: 05/04/2010
  *      Author: christian
+ *      LAS OPERACIONES LOGICAS SE APLICAN SOBRE IMAGENES BINARIAS Y DEVUELVEN IMAGENES BINARIAS
  */
 #include <iostream>
 #include <CImg.h>
