@@ -7,7 +7,7 @@ using namespace cimg_library;
 //FIXME: que onda con el normalizado?? el tema de los colores que quedan segun lo que sale aca..
 
 //Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255" y al sumar
-// 255-255=0 ->negro (idem para cualquier otro valor
+// 255-255=0 ->negro (idem para cualquier otro valor)
 int main() {
 	/*	cout << "suma de int: " << suma<int> (3, 4) << endl;
 	 cout << "suma de float: " << suma<float> (3.3, 4.5) << endl;*/

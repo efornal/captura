@@ -8,7 +8,7 @@
 #include <CImg.h>
 #include "../lib/lib.h"
 #include "../lib/operadores_logicos.h"
-#include "../plano_bit.h"
+#include "../lib/plano_bit.h"
 
 using namespace std;
 using namespace cimg_library;
@@ -41,20 +41,16 @@ int main(int argc, char **argv) {
 	 por tanto la imagen correspondiente a este plano es una
 	 mitad blanca mitad negra. y asi con el resto.
 	 */
-	CImg<unsigned char> img;
-	img.load("../../imagenes/letras1.tif");
-	CImgDisplay disp1, disp2;
-	img.display(disp1);
-	disp1.set_title("imagen original");
 
-	CImg<unsigned char> aux(255, 255, 1, 1);
-
+	CImg <unsigned char> imagen;
+	imagen.load("../../imagenes/tablero.png");
+	plano_de_bit(imagen, 0).display();
 	/*	CImgList<unsigned char> lista(AND(img, aux.fill(2)).normalize(0, 255), AND(
 	 img, aux.fill(4)).normalize(0, 255),
 	 AND(img, aux.fill(8)).normalize(0, 255), AND(img, aux.fill(16)),
 	 AND(img, aux.fill(32)), AND(img, aux.fill(64)), AND(img, aux.fill(
 	 128)));*/
-	lista.display();
+	//lista.display();
 
 	return 0;
 }
