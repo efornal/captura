@@ -1,6 +1,6 @@
 #include <iostream>
 #include <CImg.h>
-#include "../ejer1/lib.h"
+#include "../lib/lib.h"
 
 using namespace std;
 using namespace cimg_library;
