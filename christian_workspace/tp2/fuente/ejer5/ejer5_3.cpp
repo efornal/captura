@@ -6,22 +6,35 @@
  */
 #include <iostream>
 #include <CImg.h>
-#include "../lib/operadores_relacionales.h"
+#include "../lib/operadores_relacionales.h" //FIXME: ver si estan bien programadas las funciones...
+#include "../lib/lib.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg <unsigned char> negro (255,255,1,1);
-	negro.fill(0);
+	CImg<unsigned char> im1, im2;
+	im1.load("../../imagenes/letras1.tif");
+	im2.load("../../imagenes/letras2.tif");
 
-	CImg <unsigned char> blanco (255,255,1,1);
-	blanco.fill(255);
-//TODO: seguir con esto.. que no anda por ahora...
-	menor(negro, blanco).normalize(0,255).display("menor(negro, blanco)");
-	menor(blanco, negro).normalize(0,255).display("menor(negro, blanco)");
-	menor_igual(negro, blanco).display("menor_igual(negro, blanco)");
-	mayor(negro, blanco).display("mayor(negro, blanco)");
-	mayor_igual(negro, blanco).display("mayor_igual(negro, blanco)");
+	/*LAS OPERACIONES RELACIONALES SE APLICAN A IMAGENES EN ESCALAS DE GRISES Y DAN COMO RESULTADOS IMAGENES BINARIAS
+	 * */
+	CImgList<unsigned char> lista1(im1, im2, menor(im1, im2), menor(im2, im1));
+	lista1.display(
+			"im1        -       im2                - menor (im1, im2)      - menor (im2, im1)");
+
+	CImgList<unsigned char> lista2(im1, im2, menor_igual(im1, im2),
+			menor_igual(im2, im1));
+	lista2.display(
+			"im1        -       im2                - menor_igual (im1, im2)      - menor_igual (im2, im1)");
+
+	CImgList<unsigned char> lista3(im1, im2, mayor(im1, im2), mayor(im2, im1));
+	lista3.display(
+			"im1        -       im2                - mayor (im1, im2)      - mayor (im2, im1)");
+
+	CImgList<unsigned char> lista4(im1, im2, mayor_igual(im1, im2), mayor_igual(im2, im1));
+	lista4.display(
+			"im1        -       im2                - mayor_igual (im1, im2)      - mayor_igual (im2, im1)");
+
 	return 0;
 }

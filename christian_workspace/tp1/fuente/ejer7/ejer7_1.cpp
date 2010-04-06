@@ -1,6 +1,6 @@
-//FIXME:
-/* Ver la funcion el tema cuando hago la asignacion que deja los bordes mal como solucuionarlo..
- * cuando hago el resize se ve mal .. porque???
+//TODO:
+/*Ver la funcion el tema cuando hago la asignacion que deja los bordes mal como solucuionarlo..
+ *FIXME:  cuando hago el resize se ve mal .. porque???
  * */
 //============================================================================
 // Name        :

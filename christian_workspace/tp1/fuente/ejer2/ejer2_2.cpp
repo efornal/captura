@@ -17,7 +17,7 @@ CImg <float> imagen;
 imagen.load(filename);
 imagen.display(); //tira info de lox pixels y demas
 
-CImgDisplay ventana(imagen, "imagen"); //conserva el tamanio y no tira informacion ninguna
+CImgDisplay ventana(imagen, "imagen"); //conserva el tamanio y no tira informacion alguna
 
 //CImg <char> imagen(filename);
 //CImgDisplay ventana(imagen, "earth");
