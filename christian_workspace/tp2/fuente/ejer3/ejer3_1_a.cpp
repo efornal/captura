@@ -5,7 +5,9 @@
 using namespace std;
 using namespace cimg_library;
 //FIXME: que onda con el normalizado?? el tema de los colores que quedan segun lo que sale aca..
-//porque al sumar la imagen con su negativo no se obtiene la imagen negra como dice en el tp2 ejercicio 4?
+
+//Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255" y al sumar
+// 255-255=0 ->negro (idem para cualquier otro valor
 int main() {
 	/*	cout << "suma de int: " << suma<int> (3, 4) << endl;
 	 cout << "suma de float: " << suma<float> (3.3, 4.5) << endl;*/
@@ -26,25 +28,23 @@ int main() {
 			"suma de imagenes letras1 y letras 2 - NO normalizado"); //muestreo en un display
 
 
-	CImgList<unsigned char> lista3(im1, negativo(im1),
-			sumar<CImg<unsigned char> > (im1, negativo(im1), true));
+	CImgList<unsigned char> lista3(im1, negativo(im1), sumar<
+			CImg<unsigned char> > (im1, negativo(im1), true));
 	CImgDisplay disp3(lista3,
 			"suma de imagenes letras 1 y su negativo - normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista4(im1, negativo(im1),
-			sumar<CImg<unsigned char> > (im1, negativo(im1), false));
+	CImgList<unsigned char> lista4(im1, negativo(im1), sumar<
+			CImg<unsigned char> > (im1, negativo(im1), false));
 	CImgDisplay disp4(lista4,
 			"suma de imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista5(im1, im1,
-			sumar<CImg<unsigned char> > (im1, im1, false));
-	CImgDisplay disp5(lista5,
-			"suma de imagenes con si misma - NO normalizado"); //muestreo en un display
+	CImgList<unsigned char> lista5(im1, im1, sumar<CImg<unsigned char> > (im1,
+			im1, false));
+	CImgDisplay disp5(lista5, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista6(im1, im1, sumar<CImg<
-			unsigned char> > (im1, im1, false));
-	CImgDisplay disp6(lista6,
-			"suma de imagenes con si misma - NO normalizado"); //muestreo en un display
+	CImgList<unsigned char> lista6(im1, im1, sumar<CImg<unsigned char> > (im1,
+			im1, false));
+	CImgDisplay disp6(lista6, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 	while (!disp1.is_closed()) {
 	}
 	return 0;

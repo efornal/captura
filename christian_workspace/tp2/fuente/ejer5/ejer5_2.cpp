@@ -4,6 +4,7 @@
  *  Created on: 05/04/2010
  *      Author: christian
  *      LAS OPERACIONES LOGICAS SE APLICAN SOBRE IMAGENES BINARIAS Y DEVUELVEN IMAGENES BINARIAS
+ *      FIXME: funcionan igual como ya conociamos..? conclusion aparte?
  */
 #include <iostream>
 #include <CImg.h>

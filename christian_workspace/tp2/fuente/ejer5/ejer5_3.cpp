@@ -6,7 +6,7 @@
  */
 #include <iostream>
 #include <CImg.h>
-#include "../lib/operadores_relacionales.h"
+#include "../lib/operadores_relacionales.h" //FIXME: ver si estan bien programadas las funciones...
 #include "../lib/lib.h"
 
 using namespace std;
