@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "lib.h"
+#include "../lib/lib.h"
 
 using namespace std;
 using namespace cimg_library;
