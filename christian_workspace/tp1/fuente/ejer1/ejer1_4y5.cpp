@@ -12,12 +12,7 @@ using namespace cimg_library;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	const char *filename =
-			"../../imagenes/huang.jpg";
-	/*CImg<char>
-	 original_image(
-	 "/home/christian/Documentos/universidad/2010/captura/imagenes/huang.jpg"); //cargo imagen*/
-
+	const char *filename = "../../imagenes/huang.jpg";
 
 	CImg<float> imagen(filename);
 

@@ -6,7 +6,6 @@
 // Description : Captura 2010, Ansi-style
 //============================================================================
 
-
 //http://usuarios.multimania.es/explorar/halfto/halfto.htm
 #include <CImg.h>
 #include <iostream>

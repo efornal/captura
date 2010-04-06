@@ -1,9 +1,3 @@
-//FIXME:
-/*
- * cuando despliego las imagenes por separado parecen iguales aunque los valores no lo son
- * para que la matriz tome colores entre 0 y 255 si tiene valores de 100 x 100 hay que normalizarla?! conclusion
- * cuando los pongo en la lista se nota la diferencia .. que onda?
- * */
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
@@ -17,7 +11,6 @@
 using namespace cimg_library;
 using namespace std;
 
-
 int main(int argc, char *argv[]) {
 	CImg<int> imagen_norm(100, 100, 1, 1);
 	CImg<int> imagen_notnorm(100, 100, 1, 1);
@@ -28,14 +21,17 @@ int main(int argc, char *argv[]) {
 			imagen_notnorm(x, y) = y;
 		}
 
-	imagen_norm.normalize(0,255); //imagen normalizada
+	imagen_norm.normalize(0, 255); //imagen normalizada
 
 	CImgList<int> lista(imagen_norm, imagen_notnorm);
 	CImgDisplay vent;
+	vent.set_title("imagen normalizada e imagen sin normalizar respectivamente");
 	lista.display(vent, true, 'y', 'c');
 
 	imagen_norm.display("imagen normalizada entre 0 y 255");
-	imagen_notnorm.display("imagen sin normalizar");
+
+	//imagen_notnorm.display("imagen sin normalizar");
+	// en realidad no es sin normalizar ya que por defecto display normaliza la imagen
 
 	while (!vent.is_closed()) {
 	}
