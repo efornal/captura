@@ -2,6 +2,7 @@
    FIXME: or no funciona ???, 
      segun como esta en el libro, para un or deberia verse la parte
      del cuadrado y la der circulo mas la interseccion.
+PERO DE ECHO SE VE!! PORQUE NO TE ANDA?? A MI ME ANDA Y CON EL MISMO CODIGO... (CHRISTIAN)
 */
 #include <CImg.h>
 #include <operadores_logicos.h>
