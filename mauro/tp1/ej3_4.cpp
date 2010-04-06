@@ -27,17 +27,19 @@ CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int 
   }
 
   // genero como máscara un segmento que va de (x0,y0) a (x1,y1)
-  CImg<unsigned char> enmascarada( imagen.get_crop( 0,0,0,0,imagen.width()-1,imagen.height()-1,0,imagen.spectrum()-1).fill(*negro).draw_line(x0,y0,x1,y1,blanco) * imagen );
+  CImg<unsigned char> enmascarada( imagen.get_crop( 0,0,0,0,imagen.width()-1,imagen.height()-1,0,imagen.spectrum()-1).fill(*negro).draw_line(x0,y0,x1,y1,blanco).get_min(imagen) );
   
   //CImg<unsigned char> resultado ();
+
+  //enmascarada.display();
 
   if ( es_horizontal ) {
     //resultado = CImg<unsigned char> (abs(x1-x0)+1,1,1,nro_canales);
     
     // sgn indica si los valores se recorren de derecha a izq o viceversa
     int sgn = 1;
-    //   if( x1 == 0 ) sgn = -1;
-    //    else if (x0 != x1 ) sgn = (x1-x0) / abs(x1-x0);
+       if( x1 == 0 ) sgn = -1;
+        else if (x0 != x1 ) sgn = (x1-x0) / abs(x1-x0);
     
     for (unsigned i=0; i<=abs(x1-x0); i++ ) {
       enmascarada(i,0)=enmascarada.get_crop(x0+(i*sgn),y0,0,x0+(i*sgn),y1,0).max();
@@ -47,8 +49,8 @@ CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int 
   else {
     //    resultado.assign(1,abs(y1-y0)+1,1,nro_canales);
     int sgn = 1;
-    //   if( y1 == 0 ) sgn = -1;
-    //    else if (y0 != y1 ) sgn = (y1-y0) / abs(y1-y0);
+       if( y1 == 0 ) sgn = -1;
+        else if (y0 != y1 ) sgn = (y1-y0) / abs(y1-y0);
     for (unsigned i=0; i<=abs(y1-y0); i++ ) {
       enmascarada(0,i)=enmascarada.get_crop(x0,y0+(i*sgn),0,x1,y0+(i*sgn),0).max();
     }
@@ -99,6 +101,7 @@ int main(int argc, char *argv[]) {
 	      y1 = disp_imag.mouse_y();
 	      
 	      grafico.fill(192).draw_graph( perfil_intensidad( imagen, x0, y0, x1, y1), color ).display(disp_graf);
+	      //perfil_intensidad( imagen, x0, y0, x1, y1).display(disp_graf);
 
 	      click_es_2do_punto = false;
 	    }
