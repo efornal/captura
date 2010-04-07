@@ -6,7 +6,7 @@
 // Description : Captura 2010, Ansi-style
 //============================================================================
 
-/* El resize se puede coinciderar como un submuestreo, el tema es que dependiendo del tamanio de imagen
+/* POSTA: El resize se puede coinciderar como un submuestreo, el tema es que dependiendo del tamanio de imagen
  * no necesariamente me va a estar sacando una fila y una columna cada un pixel...
  * resize(50,50) -> reduce en un 50% la imagen (es decir que la nueva va  a ser del 50% de la original en tamanio)
  * resize(100,100) -> no tiene efecto sobre la imagen
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	cout << endl;
 	cimg_forX(imagen, x) {
 		if (!(x % 2))
-			continue;
+		continue;
 		cout << x << " ";
 		++xn;
 		cimg_forY(imagen, y) {
