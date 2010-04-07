@@ -97,13 +97,14 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 
 	cimg_forXY(original,x,y)
 		{
-			modificada(x, y) = log(1 + original(x, y)) * factor;
+			modificada(x, y) = clipp(log(1 + original(x, y)) * factor);
 		}
 
 	return modificada;
 }
 
-//FIXME: va con clip o sin clip??
+//operaciones con una sola imagen: clipping
+//operaciones con 2 imagenes: normalizacion
 CImg<unsigned char> potencia(CImg<unsigned char> original, int exp, int factor =
 		1) {
 	// transforacion de potencia
@@ -145,8 +146,7 @@ template<class T>
 T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
 	// para llamarla por ejemplo : sumar<double>(l,m);
-	/*XXX: return (normalizado)? (primer_termino+segundo_termino)/2 : primer_termino+segundo_termino;*/// no entiendo porque de esta forma no anda
-	if (normalizado) //FIXME: normalizado o clipp?
+	if (normalizado)
 		return (primer_termino + segundo_termino) / 2;
 	return (primer_termino + segundo_termino);
 }
@@ -158,10 +158,16 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	// para llamarla por ejemplo :restar<double>(l,m);
 
 	T imagen = primer_termino - segundo_termino;
-	if (normalizado) { // FIXME: seria normalizado o clip?
+	if (normalizado) {
 		cimg_forXY(imagen, x,y)
-			{ //FIXME: esto de sumar por 255 y divir por 2 es lo que pide: ?? porque? no entiendo
+			{
 				imagen(x, y) = (imagen(x, y) + 255) / 2;
+				/* observar que en la linea de arriba estoy normalizando, los valores de intensidad van de 0 a 255:
+				 * 0-255 = -255 -> (-255+255)/2=0
+				 * 255-0=  255 -> (255+255)/2=255
+				 * 255-255= 0 -> (0+255)/2 = 127
+				 * 0-0= 0+255 -> 255/2 =127
+				 * */
 			}
 		return imagen;
 	}
@@ -200,11 +206,10 @@ CImg<unsigned char> multiplicar(CImg<unsigned char> im1,
 CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 		bool normalizar) {
 	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
-
 	cimg_forXY(im1, x, y)
 		{
 			if (floor(im2(x, y)) == 0)
-				imagen(x, y) = im1(x, y); //TODO: dejo el original --->que hago que es lo correcto?
+				imagen(x, y) = im1(x, y); // FIXME: en el caso que el pixel balga cero que hago? dejo el original o lo cambio?
 			else
 				imagen(x, y) = im1(x, y) / im2(x, y);
 		}
@@ -213,11 +218,6 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 	else
 		return imagen;
 }
-
-//FIXME: varias cosas en todas las fucniones.. confusion entre normalizado y clipp. en vez de hacer el clipp no puedo hacer el
-//normalizado y listo?
-
-
 //WBB: no se que esta mal!
 CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		true) { //TODO: hacer para que corte la imagen segun el desplazamiento
@@ -243,7 +243,7 @@ CImg<unsigned char> grises() {
 	return imagen;
 }
 
-CImg<unsigned char> get_binary (CImg<unsigned char> imagen) {
+CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	//convierte una imagen en escala de grises a binaria
 	/** by chaco:
 	 CImg<T>& threshold( T value,
@@ -254,8 +254,5 @@ CImg<unsigned char> get_binary (CImg<unsigned char> imagen) {
 	 para valores menores a 100 toma 0
 	 para valores mayores a 100 toma 1
 	 */
-	return imagen.threshold(imagen.max()/2);
+	return imagen.threshold(imagen.max() / 2);
 }
-
-//operadores logicos:
-

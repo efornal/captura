@@ -1,7 +1,5 @@
-//TODO:
-/*Ver la funcion el tema cuando hago la asignacion que deja los bordes mal como solucuionarlo..
- *FIXME:  cuando hago el resize se ve mal .. porque???
- * */
+//TODO: Ver la funcion el tema cuando hago la asignacion que deja los bordes mal como solucuionarlo..
+
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
@@ -30,6 +28,9 @@ int main(int argc, char *argv[]) {
 
 	pasar_a_medios_tonos(imagen, 0).display("Modificando el tamanio");
 	pasar_a_medios_tonos(imagen, 1).display("Resize");
+	/*al hacer el resize se ve mal porque estoy reduciendo el tamanio a 3 veces por tanto los patrones que eran
+	 * un simil gris pasan a ser negro.. obtengo como resultado una imagen binaria solo negros y blancos
+	 * */
 
 	return 0;
 }

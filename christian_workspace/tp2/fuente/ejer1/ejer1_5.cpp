@@ -1,4 +1,4 @@
-//FIXME: no entiendo el enunciado
+//TODO: no entiendo el enunciado pero tengo que leerlo mejor e intentar hacerlo
 //============================================================================
 // Author      : Christian Pfarher
 // Version     :

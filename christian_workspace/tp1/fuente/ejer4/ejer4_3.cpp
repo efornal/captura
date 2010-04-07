@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
 	lista.display(vent, false, 'y', 'c');
 
 	imagen_norm.display("imagen normalizada entre 0 y 255");
-	imagen_notnorm.display("imagen sin normalizar");
 
 	while (!vent.is_closed()) {
 	}

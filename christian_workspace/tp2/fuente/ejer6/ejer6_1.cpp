@@ -8,13 +8,12 @@
 #include <CImg.h>
 #include "../lib/lib.h"
 #include "../lib/operadores_logicos.h"
+#include "../lib/plano_bit.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<unsigned char> img;
-	img.load("../../imagenes/letras1.tif");
 	//8 bits image = 2^8=256 colores 0 a 255....
 	/**
 	 Con la imagen en escala de grises se aprecia como interpreta los bits:
@@ -43,18 +42,15 @@ int main(int argc, char **argv) {
 	 mitad blanca mitad negra. y asi con el resto.
 	 */
 
-	CImgDisplay disp1, disp2;
-	img.display(disp1);
-	disp1.set_title("imagen original");
-
-	CImg<unsigned char> aux(255, 255, 1, 1);
-
-	CImgList<unsigned char> lista(AND(img, aux.fill(2)).normalize(0, 255), AND(
-			img, aux.fill(4)).normalize(0, 255),
-			AND(img, aux.fill(8)).normalize(0, 255), AND(img, aux.fill(16)),
-			AND(img, aux.fill(32)), AND(img, aux.fill(64)), AND(img, aux.fill(
-					128)));
-	lista.display();
+	CImg <unsigned char> imagen;
+	imagen.load("../../imagenes/tablero.png");
+	plano_de_bit(imagen, 0).display();
+	/*	CImgList<unsigned char> lista(AND(img, aux.fill(2)).normalize(0, 255), AND(
+	 img, aux.fill(4)).normalize(0, 255),
+	 AND(img, aux.fill(8)).normalize(0, 255), AND(img, aux.fill(16)),
+	 AND(img, aux.fill(32)), AND(img, aux.fill(64)), AND(img, aux.fill(
+	 128)));*/
+	//lista.display();
 
 	return 0;
 }

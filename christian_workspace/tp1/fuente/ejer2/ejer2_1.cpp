@@ -1,4 +1,3 @@
-//FIXME: que hace la funcion stats? parece no hacer nada!
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
@@ -6,34 +5,39 @@
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style
 //============================================================================
-
+//TODO: ver que mierda pasa
 #include <CImg.h>
 #include <iostream>
 using namespace cimg_library;
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	const char *filename =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.jpg";
+	CImg<unsigned char> imagen, imagen1, imagen2;
 
-	const char *filename1 =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.tif";
-
-	const char *filename2 =
-			"/home/christian/Documentos/universidad/2010/captura/git_repo/captura/christian_workspace/tp1/img.bmp";
-
-	CImg<float> imagen(filename);
+	imagen.load("../../imagenes/imagenA.tif");
 	imagen.print();
+	imagen.stats(); ////FIXME: que hace la funcion stats? parece no hacer nada!
 
-	CImg<float> imagen1(filename1);
+	imagen1.load("../../imagenes/earth.bmp");
 	imagen1.print();
+	imagen1.stats();
 
-	CImg<float> imagen2(filename2);
+	imagen2.load("../../imagenes/huang.jpg");
 	imagen2.print();
+	imagen2.stats();
 
-	CImgDisplay vent1(imagen, "imagen 0"), vent2 (imagen1, "imagen 1"), vent3 (imagen2, "imagen 2");
-	while (!vent1.is_closed()) {
+	CImgDisplay vent1, vent2, vent3;
+	imagen.display(vent1);
+	vent1.set_title("imagen 0");
+
+	imagen1.display(vent2);
+	vent2.set_title("imagen 1");
+
+	imagen2.display(vent3);
+	vent3.set_title("imagen 2");
+
+
+	while (!vent1.is_closed() && !vent2.is_closed() && !vent3.is_closed()) {
 	}
-
 	return 0;
 }

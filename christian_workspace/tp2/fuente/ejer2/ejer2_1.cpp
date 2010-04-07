@@ -1,4 +1,4 @@
-//FIXME: ver porque las graficas no me convencen
+//FIXME: estan bien las graficas?
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher

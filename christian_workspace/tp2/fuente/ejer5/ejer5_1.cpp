@@ -22,7 +22,9 @@ int main(int argc, char **argv) {
 	im1_bin = get_binary(im1).normalize(0, 255);
 	im2_bin = get_binary(im2).normalize(0, 255);
 	im3_bin = get_binary(gris).normalize(0, 255);
-	//FIXME: si no normalizo, no me muestra nada!! porque?
+	// al aplicar la funcion get_binary la imagen que obtengo tiene valores 0 y 1 debido que es una imagen binaria obviamente
+	// por eso es que normalizo de 0 a 255 para poder ver lo blanco y negro porque sino veeria all negro ya que el ojo humano
+	// no me distingue el 1 del 0....
 
 	CImgList<unsigned char> lista_imagenes(im1, im2, gris, im1_bin, im2_bin,
 			im3_bin);
