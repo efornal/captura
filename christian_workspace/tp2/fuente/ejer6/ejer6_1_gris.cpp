@@ -46,14 +46,21 @@ int main(int argc, char **argv) {
 	CImg<unsigned char> gris = grises(); // me genera la imagen en tonos de grises
 
 	CImgDisplay disp0(gris, "imagen original", 0); // el 1 es para que normalice.
-	CImgDisplay disp(plano_de_bit(gris, 0), "plano 0 = 0000 0001", 1);
-	CImgDisplay disp1(plano_de_bit(gris, 1), "plano 1= 0000 0010 ", 1);
-	CImgDisplay disp2(plano_de_bit(gris, 2), "plano 2= 0000 0100", 1);
-	CImgDisplay disp3(plano_de_bit(gris, 3), "plano 3= 0000 1000", 1);
-	CImgDisplay disp4(plano_de_bit(gris, 4), "plano 4= 0001 0000", 1);
-	CImgDisplay disp5(plano_de_bit(gris, 5), "plano 5= 0010 0000", 1);
-	CImgDisplay disp6(plano_de_bit(gris, 6), "plano 6= 0100 0000", 1);
-	CImgDisplay disp7(plano_de_bit(gris, 7), "plano 7= 1000 0000", 1);
+	int plano = 0;
+	CImgDisplay disp(plano_de_bit(gris, plano), "plano 0 = 0000 0001", 1);
+	cout << endl;
+	while (!disp0.is_closed() && !disp0.is_keyQ()) {
+		disp.wait();
+		if (disp.is_keyARROWUP()) { //aumentar plano bits
+			plano = clipp_plano(++plano);
+		} else if (disp.is_keyARROWDOWN()) {
+			plano = clipp_plano(--plano);
+		}
+		disp.display(plano_de_bit(gris, plano));
+		disp.set_title("planos 0=>7");
+		cout << "Plano: " << plano;
+	}
+
 	/*FIXME: es un umbral cdo aplico lo de los planos de bits..para el
 	 * Plano 0 -> estoy aplicando un umbral que corta en 1 o sea deja pasar los valores de 0 hasta 1 inclusive y los demas
 	 * 			  los hace 0
