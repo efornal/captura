@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
 	CImg<unsigned char> gris = grises(); // me genera la imagen en tonos de grises
 
-	CImgDisplay disp0(gris, "imagen original", 0); // el 1 es para que normalice.
+	CImgDisplay disp0(gris, "imagen original", 1); // el 1 es para que normalice.
 	int plano = 0;
 	CImgDisplay disp(plano_de_bit(gris, plano), "plano 0 = 0000 0001", 1);
 	cout << endl;

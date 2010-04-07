@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 	CImg<unsigned char> imagen;
 	imagen.load("../../imagenes/tablero.png");
 
-	CImgDisplay disp0(imagen, "imagen original", 0); // el 1 es para que normalice.
+	CImgDisplay disp0(imagen, "imagen original", 1); // el 1 es para que normalice.
 	int plano = 0;
 	CImgDisplay disp(plano_de_bit(imagen, plano), "plano 0 = 0000 0001", 1);
 	cout << endl;
@@ -76,7 +76,6 @@ int main(int argc, char **argv) {
 	 */
 
 	//FIXME: solo se pueden meter hasta 6 imagenes en una lista! no mas de eso!?
-
 
 	while ((!disp.is_closed() && !disp.is_keyQ())) {
 	}
