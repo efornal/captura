@@ -1,4 +1,4 @@
-//TODO: esto funciona pero no se si esta bien sacado _todo el tema de la ecuacion de la recta y demas hay que seguirlo
+//TODO: hacerlo pero con draw_line.. terminarlo ...
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
@@ -97,21 +97,26 @@ int main(int argc, char *argv[]) {
 				/*imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width() - 1, p1.y, 0,
 				 0).display(); //fila 0, y donde clieckee - toda la fila (imagen.width()-1)*/
 
-				//                                     width, height, dept, spec, data,
-				vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), red, 1,
-						3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
-				//							   |-->plot type=3=bars
+				vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 1, p2.x,
+						p2.y, // una fila!
+						0, 1), red, 1, 1, 1, 255, 0);
+				vent_grafico.display(draw_disp);
+
+				/*			//                                     width, height, dept, spec, data,
+				 vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), red, 1,
+				 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)
+				 //							   |-->plot type=3=bars
 
 
-				vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), green, 1,
-						1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
+				 vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), green, 1,
+				 1, 0, 255, 0);//|---> canal green (el espectrum esta en 1 cuando hago el get_crop)
 
 
-				vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), blue, 1,
-						1, 0, 255, 0).display(draw_disp);//|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
+				 vent_grafico.draw_graph(imagen.get_lines(p1.y, p2.y), blue, 1,
+				 1, 0, 255, 0).display(draw_disp);//|---> canal blue (el espectrum esta en 2 cuando hago el get_crop)
 
-				//                     color,op,pt,ver,ymin,ymax
-				vent_grafico.draw_graph(imagen, red, 1, 1, 0, 0);
+				 //                     color,op,pt,ver,ymin,ymax
+				 vent_grafico.draw_graph(imagen, red, 1, 1, 0, 0);*/
 			}
 		}
 	}
