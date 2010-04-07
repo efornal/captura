@@ -20,7 +20,7 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 		cimg_forXY(img,x,y)
 			{
 				img(x, y) = (img(x, y) >> nro) & 0x00000001;
-				cout<<img(x,y)<<endl; //FIXME: porque si pongo esto en consola no me lo muestra en binario?
+				//cout<<img(x,y)<<endl; //FIXME: porque si pongo esto en consola no me lo muestra en binario?
 			}
 	} else {
 		cimg_forXY(img,x,y)
@@ -31,6 +31,16 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 
 	/* 0   ==  0000 0000     => 0 >> 1   =  0000 0000  ==  0
 	   2   ==  0000 0010     => 2 >> 1   =  0000 0001  ==  1
+	   & -> operador and bit a bit o bitand
 	 * */
 	return img;
+}
+
+int clipp_plano(int valor) {
+	if (valor > 7)
+		return 7;
+	else if (valor < 0)
+		return 0;
+	else
+		return valor;
 }
