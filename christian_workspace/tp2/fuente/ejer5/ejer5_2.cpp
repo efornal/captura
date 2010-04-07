@@ -3,10 +3,13 @@
  *
  *  Created on: 05/04/2010
  *      Author: christian
- *      LAS OPERACIONES LOGICAS SE APLICAN SOBRE IMAGENES BINARIAS Y DEVUELVEN IMAGENES BINARIAS
+ *
+ */
+
+/* POSTA:  LAS OPERACIONES LOGICAS SE APLICAN SOBRE IMAGENES BINARIAS Y DEVUELVEN IMAGENES BINARIAS
  *      UNION: OR
  *      INTERSECCION: AND ...
- */
+ * */
 #include <iostream>
 #include <CImg.h>
 #include "../lib/lib.h"

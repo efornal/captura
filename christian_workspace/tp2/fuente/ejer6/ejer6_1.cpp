@@ -14,8 +14,9 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	//8 bits image = 2^8=256 colores 0 a 255....
-	/**
+
+	/** POSTA:
+	 * 8 bits image = 2^8=256 colores 0 a 255....
 	 Con la imagen en escala de grises se aprecia como interpreta los bits:
 	 dec  | bin
 	 0    | 0000 0000
