@@ -18,11 +18,9 @@
    por tanto la imagen correspondiente a este plano es una
    mitad blanca mitad negra. y asi con el resto.
 */
-#include <CImg.h>
-#include <plano_bit.h>
+#include <CHImg.h>
 #include <imagenes.h>
 
-using namespace cimg_library;
 using namespace std;
 
 int main( int argc, char **argv ) {
@@ -30,7 +28,7 @@ int main( int argc, char **argv ) {
                                         "ruta archivo imagen" );
     //    CImgDisplay disp, disp2;
     //CImg<unsigned char> img1 = tonos_de_gris( 255 );
-    CImg<unsigned char> img1( filename );
+    CHImg<unsigned char> img1( filename );
     CImg<unsigned char> result;
     CImg<unsigned char> planos[8];
     
@@ -38,11 +36,10 @@ int main( int argc, char **argv ) {
 
     sleep(1);
     for ( int i=0;i<8;i++){
-        planos[i] = plano_de_bit( img1, i ) ;
+        planos[i] = img1.get_plano_de_bit( i ) ;
         planos[i].display(disp);
         sleep(2);
     }
-
 
     result = planos[7]*pow(2,7);
     result.display(disp);
