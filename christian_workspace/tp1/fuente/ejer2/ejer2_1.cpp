@@ -5,7 +5,6 @@
 // Copyright   : GNU Public License
 // Description : Captura 2010, Ansi-style
 //============================================================================
-//TODO: ver que mierda pasa
 #include <CImg.h>
 #include <iostream>
 using namespace cimg_library;

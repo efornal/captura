@@ -4,8 +4,8 @@
 
 using namespace std;
 using namespace cimg_library;
-//FIXME: que pasa con las imagenes? sale cualqueri cosa ?? coincidera que todo es ruido porque no hay nada que coincide?
-//al multiplicar la imagen por si misma da cualquier cosa ->??? o sea?
+/*FIXME: que pasa con las imagenes? sale cualqueri cosa ?? coincidera que all es ruido porque no hay nada que coincide?
+al multiplicar la imagen por si misma da cualquier cosa ->??? o sea?*/
 int main() {
 
 	CImg<unsigned char> im1, im2;
