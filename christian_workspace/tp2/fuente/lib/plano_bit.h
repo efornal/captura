@@ -4,7 +4,7 @@
  *  Created on: 06/04/2010
  *      Author: chaco
  */
-
+#define UNICODE
 #include <CImg.h>
 
 using namespace cimg_library;
@@ -20,6 +20,7 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 		cimg_forXY(img,x,y)
 			{
 				img(x, y) = (img(x, y) >> nro) & 0x00000001;
+				cout<<img(x,y)<<endl; //FIXME: porque si pongo esto en consola no me lo muestra en binario?
 			}
 	} else {
 		cimg_forXY(img,x,y)
@@ -27,5 +28,9 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 				img(x, y) = (img(x, y)) & 0x00000001;
 			}
 	}
+
+	/* 0   ==  0000 0000     => 0 >> 1   =  0000 0000  ==  0
+	   2   ==  0000 0010     => 2 >> 1   =  0000 0001  ==  1
+	 * */
 	return img;
 }

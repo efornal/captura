@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 	CImgList<float> listaimg(im0, im1, im2);
 
 	listaimg.print();
-
+	//POSTA: Lisat de imagenes
 	char parametros_axis[4] = { 'x', 'y', 'z', 'c' };
 	char parametros_align[4] = { 'p', 'c', 'n'};
 

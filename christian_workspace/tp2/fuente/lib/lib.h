@@ -209,7 +209,7 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 	cimg_forXY(im1, x, y)
 		{
 			if (floor(im2(x, y)) == 0)
-				imagen(x, y) = im1(x, y); // FIXME: en el caso que el pixel balga cero que hago? dejo el original o lo cambio?
+				imagen(x, y) = im1(x, y); // FIXME: en el caso que el pixel balga cero que hago? dejo el original o lo cambio por el de la nueva imagen?
 			else
 				imagen(x, y) = im1(x, y) / im2(x, y);
 		}
@@ -235,7 +235,7 @@ CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 
 CImg<unsigned char> grises() {
 	//retorna una imagen con un degrade de grises de 0 a 255
-	CImg<unsigned char> imagen(255, 255, 1, 1);
+	CImg<unsigned char> imagen(256, 256, 1, 1);
 	cimg_forXY(imagen, x,y)
 		{
 			imagen(x, y) = y;
@@ -255,4 +255,5 @@ CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	 para valores mayores a 100 toma 1
 	 */
 	return imagen.threshold(imagen.max() / 2);
+	// FIXME: cuantiza en 2 niveles... se puede decir que cuantizar y aplicar un threshold sobre el rango es lo mismo?
 }
