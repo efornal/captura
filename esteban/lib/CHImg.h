@@ -51,5 +51,23 @@ template<typename T> struct CHImg : public CImg<T> {
         return img1;
     }
 
+    /**
+     * Retorna el plano de bit nro de la imagen
+     */
+    CImg<unsigned char> get_plano_de_bit( int nro=0 ){
+        CImg<unsigned char> img = *this;
+        if ( nro > 0 ) {
+            cimg_forXY(img,x,y){
+                img(x,y) = (img(x,y) >> nro) &0x00000001;
+            }
+        } else{
+            cimg_forXY(img,x,y){
+                img(x,y) = (img(x,y)) &0x00000001;
+            }
+        }
+        return img;
+    }
+
+
 };
 
