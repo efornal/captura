@@ -1,7 +1,7 @@
 /*
  * ejer6_1_reconstruccion.cpp
  *
- *  Created on: 06/04/2010
+ *  Created on: 07/04/2010
  *      Author: christian
  */
 #include <iostream>
