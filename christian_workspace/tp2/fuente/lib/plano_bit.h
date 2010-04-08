@@ -66,4 +66,3 @@ CImg<unsigned char> get_until_plan(CImg<unsigned char> imagen,
 	}
 	return resultado;
 }
-
