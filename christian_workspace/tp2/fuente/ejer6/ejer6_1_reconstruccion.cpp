@@ -17,32 +17,35 @@ int main(int argc, char **argv) {
 	CImg<unsigned char> imagen;
 	imagen.load("../../imagenes/huang.jpg");
 
-	CImg<unsigned char> planos[8]; //imagenes
-
 	CImgDisplay disp0(imagen, "imagen original", 1); // el 1 es para que normalice.
-	int plano = 0;
 
-	for (int i = 0; i <= 7; i++) {
-		planos[i] = plano_de_bit(imagen, i); //obtengo los 8 planos de 0 a 7 de la imagen
-	}
 
-	//empezar la reconstruccion: del 0 al 7
-	CImg<unsigned char> resultado(planos[0]);
-	CImgDisplay disp(resultado, "plano 0 = 0000 0001", 1); //es lo mismo que => planos[0]*pow(2,0);
-	//int indice = 0;
-	cout << endl << "Plano: " << plano<<endl;
+	//	cout << endl << "Plano: " << plano<<endl;
+	CImg<unsigned char> resultado(imagen);
+	resultado.fill(0);
+
+	int plano_inicial = 0;
+	int plano_final = 0;
+	resultado = get_until_plan(imagen, plano_inicial, plano_final);
+	cout << "Reconstruccion desde plano: " << plano_inicial
+			<< "  hasta el plano: " << plano_final << endl;
+	CImgDisplay disp(resultado, "Reconstruccion", 1);
 	while (!disp.is_closed() && !disp.is_keyQ()) {
 		disp.wait();
-		if (disp.is_keyARROWUP() && plano<7) { //aumentar plano bits
-			resultado += planos[++plano] * pow(2, plano); // ya esta incrementado! truquito...
-		} else if (disp.is_keyARROWDOWN() && plano>0) {
-			resultado -= planos[--plano] * pow(2, plano); // ya esta decrementado
+		if (disp.is_keyARROWUP() && plano_final < 7) { //aumentar plano bits
+			resultado = get_until_plan(imagen, plano_inicial, ++plano_final);
+		} else if (disp.is_keyARROWDOWN() && plano_final > 0) {
+			resultado = get_until_plan(imagen, plano_inicial, --plano_final);
 		}
-		disp.display(resultado);
-		//disp.set_title((char *) plano);
-		cout << endl << "Plano: " << plano<<endl;
-
+		cout << "Reconstruccion desde plano: " << plano_inicial
+				<< "  hasta el plano: " << plano_final << endl;
+		resultado.display(disp);
+		disp.set_title("reconstruccion");
 	}
-
+	/* FIXME:tuve que hacerlo con la funcion que obtiene la reconstruccion desde el plano 0... o sea hacer un for siempre. no
+	 * es que la obtiene simplemente anadiendole un termino o elimnando otro (sumando y restando respectivamente) porque
+	 * si lo hacia de esa manera no me andaba del _todo bien y aveces quedaba una cosa y aveces otra.. se debera a los
+	 * decimales de la potenciacion?
+	 * */
 	return 0;
 }
