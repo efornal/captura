@@ -14,14 +14,14 @@ CImg<unsigned char> lut( CImg<unsigned char> img1, int a=1, int c=0 ) {
 }
 
 /**
-   s=r*factor en el rango x1 <= x <= x2
+   s=r*factor en el rango r1 <= x <= r2
+   FIXME:corregir el intervalo es en la intensidad no en las coordenadas
 */
-CImg<unsigned char> lut_x_tramo( CImg<unsigned char> img1, int x1, int x2 ) {
-    int factor = 2;
+CImg<unsigned char> lut_x_tramo( CImg<unsigned char> img1, int r1, int r2,int factor=2 ) {
     CImg<unsigned char> img2( img1.width(), img1.height(), 1, 1, 0 );
     cimg_forXY( img1, x, y ) {
-        if ( x < x1 || x > x2 ) img2(x,y) =  img1(x,y);
-        if ( x >= x1 && x <= x2 ) img2(x,y) =  img1(x,y)*factor;
+        if ( img2(x,y) < r1 || img2(x,y) > r2 ) img2(x,y) =  img1(x,y);
+        if ( img2(x,y) >= r1 && img2(x,y) <= r2 ) img2(x,y) =  img1(x,y)*factor;
 
         if ( img2(x,y) > 255 ) img2(x,y) = 255; // clipping
         if ( img2(x,y) < 1   ) img2(x,y) = 0; // clipping

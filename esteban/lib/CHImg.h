@@ -68,6 +68,21 @@ template<typename T> struct CHImg : public CImg<T> {
         return img;
     }
 
+    /**
+     * Transformacion lineal - Lut: s = ar + c
+     */
+    CImg<unsigned char> get_lut( int a=1, int c=0 ) {
+        CImg<unsigned char> img1 = *this;
+        CImg<unsigned char> img2( img1.width(), img1.height(), 1, 1 );
+        cimg_forXY( img1, x, y ) {
+            img2(x,y) =  a*img1(x,y) + c;
+            if ( img2(x,y) > 255 ) img2(x,y) = 255; // clipping
+            if ( img2(x,y) < 1   ) img2(x,y) = 0; // clipping
+        }
+        return img2; 
+    }
+
+
 
 };
 
