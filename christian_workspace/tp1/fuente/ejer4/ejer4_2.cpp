@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	imagen_norm.display("imagen normalizada entre 0 y 255");
 
 	//imagen_notnorm.display("imagen sin normalizar");
-	// en realidad no es sin normalizar ya que por defecto display normaliza la imagen
+	// POSTA: en realidad no es sin normalizar ya que por defecto display normaliza la imagen
 
 	while (!vent.is_closed()) {
 	}

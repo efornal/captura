@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 		cout << ext[i] << ": size: " << temp.size() << ":::: Height: "
 				<< temp._height << ":::: Width: " << temp._width
 				<< ":::: depth: " << temp._depth << "" << ":::: Spectrum: "
-				<< temp._spectrum << endl; // esta clarisimo en la salida que la bmp usa 3 veces mas!
+				<< temp._spectrum << endl; // POSTA: esta clarisimo en la salida que la bmp usa 3 veces mas!
 	}
 	cout << endl
 			<< "Ancho x Alto x Spectrum +54 de cabecera= tamanio en bytes de la imagen bmp: "

@@ -14,7 +14,7 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	//TODO: ver funcion get_noise
-	/*generar una imagen agregarle ruido y hacer varias imagenes para reconstruir... y ver hasta cuantas imagenes necesito
+	/* generar una imagen agregarle ruido y hacer varias imagenes para reconstruir... y ver hasta cuantas imagenes necesito
 	 * pare reconstrubir
 	 *
 	 * */

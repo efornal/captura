@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 	im1.load("../../imagenes/letras1.tif");
 	im2.load("../../imagenes/letras2.tif");
 
-	/*LAS OPERACIONES RELACIONALES SE APLICAN A IMAGENES EN ESCALAS DE GRISES Y DAN COMO RESULTADOS IMAGENES BINARIAS
+	/* POSTA: LAS OPERACIONES RELACIONALES SE APLICAN A IMAGENES EN ESCALAS DE GRISES Y DAN COMO RESULTADOS IMAGENES BINARIAS
 	 * no son muy usadas pero por ejemplo podriamos ver con las operaciones si la imagen se aclaro o se oscurecio, etc.
 	 * */
 	CImgList<unsigned char> lista1(im1, im2, menor(im1, im2), menor(im2, im1));

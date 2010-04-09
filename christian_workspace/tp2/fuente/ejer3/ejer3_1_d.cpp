@@ -4,7 +4,8 @@
 
 using namespace std;
 using namespace cimg_library;
-// al dividir la imagen por sigo misma daria 1 -> por tanto es casi negro
+// POSTA: al dividir la imagen por sigo misma daria 1 -> por tanto es casi negro (el ojo no diferencia entre 0 y 1 aca..
+
 // FIXME: que pasa con lo que sale el pequenio borde? -> porque como esta dividiendo por cero sale eso?
 
 int main() {

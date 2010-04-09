@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
 
 	image_ch3.channel(3);
 	image_ch3.display("canal seteado en 3");
-	//Imagen.load(); y la cargue en el constructor
 
 	CImgDisplay original_withid(original_image, "ventana con CimgDisplay", 0);
 	while (!original_withid.is_closed()) { }

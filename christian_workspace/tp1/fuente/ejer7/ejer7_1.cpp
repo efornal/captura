@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 
 	pasar_a_medios_tonos(imagen, 0).display("Modificando el tamanio");
 	pasar_a_medios_tonos(imagen, 1).display("Resize");
-	/*al hacer el resize se ve mal porque estoy reduciendo el tamanio a 3 veces por tanto los patrones que eran
+	/*POSTA: al hacer el resize se ve mal porque estoy reduciendo el tamanio a 3 veces por tanto los patrones que eran
 	 * un simil gris pasan a ser negro.. obtengo como resultado una imagen binaria solo negros y blancos
 	 * */
 

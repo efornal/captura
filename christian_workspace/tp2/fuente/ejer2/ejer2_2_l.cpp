@@ -17,14 +17,26 @@ int main() {
 	CImg<unsigned char> imagen, im_log;
 	imagen.load("../../imagenes/rmn.jpg");
 	CImgDisplay disp1, disp2;
-	for (int i=0;i<100;i++) {
-		im_log=logaritmo(imagen, i);
+	int factor = 0;
+	im_log = logaritmo(imagen, factor);
+	disp1.set_title("grafica logaritmo variando el factor");
+	im_log.display(disp1);
+	cout << "Factor: " << factor << endl;
+	obtener_grafica_mapeo_logaritmo(factor).display(disp2);
+	while ((!disp1.is_closed() && !disp1.is_keyQ())) {
+		disp1.wait();
+		factor = clipp(factor); // me lo mantiene entre 0 y 255.. porque sin.. no hay limite...
+		if (disp1.is_keyARROWDOWN())
+			factor = clipp(--factor);
+		else if (disp1.is_keyARROWUP()) {
+			factor = clipp(++factor);
+		}
+		im_log = logaritmo(imagen, factor);
 		disp1.set_title("grafica logaritmo variando el factor");
 		im_log.display(disp1);
-		cout<<"Factor: "<<i<<endl;
-		obtener_grafica_mapeo_logaritmo(i).display(disp2);
-		while (!disp1.button()){}
-			sleep(0.8);
+		cout << "Factor: " << factor << endl;
+		obtener_grafica_mapeo_logaritmo(factor).display(disp2);
 	}
+
 	return 0;
 }

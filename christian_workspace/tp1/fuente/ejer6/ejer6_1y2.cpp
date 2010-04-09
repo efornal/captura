@@ -6,7 +6,7 @@
 // Description : Captura 2010, Ansi-style
 //============================================================================
 
-/* mayor nivel de cuantizacion mayor detalle.. fijarse en el punto .. el color...
+/* POSTA: mayor nivel de cuantizacion mayor detalle.. fijarse en el punto .. el color...
  * igual que en muestreo :)
  * */
 #include <CImg.h>
