@@ -11,7 +11,6 @@
 
 using namespace std;
 using namespace cimg_library;
-//TODO: hacerlo
 int main(int argc, char **argv) {
 
 	/*	no recuerdo si les comente, pero por las dudas, la función que deben usar para contaminar la imagen con
