@@ -41,9 +41,6 @@ int main(int argc, char **argv) {
 				<< "  hasta el plano: " << plano_final << endl;
 		resultado.display(disp);
 
-		/* TODO: ver el error cuadratico entre la imagen original y la reconstruida en funcion de la cantidad de
-		 * planos con los que se va reconstruyendo la imagen
-		 * */
 		disp.set_title("reconstruccion");
 	}
 	/* FIXME:tuve que hacerlo con la funcion que obtiene la reconstruccion desde el plano 0... o sea hacer un for siempre. no
