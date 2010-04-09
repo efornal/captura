@@ -51,7 +51,9 @@ int main(int argc, char **argv) {
 	imagen_sucia[10].print();
 	cout<<"Media de la imagen con ruido: "<<imagen_sucia[10].mean()<<endl;
 
-	disp3.set_title("imagen sucia 10"); //FIXME: el ruido no se nota porque es muy chica la varianza?
+	disp3.set_title("imagen sucia 10"); /*FIXME: el ruido no se nota porque es muy chica la varianza? y nos dieron
+												 dieron ese valor de varianza para que no tengamos que usar tantos cuadros
+												 para la reconstruccion ? o esta mal el ejercicio? */
 	CImg<float> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
 		reconstruida = sumar<CImg<float> > (reconstruida, imagen_sucia[i]);
