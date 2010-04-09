@@ -42,10 +42,6 @@ int main(int argc, char **argv) {
 				<< "  hasta el plano: " << plano_final << endl;
 		resultado.display(disp);
 
-		/* TODO: ver el error cuadratico entre la imagen original y la reconstruida en funcion de la cantidad de
-		 * planos con los que se va reconstruyendo la imagen
-		 * */
-
 		disp.set_title("reconstruccion");
 	}
 	/* FIXME:tuve que hacerlo con la funcion que obtiene la reconstruccion desde el plano 0... o sea hacer un for siempre. no
@@ -94,6 +90,14 @@ int main(int argc, char **argv) {
 	ejey[7] = imagen.MSE(get_until_plan(imagen, 0, 7));
 	cout << ejey[7];
 	cout << " ])";
+
+	/*FIXME:
+	 * ver el cout que hago en consola, copiar tal cual lo que tira donde dice Linea octave (inversa...) eso hace el grafico
+	 * del error caudratico medio y la imagen en x=0 del grafico esta el error cuadratico medio de reconstruccion solo con el plano 7 (bit mas significativo)
+	 * notar que da 0 --> usando 1 solo plano (el mas significativo da 0! porque???)
+	 * en x=1 del grafico esta el MSE de la reconstruccion entre la imagen original y los planos 7+6 y asi sucesivamente...
+	 *  porque cuando sumo los planos 7+6+5+4 segun la grafica el error cuadratico medio vuelve a ser cero??
+	 * */
 
 	//system("octave");
 	//imagen.MSE(resultado);
