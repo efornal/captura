@@ -9,9 +9,9 @@ using namespace cimg_library;
  * ver las graficas cuyos titulos son:
  * "suma de imagenes letras1 y su negativo - NO normalizado"
  * "suma de imagenes letras 1 y su negativo - normalizado"
- * porque el resultado en una y otra sale de diferentes colores?
+ * porque el resultado en una y otra sale de diferentes colores? no deberia dar negro?
  *
- * Se puede tirar informacion de la imagen en la lista como cuando sale con display (ej. los valores de intensidad)
+ * Se puede mostrar informacion de la imagen en la lista similar a display? (coordenada y valores de intensidad)
  * ya que si despliego las imagenes con display no me muestra nada
  */
 
@@ -25,36 +25,36 @@ int main() {
 	im1.load("../../imagenes/letras1.tif"); //cargo imagenes
 	im2.load("../../imagenes/letras2.tif");
 
-	CImgList<unsigned char> lista1(im1, im2, sumar<CImg<unsigned char> > (im1,
+	CImgList<float> lista1(im1, im2, sumar<CImg<float> > (im1,
 			im2, true)); //armo una lista con las imagenes y la suma de las mismas
 	cout << "lista 1 (normalizada la suma): " << lista1.print() << endl;
 	CImgDisplay disp1(lista1,
 			"suma de imagenes letras1 y letras 2 - normalizado"); //muestreo en un display
 
 
-	CImgList<unsigned char> lista2(im1, im2, sumar<CImg<unsigned char> > (im1,
+	CImgList<float> lista2(im1, im2, sumar<CImg<float> > (im1,
 			im2, false));
 	CImgDisplay disp2(lista2,
 			"suma de imagenes letras1 y letras 2 - NO normalizado"); //muestreo en un display
 	cout << "lista 2: (NO normalizada la suma)" << lista2.print() << endl;
 
-	CImgList<unsigned char> lista3(im1, negativo(im1), sumar<
-			CImg<unsigned char> > (im1, negativo(im1), true));
+	CImgList<float> lista3(im1, negativo(im1), sumar<
+			CImg<float> > (im1, negativo(im1), true));
 	CImgDisplay disp3(lista3,
 			"suma de imagenes letras 1 y su negativo - normalizado"); //muestreo en un display
 	cout << "lista 3: (Normalizada la suma) " << lista3.print() << endl;
 
-	CImgList<unsigned char> lista4(im1, negativo(im1), sumar<
-			CImg<unsigned char> > (im1, negativo(im1), false));
+	CImgList<float> lista4(im1, negativo(im1), sumar<
+			CImg<float> > (im1, negativo(im1), false));
 	CImgDisplay disp4(lista4,
 			"suma de imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 	cout << "lista 4: (no normalizada la suma" << lista4.print() << endl;
 
-	CImgList<unsigned char> lista5(im1, im1, sumar<CImg<unsigned char> > (im1,
+	CImgList<float> lista5(im1, im1, sumar<CImg<float> > (im1,
 			im1, false));
 	CImgDisplay disp5(lista5, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 
-	CImgList<unsigned char> lista6(im1, im1, sumar<CImg<unsigned char> > (im1,
+	CImgList<float> lista6(im1, im1, sumar<CImg<float> > (im1,
 			im1, false));
 	CImgDisplay disp6(lista6, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 	while (!disp1.is_closed()) {
