@@ -28,16 +28,16 @@ int main() {
 	imagennegra.fill(0);
 	CImgDisplay display1;
 	imagenblanca.display(display1);
-	display1.set_title("primera imagen a sumar");
-	sleep(5);
-	imagennegra.display(display1);
-	display1.set_title("segunda imagen a sumar");
-	sleep(5);
-	sumar(imagenblanca, imagennegra, true).display(display1);
-	display1.set_title("suma normalizada");
-	sleep(5);
-	sumar(imagenblanca, imagennegra, false).display(display1);
-	display1.set_title("suma no normalizada");
+	display1.set_title("im1+");
+	sleep(3);
+	negativo(imagenblanca).display(display1);
+	display1.set_title("+negativo (im1)");
+	sleep(3);
+	sumar(imagenblanca, negativo(imagenblanca), true).display(display1);
+	display1.set_title("= (suma normalizada)");
+	sleep(3);
+	sumar(imagenblanca, negativo(imagenblanca), false).display(display1);
+	display1.set_title("= (suma no normalizada)");
 	while (!display1.is_closed()) {
 	}
 
