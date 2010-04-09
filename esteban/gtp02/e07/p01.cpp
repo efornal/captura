@@ -1,6 +1,10 @@
+/**
+   FIXME: completar, esto solo prueba inicial,..
+*/
 #include <CHImg.h>
 #include <iostream>
 #include <lut.h>
+
 
 using namespace std;
 
