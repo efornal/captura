@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 	double ejey[8]; // ejey[0] es el error en reconstruir la imagen con un solo plano el 0
 
 	cout
-			<< "LINEA PARA OCTAVE - cantidad de planos tomados para la reconstruccion, error cuadratico medio"
+			<< "LINEA PARA OCTAVE (0-1-2...) - cantidad de planos tomados para la reconstruccion, error cuadratico medio"
 			<< endl;
 	cout << "plot([ ";
 	for (int i = 0; i < 7; i++) {
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 	cout << ejey[7];
 	cout << " ])";
 
-	cout<<endl<<endl<<"LINEA PARA OCTAVE (inverso) - cantidad de planos tomados para la reconstruccion, error cuadratico medio"<<endl;
+	cout<<endl<<endl<<"LINEA PARA OCTAVE (inverso 7-6-5....) - cantidad de planos tomados para la reconstruccion, error cuadratico medio"<<endl;
 	cout << "plot([ ";
 	for (int i = 0; i < 7; i++) {
 		cout << ejex[i] << ", ";
@@ -88,8 +88,8 @@ int main(int argc, char **argv) {
 
 	cout << "[ ";
 	for (int i = 7; i > 0; i--) {
-		ejey[7-i] = imagen.MSE(get_until_plan(imagen, i, 7));
-		cout << ejey[i] << ", ";
+		ejey[7-i] = imagen.MSE(get_until_plan(imagen, i, 7)); //ejey[0] va a tener el MSE con el plano 7 solo
+		cout << ejey[i] << ", ";							  //ejey[1] va a tener el MSE con el plano 7+plano6..etc.
 	}
 	ejey[7] = imagen.MSE(get_until_plan(imagen, 0, 7));
 	cout << ejey[7];
