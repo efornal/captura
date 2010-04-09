@@ -6,7 +6,7 @@ using namespace cimg_library;
 using namespace std;
 
 int main( int argc, char **argv ) {
-    const char *filename = cimg_option( "-f", "../../imagenes/rmn.jpg", 
+    const char *filename = cimg_option( "-f", "../../../imagenes/rmn.jpg", 
                                         "ruta archivo imagen" );
     const double factor = cimg_option( "-v", 1.01, 
                                       "valor exponencial" );
