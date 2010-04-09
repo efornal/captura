@@ -4,8 +4,16 @@
 
 using namespace std;
 using namespace cimg_library;
-//FIXME: que onda con el normalizado?? el tema de los colores que quedan segun lo que sale aca..
-// com ohago para tirar informacio de la imagen en la lista? si las despliego con display no me muestra nada!
+
+/*FIXME:
+ * ver las graficas cuyos titulos son:
+ * "suma de imagenes letras1 y su negativo - NO normalizado"
+ * "suma de imagenes letras 1 y su negativo - normalizado"
+ * porque el resultado en una y otra sale de diferentes colores?
+ *
+ * Se puede tirar informacion de la imagen en la lista como cuando sale con display (ej. los valores de intensidad)
+ * ya que si despliego las imagenes con display no me muestra nada
+ */
 
 /*POSTA :Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255"
  * y al sumar 255-255=0 ->negro (idem para cualquier otro valor)
