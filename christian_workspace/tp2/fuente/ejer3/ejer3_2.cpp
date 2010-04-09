@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace cimg_library;
+
 int main(int argc, char **argv) {
 
 	/*	no recuerdo si les comente, pero por las dudas, la función que deben usar para contaminar la imagen con
@@ -32,24 +33,26 @@ int main(int argc, char **argv) {
 	 Returns:
 	 A noisy version of the instance image.
 	 */
-	int cantidad_cuadros=60;
-	CImg<float> imagen_sucia [cantidad_cuadros];
-	for (int i=0;i<cantidad_cuadros;i++){
-		imagen_sucia[i]=imagen_limpia.get_noise(varianza); //FIXME: esta bien esto? com ohago para que el prpmedio me de 0 exacto?
+	int cantidad_cuadros = 60;
+	CImg<float> imagen_sucia[cantidad_cuadros];
+	for (int i = 0; i < cantidad_cuadros; i++) {
+		imagen_sucia[i] = imagen_limpia.get_noise(varianza); //FIXME: esta bien esto? com ohago para que el prpmedio me de 0 exacto?
 	}
 	imagen_sucia[10].display(disp3);
 	imagen_sucia[10].print();
 
 	disp3.set_title("imagen sucia 10");
-	CImg<float> reconstruida=imagen_sucia[0];
-	for (int i=1;i<cantidad_cuadros;i++){
-		reconstruida=sumar < CImg <float> >(reconstruida, imagen_sucia[i]);
+	CImg<float> reconstruida = imagen_sucia[0];
+	for (int i = 1; i < cantidad_cuadros; i++) {
+		reconstruida = sumar<CImg<float> > (reconstruida, imagen_sucia[i]);
 	}
-	cimg_forXY(reconstruida, x, y){
-		reconstruida(x,y)/=0.01; //FIXME: si le pongo 1/100 me tira error como que esta muy cerca de 0;
-	}
+	cimg_forXY(reconstruida, x, y)
+		{
+			reconstruida(x, y) /= 0.01; //FIXME: si le pongo 1/100 me tira error como que esta muy cerca de 0;
+		}
 	reconstruida.display(disp2);
 	disp2.set_title("reconstruida con 70 cuadros");
-	while (!disp2.is_closed()){}
+	while (!disp2.is_closed()) {
+	}
 	return 0;
 }
