@@ -9,14 +9,16 @@ using namespace cimg_library;
  * ver las graficas cuyos titulos son:
  * "suma de imagenes letras1 y su negativo - NO normalizado"
  * "suma de imagenes letras 1 y su negativo - normalizado"
- * porque el resultado en una y otra sale de diferentes colores? no deberia dar negro?
+ * porque cuando normalizo me queda gris? no deberia quedar blanco tambien?
  *
  * Se puede mostrar informacion de la imagen en la lista similar a display? (coordenada y valores de intensidad)
  * ya que si despliego las imagenes con display no me muestra nada
  */
 
-/*POSTA :Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255"
- * y al sumar 255-255=0 ->negro (idem para cualquier otro valor)
+/*FIXME: POSTA: Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255"
+ * y al sumar 255-255=0 ->negro (idem para cualquier otro valor)..
+ * esto es realmente asi?
+ *
  * */
 int main() {
 
