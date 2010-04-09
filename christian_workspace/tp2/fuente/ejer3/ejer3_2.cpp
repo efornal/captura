@@ -19,9 +19,12 @@ int main(int argc, char **argv) {
 	 * 	en los parámetros se especifica el tipo de ruido (gaussiano es el default) y la varianza.
 	 * La media del ruido generado es cero. El ruido generado es aditivo.*/
 
-	CImg<unsigned char> imagen_limpia;
-	imagen_limpia.load("../../imagenes/hubble.tif");
+	CImg<float> imagen_limpia;
+	imagen_limpia.load("../../imagenes/tablero.png");
 	double varianza = 0.05;
+	CImgDisplay disp1, disp2, disp3;
+	imagen_limpia.display(disp1);
+	disp1.set_title("imagen original");
 
 	/* Add noise to the image.
 	 Parameters:
@@ -29,9 +32,25 @@ int main(int argc, char **argv) {
 	 ntype 	= noise type. can be 0=gaussian, 1=uniform or 2=Salt and Pepper.
 	 Returns:
 	 A noisy version of the instance image.
+	 */
+	int cantidad_cuadros=60;
+	CImg<float> imagen_sucia [cantidad_cuadros];
+	for (int i=0;i<cantidad_cuadros;i++){
+		imagen_sucia[i]=imagen_limpia.get_noise(varianza); //FIXME: esta bien esto? com ohago para que el prpmedio me de 0 exacto?
+	}
+	imagen_sucia[10].display(disp3);
+	imagen_sucia[10].print();
 
-	 * */
-	CImg <unsigned char> imagen_sucia=imagen_limpia.get_noise(varianza);
-	imagen_sucia.display("ruidosa");
+	disp3.set_title("imagen sucia 10");
+	CImg<float> reconstruida=imagen_sucia[0];
+	for (int i=1;i<cantidad_cuadros;i++){
+		reconstruida=sumar < CImg <float> >(reconstruida, imagen_sucia[i]);
+	}
+	cimg_forXY(reconstruida, x, y){
+		reconstruida(x,y)/=0.01; //FIXME: si le pongo 1/100 me tira error como que esta muy cerca de 0;
+	}
+	reconstruida.display(disp2);
+	disp2.set_title("reconstruida con 70 cuadros");
+	while (!disp2.is_closed()){}
 	return 0;
 }
