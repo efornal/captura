@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 	 de 128-255 son todos unos
 	 por tanto la imagen correspondiente a este plano es una
 	 mitad blanca mitad negra. y asi con el resto.
-	 Los bits mas significativos(planos 7, 6..) me dan mucho mas nivel de detalle que los menos significativos (plano0..1)
+	 FIXME: Los bits mas significativos(planos 7, 6..) me dan mucho mas nivel de detalle que los menos significativos (plano0..1)
 	 */
 
 	CImg<unsigned char> gris = grises(); // me genera la imagen en tonos de grises
@@ -61,21 +61,21 @@ int main(int argc, char **argv) {
 		cout << "Plano: " << plano;
 	}
 
-	/*FIXME: es un umbral cdo aplico lo de los planos de bits..para el
-	 * Plano 0 -> estoy aplicando un umbral que corta en 1 o sea deja pasar los valores de 0 hasta 1 inclusive y los demas
-	 * 			  los hace 0
-	 * Plano 1 -> deja pasar valores desde 2 en adelante -> estoy cuantizando en 128 niveles????
-	 * Plano 2 -> deja pasar valores desde 4 en adelante
-	 * Plano 3 -> deja pasar valores desde 8 en adelante
-	 * ........
-	 * Plano 7 -> estoy aplicando un umbral en 128 -> deja pasar valores de 128 a 255
-	 * */
-	/*FIXME: porque el plano 7 con la imagen de grises se ve como que estuviera cuantizado en 2->poco detalle
-	 pero en la imagen con el plano 7 tengo mucho detalle!?que onda?
+	/*FIXME: es mi interpretacion correcta: es un umbral cdo aplico lo de los planos de bits??
+	 * Plano 0 -> cuantizo en 256 niveles?
+	 * Plano 1 -> cuantizo en 128 niveles
+	 * Plano 2 -> quantizo en 64 niveles
+	 * Plano 3 -> quantizo en 32 niveles
+	 * Plano 4 -> quantizo en 16 niveles
+	 * Plano 5 -> quantizo en 8 niveles
+	 * Plano 6 -> quantizo en 4 niveles
+	 * Plano 7 -> cuantizo en 2 niveles = umbral en 128/
+	 *--------------------------------------------------------------------------------------------------------------
+	 * si bien el plano 7 es como que lo estoy cuantizando en 2 niveles porque al
+	 * reconstruir la imagen (ver ejercicio ejer6_1_imagen.cpp) es como el que me aporta o me deja mejor la imagen?
+	 *--------------------------------------------------------------------------------------------------------------
+	 *solo se pueden meter hasta 6 imagenes en una lista! no mas de eso!?
 	 */
-
-	//FIXME: solo se pueden meter hasta 6 imagenes en una lista! no mas de eso!?
-
 
 	while ((!disp.is_closed() && !disp.is_keyQ())) {
 	}
