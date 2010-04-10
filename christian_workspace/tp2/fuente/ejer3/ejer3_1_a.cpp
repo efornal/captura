@@ -18,7 +18,6 @@ using namespace cimg_library;
 /*FIXME: POSTA: Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255"
  * y al sumar 255-255=0 ->negro (idem para cualquier otro valor)..
  * esto es realmente asi?
- *
  * */
 int main() {
 

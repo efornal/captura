@@ -40,7 +40,6 @@ int main(int argc, char **argv) {
 	 de 128-255 son todos unos
 	 por tanto la imagen correspondiente a este plano es una
 	 mitad blanca mitad negra. y asi con el resto.
-	 FIXME: Los bits mas significativos(planos 7, 6..) me dan mucho mas nivel de detalle que los menos significativos (plano0..1)
 	 */
 
 	CImg<unsigned char> gris = grises(); // me genera la imagen en tonos de grises
@@ -62,6 +61,9 @@ int main(int argc, char **argv) {
 	}
 
 	/*FIXME: es mi interpretacion correcta: es un umbral cdo aplico lo de los planos de bits??
+	 * Los bits mas significativos(planos 7, 6..) me dan mucho mas nivel de detalle que los menos
+	 * significativos (plano0..1)
+	 *
 	 * Plano 0 -> cuantizo en 256 niveles?
 	 * Plano 1 -> cuantizo en 128 niveles
 	 * Plano 2 -> quantizo en 64 niveles
@@ -71,8 +73,8 @@ int main(int argc, char **argv) {
 	 * Plano 6 -> quantizo en 4 niveles
 	 * Plano 7 -> cuantizo en 2 niveles = umbral en 128/
 	 *--------------------------------------------------------------------------------------------------------------
-	 * si bien el plano 7 es como que lo estoy cuantizando en 2 niveles porque al
-	 * reconstruir la imagen (ver ejercicio ejer6_1_imagen.cpp) es como el que me aporta o me deja mejor la imagen?
+	 * si bien el plano 7 es como que lo estoy cuantizando en 2 niveles, ¿porque al
+	 * reconstruir la imagen (ver ejercicio ejer6_1_imagen.cpp) es el que me deja mejor la imagen?
 	 *--------------------------------------------------------------------------------------------------------------
 	 *solo se pueden meter hasta 6 imagenes en una lista! no mas de eso!?
 	 */

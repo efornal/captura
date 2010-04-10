@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	 Returns:
 	 A noisy version of the instance image.
 	 */
-	int cantidad_cuadros=70; //FIXME: mejora muy poco el ruido que onda con esto!?
+	int cantidad_cuadros=70; //FIXME: mejora muy poco la imagen que esta pasando con esto!?
 	CImg<float> imagen_sucia [cantidad_cuadros];
 	for (int i=0;i<cantidad_cuadros;i++){
 		imagen_sucia[i]=imagen_limpia.get_noise(varianza);
