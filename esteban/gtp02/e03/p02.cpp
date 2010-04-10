@@ -3,7 +3,7 @@
  * en los parámetros se especifica el tipo de ruido (gaussiano es el default) 
  * y la varianza. La media del ruido generado es cero. El ruido generado es aditivo.
  *
- * NOTA: con ./p02 -var 10 (varianza 10) se aprecia mejor
+ * NOTA: con ./p02 -var 50 (varianza 50 ) se aprecia mejor
  *
  * FIXME: 
  * 1) la imagen promediada no sale muy bien!
@@ -18,9 +18,8 @@
  * ruido haces de nuevo el proceso y te fijas si no cambia la media el ruido tiene
  * media cero
 */
-#include <CImg.h>
+#include <CHImg.h>
 #include <iostream>
-#include <operaciones.h>
 
 using namespace cimg_library;
 using namespace std;
@@ -33,16 +32,16 @@ int main( int argc, char **argv ) {
     const double var = cimg_option( "-var", 0.05 , 
                                         "varianza" );
 
-    CImg<double> img( filename );
-    CImg<double> ruidosas[cantidad];
-    CImg<double> promedio;
+    CHImg<double> img( filename );
+    CHImg<double> ruidosas[cantidad];
+    CHImg<double> promedio;
 
     CImgDisplay disp, disp2, disp3;
 
     img.display(disp); 
-    cout << "Media de la imagen original: " << img.mean() << endl;
-
     disp.set_title("original");
+
+    cout << "Media de la imagen original: " << img.mean() << endl;
 
     for( int i=0; i<cantidad; i++){
         ruidosas[i] = img.get_noise( var );
@@ -52,21 +51,11 @@ int main( int argc, char **argv ) {
 
     ruidosas[0].display(disp2);
     disp2.set_title("con ruido gausiano (ej: imagen uno)");
+    cout << "Media de una de las imagenes con ruido: " << ruidosas[0].mean() << endl ;
 
-
-    promedio = ruidosas[0];
-    cout << "Media de una de las imagenes con ruido: " << promedio.mean() << endl ;
-
-    for( int i=1; i<cantidad; i++){
-        promedio = sumar(promedio,ruidosas[i]);
-    }
-    cimg_forXY(promedio,x,y){
-        promedio(x,y) = (promedio(x,y)/cantidad);
-        //	reconstruida = sumar<CImg<float> > (reconstruida, imagen_sucia[i]);
-    }
+    promedio =  promedio.get_suma_promedio( ruidosas, cantidad );
     promedio.display(disp3);
     disp3.set_title("promediada (suma todas / cantidad)");
-
     cout << "Media de la imagen promedio: " << promedio.mean() << endl 
          << "la media debe mantenerse." << endl;
  
