@@ -5,8 +5,6 @@
 // Copyright   : GNU Public License
 // Description : Hello World in C++, Ansi-style
 //============================================================================
-//FIXME: ejecutar y  probar con las flechas lo que da varia rapidamente es por el factor nomas y como estoy trabjaando
-//con imagenes unsgiend char me lo castea a entero?
 
 #include <iostream>
 #include <CImg.h>
