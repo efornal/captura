@@ -4,6 +4,7 @@
  * y la varianza. La media del ruido generado es cero. El ruido generado es aditivo.
  *
  * NOTA: con ./p02 -var 50 (varianza 50 ) se aprecia mejor
+ * si cambiamos el tipo de dato de unsigned char a double se ve mejor 
  *
  * FIXME: 
  * 1) la imagen promediada no sale muy bien!
@@ -34,7 +35,8 @@ int main( int argc, char **argv ) {
 
     CHImg<double> img( filename );
     CHImg<double> ruidosas[cantidad];
-    CHImg<double> promedio;
+    CHImg<unsigned char> promedio;
+    //CHImg<double> promedio; // mejora la calidad
 
     CImgDisplay disp, disp2, disp3;
 
