@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace cimg_library;
-//FIXME: que onda con el normalizado?? el tema de los colores que quedan segun lo que sale aca..
+
 int main() {
 
 	CImg<unsigned char> im1, im2;
