@@ -5,8 +5,8 @@
 // Copyright   : GNU Public License
 // Description : Hello World in C++, Ansi-style
 //============================================================================
-//FIXME: creo que anda mal, ejecutarlo y ver los resutlados creo que la funcion potencia esta mal... y
-// ver la grafica porque esta mal!????
+//FIXME: ejecutar y  probar con las flechas lo que da varia rapidamente es por el factor nomas y como estoy trabjaando
+//con imagenes unsgiend char me lo castea a entero?
 
 #include <iostream>
 #include <CImg.h>
@@ -20,8 +20,8 @@ int main() {
 	imagen.load("../../imagenes/rmn.jpg");
 	CImgDisplay disp1, disp2;
 	int i = 1;
-	int factor = 1;
-	im_pot = potencia(imagen, i, factor);
+	float factor = 1;
+	im_pot = potencia<CImg<unsigned char> > (imagen, i, factor);
 	disp1.set_title("grafica potencia variando el factor");
 	im_pot.display(disp1);
 	cout << "Factor: " << factor << endl;
@@ -44,7 +44,8 @@ int main() {
 		im_pot = potencia(imagen, i, factor);
 		disp1.set_title("grafica logaritmo variando el factor");
 		im_pot.display(disp1);
-		cout << "exponenete: " << i << "        - FACTOR: (original^i)*factor : " << factor << endl;
+		cout << "exponenete: " << i
+				<< "        - FACTOR: (original^i)*factor : " << factor << endl;
 		obtener_grafica_mapeo_potencia(i).display(disp2);
 	}
 	return 0;
