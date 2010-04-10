@@ -22,12 +22,15 @@ int main() {
 
 	CImgDisplay disp1, disp2, disp3;
 	img.display(disp1);
+
 	disp1.set_title("original");
 
 	//img_histograma.display_graph("histograma de imagen original", 3);
 	//img_ecualizada.display_graph("ecualizacion de imagen original", 3);
 	img_histograma.display_graph(disp2, 3);
+	img_histograma.display_graph()
 	disp2.set_title("imagen de histograma");
+	img_histograma.display("imagen aplicando histograma");
 	img_ecualizada.display_graph(disp3, 3);
 
 	/*
