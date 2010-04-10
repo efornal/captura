@@ -1,7 +1,8 @@
 #include <CImg.h>
+#include <iostream>
 
 using namespace cimg_library;
-
+using namespace std;
 template<typename T> struct CHImg : public CImg<T> {
 
     // Constructores replicados
@@ -81,7 +82,60 @@ template<typename T> struct CHImg : public CImg<T> {
         }
         return img2; 
     }
+    
+    /**
+     * Suma punto a punto de dos imagenes (no promedia)
+     */
+    void sumar( CImg<double> img2 ) { 
+        CImg<double> img1 = *this; 
+        cimg_forXY( img1, x, y ) {
+            img1(x,y) = ( img1(x,y) + img2(x,y) );
+        }
+        *this = img1; //rebuscado!
+    }
+    
 
+    /**
+     * Suma punto a punto de dos imagenes (no promedia)
+     */
+    CImg<double> sumar( CImg<double> img1,CImg<double> img2 ) { 
+        cimg_forXY( img1, x, y ) {
+            img1(x,y) = ( img1(x,y) + img2(x,y) );
+        }
+        return img1;
+    }
+
+    /**
+     * Suma de dos imagenes promediando los valores
+     * ej: usada para reduccion de ruido
+     */
+    void suma_promedio( CImg<double> img2 ) { 
+        CImg<double> img1 = *this;
+        cimg_forXY( img1, x, y ) {
+            img1(x,y) = ( img1(x,y) + img2(x,y) ) / 2.0;
+        }
+    }
+
+    /**
+     * Suma de n imagenes promediando los valores
+     * ej: usada para reduccion de ruido
+     */
+    CImg<double> get_suma_promedio( CHImg<double> imagenes[], int cantidad=0 ) { 
+        CHImg<double> promedio;
+
+        promedio = imagenes[0];
+
+        for( int i=1; i<cantidad; i++){
+            promedio.sumar(imagenes[i] );
+        }
+
+        cimg_forXY( promedio, x, y ) {
+            promedio(x,y) = ( promedio(x,y) / (double)cantidad );
+        }
+
+        return promedio;
+    }
+    
 
 
 };

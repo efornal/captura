@@ -7,6 +7,13 @@ CImg<unsigned char> suma( CImg<unsigned char> img1, CImg<unsigned char> img2 ) {
     return (img1 + img2) / 2;
 }
 
+CImg<unsigned char> sumar( CImg<double> img1, CImg<double> img2 ) { 
+    cimg_forXY(img1,x,y){
+        img1(x,y) = ( img1(x,y) + img2(x,y) ) / 2.0;
+    }
+    return img1;
+}
+
 /**
    Autosuma una imgaen n veces y la divide por n (promedio)
 */
