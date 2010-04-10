@@ -1,8 +1,7 @@
 #include <CImg.h>
-#include <iostream>
 
 using namespace cimg_library;
-using namespace std;
+
 template<typename T> struct CHImg : public CImg<T> {
 
     // Constructores replicados
