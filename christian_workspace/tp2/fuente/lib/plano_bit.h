@@ -20,7 +20,11 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 		cimg_forXY(img,x,y)
 			{
 				img(x, y) = (img(x, y) >> nro) & 0x00000001;
-				//cout<<img(x,y)<<endl; //FIXME: porque si pongo esto en consola no me lo muestra en binario?
+				//cout<<img(x,y)<<endl;
+				/*FIXME: si se descomentan las barras del coemntario de arriba y
+				 * ejecutando el ejercicio ejer6_1_gris la salida no me sale en formato binario
+				 * como puedo hacer para que me salgan bien los numeritos?
+				 * */
 			}
 	} else {
 		cimg_forXY(img,x,y)
