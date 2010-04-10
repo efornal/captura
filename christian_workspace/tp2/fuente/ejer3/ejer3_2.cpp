@@ -47,6 +47,9 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < cantidad_cuadros; i++) {
 		imagen_sucia[i] = imagen_limpia.get_noise(varianza);
 	}
+	cout<<endl<<"ruido"<<endl;
+	imagen_limpia.get_noise(0.05).print();
+	cout<<endl;
 	imagen_sucia[10].display(disp3);
 	imagen_sucia[10].print();
 	cout<<"Media de la imagen con ruido: "<<imagen_sucia[10].mean()<<endl;
