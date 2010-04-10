@@ -60,11 +60,10 @@ int main(int argc, char **argv) {
 	}
 	cimg_forXY(reconstruida, x, y)
 		{
-			reconstruida(x, y) = reconstruida(x, y)/(0.01666); // 60=cant cuadros si pongo FIXME:1/60 me lo redondea a 0.. ni siguiera anda casteandolo!
-
+			reconstruida(x, y) = reconstruida(x, y)/cantidad_cuadros;
 		}
 	reconstruida.display(disp2);
-	disp2.set_title("reconstruida con 70 cuadros");
+	disp2.set_title("reconstruida con 60 cuadros");
 	while (!disp2.is_closed()) {
 	}
 	return 0;

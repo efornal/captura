@@ -2,8 +2,8 @@
 using namespace std;
 using namespace cimg_library;
 
-template <class T>
-T clipp (T valor) {
+template<class T>
+T clipp(T valor) {
 	if (valor > 255.0)
 		return 255;
 	else if (valor < 0)
@@ -107,9 +107,8 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 //operaciones con una sola imagen: clipping
 //operaciones con 2 imagenes: normalizacion
 
-template <class T>
-T potencia(T original, float exp, float factor =
-		1) {
+template<class T>
+T potencia(T original, float exp, float factor = 1) {
 	// transforacion de potencia
 	// por defecto clipea
 	T modificada(original.width(), original.height(), 1, 1);
@@ -130,7 +129,7 @@ CImg<unsigned char> obtener_grafica_mapeo_logaritmo(int factor) {
 	CImg<unsigned char> mapeado = (logaritmo(mapeo, factor));
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
-template <class T>
+template<class T>
 T obtener_grafica_mapeo_potencia(float exponente) {
 	float blanco[] = { 255, 255, 255 };
 	T mapeo(255, 1, 1, 1, 0);
@@ -221,7 +220,7 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 	else
 		return imagen;
 }
-//WBB: no se que esta mal!
+//FIXME: no se que esta mal en la funcion del filtro emboss cprrer ejercicio ejer4/ejer4_1.cpp y ver q no anda
 CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 		true) { //TODO: hacer para que corte la imagen segun el desplazamiento
 	/*	funcion que aplica un filtro emboss a una imagen
@@ -232,7 +231,7 @@ CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
 
 	//CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
 	if (normalizado)
-		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize(); //FIXME: ver lo del false normalizado=clipp hay que sacarlo sino
+		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize();
 	return sumar(im1, lut(negativo(im1), 1, c, false));
 }
 
