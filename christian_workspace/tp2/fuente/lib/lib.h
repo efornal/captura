@@ -2,10 +2,11 @@
 using namespace std;
 using namespace cimg_library;
 
-int clipp(int valor) {
-	if (valor > 255)
+template <class T>
+T clipp (T valor) {
+	if (valor > 255.0)
 		return 255;
-	else if (valor < 1)
+	else if (valor < 0)
 		return 0;
 	else
 		return valor;
@@ -129,15 +130,15 @@ CImg<unsigned char> obtener_grafica_mapeo_logaritmo(int factor) {
 	CImg<unsigned char> mapeado = (logaritmo(mapeo, factor));
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
-
-CImg<unsigned char> obtener_grafica_mapeo_potencia(int exponente) {
-	unsigned char blanco[] = { 255, 255, 255 };
-	CImg<unsigned char> mapeo(255, 1, 1, 1, 0);
-	CImg<unsigned char> mapeo_disp(255, 255, 1, 1, 0);
+template <class T>
+T obtener_grafica_mapeo_potencia(float exponente) {
+	float blanco[] = { 255, 255, 255 };
+	T mapeo(255, 1, 1, 1, 0);
+	T mapeo_disp(255, 255, 1, 1, 0);
 	cimg_forX( mapeo, x ) {
 		mapeo(x) = x; //escala de 0 a 255
 	}
-	CImg<unsigned char> mapeado = potencia(mapeo, exponente);
+	T mapeado = potencia(mapeo, exponente);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
 
