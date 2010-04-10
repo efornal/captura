@@ -105,11 +105,13 @@ CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 
 //operaciones con una sola imagen: clipping
 //operaciones con 2 imagenes: normalizacion
-CImg<unsigned char> potencia(CImg<unsigned char> original, int exp, int factor =
+
+template <class T>
+T potencia(T original, float exp, float factor =
 		1) {
 	// transforacion de potencia
 	// por defecto clipea
-	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
+	T modificada(original.width(), original.height(), 1, 1);
 	cimg_forXY(original,x,y)
 		{
 			modificada(x, y) = clipp(pow(original(x, y), exp)) * factor;
