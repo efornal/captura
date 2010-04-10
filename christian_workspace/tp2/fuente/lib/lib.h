@@ -274,3 +274,14 @@ CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	return imagen.threshold(imagen.max() / 2);
 	// FIXME: cuantiza en 2 niveles... se puede decir que cuantizar y aplicar un threshold sobre el rango es lo mismo?
 }
+
+template <class T>
+bool intensidades_iguales (T imagen1, T imagen2){
+	//si las imagenes BINARIAS son iguales devuelve true en otro caso false
+	cimg_forXY(imagen1, x, y){
+		if (imagen1(x,y)!=imagen2(x,y)){
+			return false;
+		}
+	}
+	return true;
+}
