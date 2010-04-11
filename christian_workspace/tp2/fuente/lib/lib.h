@@ -49,8 +49,9 @@ CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
 }
 
 CImg<unsigned char> negativo(CImg<unsigned char> & img1) { //retorna el negativo de una imagen
+	//ojo solo anda para imagenes en tonos de grises
 	int a = -1;
-	unsigned char c = img1.max(); // maximo de la imagen
+	unsigned char c = 255; // maximo de la "escala"
 	return lut(img1, a, c, 1);
 }
 
