@@ -70,7 +70,9 @@ int main(int argc, char **argv) {
 	cout << ejey[7];
 	cout << " ])";
 
-	cout<<endl<<endl<<"LINEA PARA OCTAVE (inverso 7-6-5....) - cantidad de planos tomados para la reconstruccion, error cuadratico medio"<<endl;
+	cout << endl << endl
+			<< "LINEA PARA OCTAVE (inverso 7-6-5....) - cantidad de planos tomados para la reconstruccion, error cuadratico medio"
+			<< endl;
 	cout << "plot([ ";
 	for (int i = 0; i < 7; i++) {
 		cout << ejex[i] << ", ";
@@ -79,32 +81,25 @@ int main(int argc, char **argv) {
 
 	cout << "[ ";
 	for (int i = 7; i > 0; i--) {
-		ejey[7-i] = imagen.MSE(get_until_plan(imagen, i, 7)); //ejey[0] va a tener el MSE con el plano 7 solo
-		cout << ejey[i] << ", ";							  //ejey[1] va a tener el MSE con el plano 7+plano6..etc.
+		ejey[7 - i] = imagen.MSE(get_until_plan(imagen, i, 7)); //ejey[0] va a tener el MSE con el plano 7 solo
+		cout << ejey[i] << ", "; //ejey[1] va a tener el MSE con el plano 7+plano6..etc.
 	}
 	ejey[7] = imagen.MSE(get_until_plan(imagen, 0, 7));
 	cout << ejey[7];
 	cout << " ])";
 
-	/*FIXME:
+	/* FIXME:
 	 * ver el cout que hago en consola, copiar tal cual lo que tira donde dice Linea octave (inversa...) eso hace el grafico
-	 * del error caudratico medio y la imagen en x=0 del grafico esta el error cuadratico medio de reconstruccion solo con el plano 7 (bit mas significativo)
+	 * del error caudratico medio y la imagen en x=0 del grafico esta el error cuadratico medio de reconstruccion solo con el
+	 * plano 7 (bit mas significativo)
 	 * notar que da 0 --> usando 1 solo plano (el mas significativo da 0! porque???)
 	 * en x=1 del grafico esta el MSE de la reconstruccion entre la imagen original y los planos 7+6 y asi sucesivamente...
 	 *  porque cuando sumo los planos 7+6+5+4 segun la grafica el error cuadratico medio vuelve a ser cero??
+	 *
+	 *  TODO: Conceptualmente no debe dar así, correcto? El error cuadrático no puede ser cero salvo que sea la misma imagen.
+	 *  Debe haber un error, proba haciendo el MSE a pata en un pedacito chiquito de la imagen donde puedas conocer los valores
+	 *  y hacer a pata el cálculo.
 	 * */
-
-	//system("octave");
-	//imagen.MSE(resultado);
-
-/*
-	FILE *archivo;El manejador de archivo
-	     archivo=fopen("error_uno.m", "w");
-	     if(archivo==NULL)So no lo logramos abrir, salimos
-	        return 1;
-	     fprintf(archivo, "Hola, mundo\n");Escribimos en el archivo
-	     fclose(archivo);//Cerramos el archivo
-*/
 
 	return 0;
 }

@@ -24,6 +24,9 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 				/*FIXME: si se descomentan las barras del coemntario de arriba y
 				 * ejecutando el ejercicio ejer6_1_gris la salida no me sale en formato binario
 				 * como puedo hacer para que me salgan bien los numeritos?
+				 *
+				 * TODO: Talves el cout no esta interpretando el tipo de dato correctamente.
+				 * Fijate si definis una vble y le asignas el valor y luego imprimis esa en pantalla.
 				 * */
 			}
 	} else {
