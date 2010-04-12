@@ -19,12 +19,18 @@ int main(int argc, char **argv) {
 	 * (desplazar el negativo unos pixeles en alguna direccion obtenemos el efecto)
 	 * segun se negativize una u otra imagen obtenemos efecto de relieve exterior o interior
 	 * */
-	//TODO: no funciona, consultar
-	CImg <unsigned char > imagen;
+
+	CImg<unsigned char> imagen;
 	imagen.load("../../imagenes/letras1.tif");
-	int c=4;
-	CImgList <unsigned char> lista (imagen, negativo(imagen), emboss(imagen, c, false));
-	lista.display("Imagen original, imagen con el negativo y un desplazamiento, filtro emboss aplicado");
-	cout<<"El desplazamiento es de: "<<c<<endl;
+
+	CImgDisplay disp1, disp2;
+
+	/*FIXME: cuadno dice segun que imagen se negativize el ejecto sera relieve interior o exterior...
+	 * en cual es exterior y en cual interior... se refiere a las dos lienas que puse aca abajo?*/
+	emboss(imagen, 1, 1, false).display(disp1);
+	emboss(negativo(imagen), 1, 1, false).display(disp2);
+	while (!disp1.is_closed()) {
+	}
+
 	return 0;
 }

@@ -12,6 +12,20 @@ T clipp(T valor) {
 		return valor;
 }
 
+template<class T>
+CImg<T> desplazar(CImg<T> imagen, int des_x, int des_y) {
+	/* des_x : desplazamiento en x
+	 * des_y : desplazamiento en y
+	 * imagen: imagen a desplazar
+	 * retorna la imagen desplazada
+	 * */
+	CImg<T> im(imagen.width(), imagen.height(), 1, 1, 0);
+	for (int x = 0; x < imagen.width() - des_x; x++)
+		for (int y = 0; y < imagen.height() - des_y; y++)
+			im(x + des_x, y + des_y) = imagen(x, y);
+	return im;
+}
+
 CImg<unsigned char> lut(CImg<unsigned char> original, int a = 1, int c = 0,
 		bool clip = 1) {
 	/*	entrada_r imagen de entrada sobre la cual se aplica la transformacion
@@ -78,9 +92,9 @@ CImg<unsigned char> lut_tramos(CImg<unsigned char> original, int x0, int x1,
 		}
 	return modificada;
 }
-template <class T>
-T lut_tramos2dimensiones(T original,
-		int x0, int y0, int x1, int y1, bool clip, float factor) {
+template<class T>
+T lut_tramos2dimensiones(T original, int x0, int y0, int x1, int y1, bool clip,
+		float factor) {
 	/* aplica un mapeo en la zona comprendida por los puntso x0, y0, x1, y1
 	 * el resto de la imagen no es modificado
 	 * */
@@ -236,19 +250,18 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 	else
 		return imagen;
 }
-//FIXME: no se que esta mal en la funcion del filtro emboss cprrer ejercicio ejer4/ejer4_1.cpp y ver q no anda
-CImg<unsigned char> emboss(CImg<unsigned char> im1, int c, bool normalizado =
-		true) { //TODO: hacer para que corte la imagen segun el desplazamiento
-/*	funcion que aplica un filtro emboss a una imagen
- im1: imagen a la que se le aplica el filtro
- * c:	parametro de desplazamiento salida=entrada+c
- * normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
+
+CImg<unsigned char> emboss(CImg<unsigned char> imagen, int des_x, int des_y,
+		bool normalizado = true) {
+/* normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
  * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO*/
 
-	//CImg<unsigned char> imagen(im1.width()-c, im1.height(), 1, 1);
 	if (normalizado)
-		return sumar(im1, lut(negativo(im1), 1, c, false)).normalize();
-	return sumar(im1, lut(negativo(im1), 1, c, false));
+		return sumar<CImg<unsigned char> > (desplazar<unsigned char> (negativo(
+				imagen), des_x, des_y), imagen).normalize();
+	return sumar<CImg<unsigned char> > (desplazar<unsigned char> (negativo(
+			imagen), des_x, des_y), imagen);
+
 }
 
 CImg<unsigned char> grises() {
@@ -276,13 +289,14 @@ CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	// FIXME: cuantiza en 2 niveles... se puede decir que cuantizar y aplicar un threshold sobre el rango es lo mismo?
 }
 
-template <class T>
-bool intensidades_iguales (T imagen1, T imagen2){
+template<class T>
+bool intensidades_iguales(T imagen1, T imagen2) {
 	//si las imagenes BINARIAS son iguales devuelve true en otro caso false
-	cimg_forXY(imagen1, x, y){
-		if (imagen1(x,y)!=imagen2(x,y)){
-			return false;
+	cimg_forXY(imagen1, x, y)
+		{
+			if (imagen1(x, y) != imagen2(x, y)) {
+				return false;
+			}
 		}
-	}
 	return true;
 }
