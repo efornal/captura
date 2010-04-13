@@ -5,7 +5,11 @@
 using namespace cimg_library;
 using namespace std;
 
-// TODO: templatizar esta función !!!!!!!!!
+// me devuelve 0 si la imagen es vertical, 1 si horizontal
+template<class T> int orientacion ( const T & imagen ){ return (imagen.width() >= imagen.height()) ? 1 : 0; }
+
+// idem anterior pero con coordenadas
+int orientacion ( int x0, int y0, int x1, int y1 ) { return abs(x1-x0) >= abs(y1-y0) ? 1 : 0; }
 
 CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int x0, int y0, int x1, int y1, short canal=0 ) {
   
@@ -15,9 +19,6 @@ CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int 
        x0 > imagen.width()-1 || x1 > imagen.width()-1 || y0 > imagen.height()-1 || y1 > imagen.height()-1 ) {
     return CImg<unsigned char> ();
   }
-
-  // me fijo si la dimensión mayor del segmento es la horizontal
-  bool es_horizontal = ( abs(x1-x0) >= abs(y1-y0) ) ? true : false;
 
   unsigned nro_canales = imagen.spectrum();
   unsigned char* blanco = new unsigned char[nro_canales], * negro = new unsigned char[nro_canales];
@@ -33,7 +34,7 @@ CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int 
 
   //enmascarada.display();
 
-  if ( es_horizontal ) {
+  if ( orientacion (x0,y0,x1,y1) == 1 ) {
     //resultado = CImg<unsigned char> (abs(x1-x0)+1,1,1,nro_canales);
     
     // sgn indica si los valores se recorren de derecha a izq o viceversa
@@ -58,8 +59,6 @@ CImg<unsigned char> perfil_intensidad ( const CImg<unsigned char> & imagen, int 
   }
   return enmascarada.get_column(0);
 }
-
-
 
 int main(int argc, char *argv[]) {
 
@@ -100,8 +99,7 @@ int main(int argc, char *argv[]) {
 	      x1 = disp_imag.mouse_x();
 	      y1 = disp_imag.mouse_y();
 	      
-	      grafico.fill(192).draw_graph( perfil_intensidad( imagen, x0, y0, x1, y1), color ).display(disp_graf);
-	      //perfil_intensidad( imagen, x0, y0, x1, y1).display(disp_graf);
+	      grafico.fill(192).draw_graph( perfil_intensidad( imagen,x0,y0,x1,y1) , color, 1,1,1,0,0,true ).display(disp_graf);
 
 	      click_es_2do_punto = false;
 	    }
@@ -115,3 +113,4 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
+
