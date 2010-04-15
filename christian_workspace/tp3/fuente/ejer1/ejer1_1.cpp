@@ -28,7 +28,7 @@ int main() {
 	//img_histograma.display_graph("histograma de imagen original", 3);
 	//img_ecualizada.display_graph("ecualizacion de imagen original", 3);
 	img_histograma.display_graph(disp2, 3);
-	img_histograma.display_graph()
+	img_histograma.display_graph();
 	disp2.set_title("imagen de histograma");
 	img_histograma.display("imagen aplicando histograma");
 	img_ecualizada.display_graph(disp3, 3);
