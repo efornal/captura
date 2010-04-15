@@ -124,13 +124,11 @@ CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 	// transforacion logaritmica
 	// por defecto clipea
-
-	//TODO: modificar logaritmo factor= 255/log(1+abs(r)) ---> s=c*log(1+abs(r))
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 
 	cimg_forXY(original,x,y)
 		{
-			modificada(x, y) = clipp(log(1 + original(x, y)) * factor);
+			modificada(x, y) = clipp(log(1 + abs(original(x, y))) * factor);
 		}
 
 	return modificada;
