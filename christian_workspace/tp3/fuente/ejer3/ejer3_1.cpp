@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	CImg<float> resultado15 = imagen.get_convolve(generar_mascara<float> (15));
 	CImg<float> resultado30 = imagen.get_convolve(generar_mascara<float> (30));
 	CImg<float> resultado50 = imagen.get_convolve(generar_mascara<float> (50));
-	/*POSTA: al aumentar el tamanio de la mascara promedias mas valores y por tanto
+	/*POSTA: filtro de promedidado -  al aumentar el tamanio de la mascara promedias mas valores y por tanto
 	 * vas haciendo cada vez menos notoria la diferencia entre pixeles vecinos y por
 	 * lo tanto resulta en una imagen mas disfuminada */
 	CImgDisplay disp1, disp2, disp3, disp4, disp5;
