@@ -27,6 +27,8 @@
    *    claros y oscuros
    *    bajo contraste: valores dispersos
    *
+   * TODO: falta comparacion con imagenB , C, D, !!!
+   *
    * - imagenE
    *        |
    *        |.||....

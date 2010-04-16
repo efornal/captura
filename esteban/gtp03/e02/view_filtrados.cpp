@@ -4,6 +4,7 @@
 
 using namespace cimg_library;
 using namespace std;
+using namespace masks;
 
 int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/tablero.png", 
