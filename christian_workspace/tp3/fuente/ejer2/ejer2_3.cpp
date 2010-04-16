@@ -30,6 +30,9 @@ int main(int argc, char **argv) {
 
 	mascara3x3<float> ().normalize(0, 255).display("mascara");
 	cout<<"Error cuadratico total: "<<resultado_convolucion.MSE(resultado_correlacion);
+	/* El error cuadratico total es 0 porque hacer la convolucion o la correlacion con la mascara
+	 * (simetrica) es lo mismo
+	 * */
 	while (!disp1.is_closed()) {
 	}
 	return 0;
