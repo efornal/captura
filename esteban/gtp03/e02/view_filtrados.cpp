@@ -1,15 +1,6 @@
-/**
-* CImg<T>& correlate( CImg< t > &mask,
-* 		    int cond = 1,
-* 		    bool weighted_correl = false ) 
-*
-* CImg<T>& convolve ( CImg< t > &mask,
-*                     int	cond = 1,
-*                     bool weighted_convol = false)
-*/
-
 #include <CHImg.h>
 #include <masks.h>
+#include <iostream>
 
 using namespace cimg_library;
 using namespace std;
@@ -17,20 +8,24 @@ using namespace std;
 int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/tablero.png", 
                                         "ruta archivo imagen" );
-    CImg<float> mask = masks::impulso();
-    CImgDisplay disp, disp2;
-    CImg<float> img( filename );
+
+    CImgDisplay disp, disp2, disp3, disp4;
+    CImg<double> img( filename );
 
     img.display(disp);
     disp.set_title("imagen original");
 
-    img.convolve( mask );
-
-
-    img.display(disp2);
+    img.get_convolve( masks::impulso() ).display(disp2);
     disp2.set_title("imagen filtrada con impulso, debe ser igual");
+    masks::impulso().display("impulso");
 
-    mask.display("kernel");
+    img.get_convolve( masks::media_estandar() ).normalize(0,255).display(disp3);
+    disp3.set_title("imagen filtrada con media estandar");
+    masks::media_estandar().normalize(0,255).display("media estandar - norm");
+
+    img.get_convolve( masks::media_ponderada() ).normalize(0,255).display(disp4);
+    disp4.set_title("imagen filtrada con media ponderada");
+    masks::media_ponderada().normalize(0,255).display("media ponderada - norm");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) { wait(); }
     return 0;
