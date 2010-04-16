@@ -26,9 +26,15 @@ int main(int argc, char **argv) {
 	 * media cero
 	 * */
 
-	CImg<float> imagen_limpia;
+	CImg<unsigned char> imagen_limpia;
 	imagen_limpia.load("../../imagenes/tablero.png");
-	double varianza = 0.05;
+	imagen_limpia=imagen_limpia.get_channel(0);
+	/* FIXME: a lo de aca arriba se referia con lo que me contesto en el mail?
+	 * el tipo de datos estaba puesto a float ya que si ponia unsigned char
+	 * me muestra la imagen de promediaddo en negro.. no se porque... y respecto a lo del canal
+	 * parece que no tiene nada que ver.. entonces :(
+	 * */
+	double varianza = 16;
 	CImgDisplay disp1, disp2, disp3;
 	imagen_limpia.display(disp1);
 	cout<<"Media de la imagen original: "<<imagen_limpia.mean()<<endl;
@@ -43,20 +49,21 @@ int main(int argc, char **argv) {
 	 */
 
 	int cantidad_cuadros = 60;
-	CImg<float> imagen_sucia[cantidad_cuadros];
+	CImg<unsigned char> imagen_sucia[cantidad_cuadros];
 	for (int i = 0; i < cantidad_cuadros; i++) {
 		imagen_sucia[i] = imagen_limpia.get_noise(varianza);
 	}
+	cout<<endl<<"ruido"<<endl;
+	imagen_limpia.get_noise(0.05).print();
+	cout<<endl;
 	imagen_sucia[10].display(disp3);
 	imagen_sucia[10].print();
 	cout<<"Media de la imagen con ruido: "<<imagen_sucia[10].mean()<<endl;
 
-	disp3.set_title("imagen sucia 10"); /*FIXME: el ruido no se nota porque es muy chica la varianza? y nos dieron
-												 dieron ese valor de varianza para que no tengamos que usar tantos cuadros
-												 para la reconstruccion ? o esta mal el ejercicio? */
-	CImg<float> reconstruida = imagen_sucia[0];
+	disp3.set_title("imagen sucia 10");
+	CImg<unsigned char> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
-		reconstruida = sumar<CImg<float> > (reconstruida, imagen_sucia[i]);
+		reconstruida = sumar<CImg<unsigned char> > (reconstruida, imagen_sucia[i]);
 	}
 	cimg_forXY(reconstruida, x, y)
 		{

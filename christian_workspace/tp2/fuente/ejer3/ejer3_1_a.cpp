@@ -5,20 +5,18 @@
 using namespace std;
 using namespace cimg_library;
 
-/*FIXME:
+/* POSTA:
  * ver las graficas cuyos titulos son:
  * "suma de imagenes letras1 y su negativo - NO normalizado"
  * "suma de imagenes letras 1 y su negativo - normalizado"
- * porque cuando normalizo me queda gris? no deberia quedar blanco tambien?
+ * Notar que cuando normalizo queda gris esto se debe a lo siguiente:
+ * La suma de una imagen con su negativo da una figura blanca (255). Ahora, la implementación correcta
+ * de la suma es (Img1(i,j)+Img2(i,j))/2 con lo que te debería dar el gris intermedio de la escala [0-255].
  *
- * Se puede mostrar informacion de la imagen en la lista similar a display? (coordenada y valores de intensidad)
- * ya que si despliego las imagenes con display no me muestra nada
+ * No, siempre tenes que normalizar el negativo, porque los valores "negativos" ( < 0 ) no existen en una imagen.
+ * Si el valor es blanco (255) el negativo es negro (0) y viceversa.
  */
 
-/*FIXME: POSTA: Al sumar la imagen con su negativo queda negra porque si valor de imagen vale 255, el negativo del mismo seria "-255"
- * y al sumar 255-255=0 ->negro (idem para cualquier otro valor)..
- * esto es realmente asi?
- * */
 int main() {
 
 	CImg<unsigned char> im1, im2;
