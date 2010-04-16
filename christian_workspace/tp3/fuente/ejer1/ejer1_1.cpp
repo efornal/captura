@@ -15,10 +15,10 @@ using namespace cimg_library;
 int main() {
 	CImg<unsigned char> img;
 	img.load("../../imagenes/camaleon.tif");
-
-	CImg<unsigned char> img_histograma = img.get_histogram(100);
-	CImg<unsigned char> img_ecualizada = img.get_equalize(100);
-	CImg<unsigned char> img_histo_ecua = img_ecualizada.get_histogram(100);
+	int n=100;
+	CImg<unsigned char> img_histograma = img.get_histogram(n); // me agrupa los valores cada 9.8 -> (25*100)/100
+	CImg<unsigned char> img_ecualizada = img.get_equalize(n);
+	CImg<unsigned char> img_histo_ecua = img_ecualizada.get_histogram(n);
 
 	CImgDisplay disp1, disp1h, disp2, disp2h;
 
