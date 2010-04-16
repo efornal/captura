@@ -16,7 +16,10 @@ int main() {
 	CImg<unsigned char> img;
 	img.load("../../imagenes/camaleon.tif");
 	int n=100;
-	CImg<unsigned char> img_histograma = img.get_histogram(n); // me agrupa los valores cada 9.8 -> (25*100)/100
+	CImg<unsigned char> img_histograma = img.get_histogram(n);
+	/*POSTA: para el n=100 me agrupa los valores cada 9.8 -> (25*100)/100
+	 * en el caso de n=1 me apareceria un rectangulo con valor maximo M*N pixeles de la imagen
+	 * */
 	CImg<unsigned char> img_ecualizada = img.get_equalize(n);
 	CImg<unsigned char> img_histo_ecua = img_ecualizada.get_histogram(n);
 
