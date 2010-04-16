@@ -66,4 +66,14 @@ namespace masks {
         return mask;
     }
 
+    /**
+       retorna una mascara de tamanio especificado 
+       m * 1/N^2  N = m*n
+     */
+    CImg<double> mask( int x=3, int y=3 ) {
+        int z=1, c=1;
+        CImg<double> mask( x, y, z, c, 1);
+        return  mask * ( 1.0 / (x*y) );
+    }
+
 }
