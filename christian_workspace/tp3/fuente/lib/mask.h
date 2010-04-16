@@ -12,8 +12,8 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
-CImg<T> mascara3x3() {
-	CImg<T> imagen (3,3,1,1);
+CImg<T> mascara3x3() { //filtro promediador pasa bajos
+	CImg<T> imagen(3, 3, 1, 1);
 	imagen(0, 0) = 1 * (1 / 9.0);
 	imagen(0, 1) = 1 * (1 / 9.0);
 	imagen(0, 2) = 1 * (1 / 9.0);
@@ -26,9 +26,9 @@ CImg<T> mascara3x3() {
 	return imagen;
 }
 
-template <class T>
+template<class T>
 CImg<T> mascara3x3_no_simetrica() {
-	CImg<T> imagen (3,3,1,1);
+	CImg<T> imagen(3, 3, 1, 1);
 	imagen(0, 0) = 1 * (1 / 10.0);
 	imagen(0, 1) = 2 * (1 / 10.0);
 	imagen(0, 2) = 1 * (1 / 10.0);
@@ -39,4 +39,9 @@ CImg<T> mascara3x3_no_simetrica() {
 	imagen(2, 1) = 1 * (1 / 10.0);
 	imagen(2, 2) = 1 * (1 / 10.0);
 	return imagen;
+}
+template <class T>
+CImg<T> generar_mascara(int tamanio) {
+	CImg<T> imagen(tamanio, tamanio, 1, 1, 1);
+	return imagen*(1.0/pow(tamanio,2.0));
 }
