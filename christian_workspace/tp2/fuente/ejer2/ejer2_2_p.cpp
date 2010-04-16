@@ -23,7 +23,8 @@ int main() {
 	disp1.set_title("grafica potencia variando el factor");
 	im_pot.display(disp1);
 	cout << "Factor: " << factor << endl;
-
+	//FIXME: la grafica esta mal deberia ser al reves... ver libro pagina 81 de ingles
+	// concava hacia abajo de identidad para arriba y hacia arriba de identidad hacia abajo
 	obtener_grafica_mapeo_potencia< CImg<float> > (i).display(disp2);
 
 	while ((!disp1.is_closed() && !disp1.is_keyQ())) {
