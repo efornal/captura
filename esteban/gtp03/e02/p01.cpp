@@ -17,20 +17,16 @@ using namespace std;
 int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/tablero.png", 
                                         "ruta archivo imagen" );
-    CImg<float> mask = masks::impulso();
-    CImgDisplay disp, disp2;
+    CImgDisplay disp, disp2, disp3;
     CImg<float> img( filename );
 
     img.display(disp);
     disp.set_title("imagen original");
 
-    img.convolve( mask );
+    img.get_convolve( masks::media_ponderada() ).normalize(0,255).display(disp2);
+    disp2.set_title("convolucion");
 
-
-    img.display(disp2);
-    disp2.set_title("imagen filtrada con impulso, debe ser igual");
-
-    mask.display("kernel");
+    masks::media_ponderada().normalize(0,255).display("mask");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) { wait(); }
     return 0;
