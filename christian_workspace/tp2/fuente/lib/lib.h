@@ -286,7 +286,6 @@ CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	 para valores mayores a 100 toma 1
 	 */
 	return imagen.threshold(imagen.max() / 2);
-	// FIXME: cuantiza en 2 niveles... se puede decir que cuantizar y aplicar un threshold sobre el rango es lo mismo?
 }
 
 template<class T>
