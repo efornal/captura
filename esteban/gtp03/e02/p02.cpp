@@ -23,9 +23,6 @@ int main( int argc, char **argv ) {
     img.display(disp);
     disp.set_title("imagen original");
 
-    img.get_convolve( masks::media_ponderada() ).normalize(0,255).display(disp2);
-    disp2.set_title("convolucion");
-
     img.get_correlate( masks::media_ponderada() ).normalize(0,255).display(disp3);
     disp3.set_title("correlacion");
 

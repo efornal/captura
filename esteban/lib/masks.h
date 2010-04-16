@@ -50,5 +50,20 @@ namespace masks {
         return mask;
     }
 
+    /**
+       retorna una mascara no simetrica
+       *  1 3 1                      1 2 1
+       *  2 1 2 * 1/15  transpuesta= 3 1 3 => no simetrica
+       *  1 3 1                      1 2 1
+     */
+    CImg<double> asimetrica() {
+        int x=3, y=3, z=1, c=1;
+        CImg<double> mask( x, y, z, c, 1);
+        mask(1,0) = 3; 
+        mask(1,2) = 3; 
+        mask(0,1) = 2; 
+        mask(2,1) = 3; 
+        return mask;
+    }
 
 }
