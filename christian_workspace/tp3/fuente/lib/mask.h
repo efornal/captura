@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <CImg.h>
-
+#include <math.h>
 using namespace std;
 using namespace cimg_library;
 
@@ -44,4 +44,22 @@ template <class T>
 CImg<T> generar_mascara(int tamanio) {
 	CImg<T> imagen(tamanio, tamanio, 1, 1, 1);
 	return imagen*(1.0/pow(tamanio,2.0));
+}
+
+template <class T>
+CImg<T> generar_mascara(int tamanio) {
+	CImg<T> imagen(tamanio, tamanio, 1, 1, 1);
+	return imagen*(1.0/pow(tamanio,2.0));
+}
+
+template <class T>
+CImg<T> generar_mascara(int x, int y, int varianza=0){
+	CImg<T> imagen (x,y,1,1,1);
+
+	/* w(s,t)= e
+	 * */
+	cimg_forXY(imagen, X, Y){
+
+	}
+	return imagen;
 }
