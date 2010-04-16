@@ -16,12 +16,27 @@ int main() {
 	CImg<unsigned char> img;
 	img.load("../../imagenes/camaleon.tif");
 
-//	CImg<unsigned char> img_histograma = img.get_histogram(100);
-	//CImg<unsigned char> img_ecualizada = img.get_equalize(100);
-/*
-	CImgDisplay disp1, disp1h, disp2, disp2h, disp3,disp3h;
-	img_histograma.display(disp1);
-	disp1.set_title("imagen original");*/
+	CImg<unsigned char> img_histograma = img.get_histogram(100);
+	CImg<unsigned char> img_ecualizada = img.get_equalize(100);
+	CImg<unsigned char> img_histo_ecua = img_ecualizada.get_histogram(100);
+
+	CImgDisplay disp1, disp1h, disp2, disp2h;
+
+	img.display(disp1); //muestro imagen original
+	disp1.set_title("imagen original");
+
+	img_ecualizada.display(disp2); //muestro imagen ecualizada
+	disp2.set_title("imagen ecualizada");
+
+	img_histograma.display_graph(disp1h, 3); //muestro histograma original
+	disp1h.set_title("histograma imagen original");
+
+	img_histo_ecua.display_graph(disp2h, 3); //muestro histograma ecualizada
+	disp2h.set_title("histograma de imagen ecualizada");
+
+	while (!disp1.is_closed()) {
+		disp1.wait();
+	}
 
 	return 0;
 }
