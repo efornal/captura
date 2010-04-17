@@ -1,4 +1,5 @@
 #include <CImg.h>
+#include <math.h>
 
 using namespace cimg_library;
 
@@ -101,6 +102,30 @@ namespace masks {
         mask(0,1) = 2; 
         mask(2,1) = 3; 
         return mask;
+    }
+
+    // =============== filtros pasa bajos: gausseana ============
+    
+    /**
+       retorna una mascara gausseana
+       *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
+       * dada la formula, con +-x = x^2 , e y+- = y^2
+       * por lo que siempre retorna una mascara tipo signo mas
+       *  0  a  0
+       *  a 255 a 
+       *  0  a  0
+       * FIXME : no funciona para valores diferentes de 3x3 !
+       *  
+     */
+     CImg<double> gaussiana( int x=3, int y=3, double var=1 ) {
+         CImg<double> mask( x, y, 1, 1, 1); 
+         double pi = 4.0*atan(1.0); 
+         double c = 1.0/sqrt(2.0*pi);
+         double den = 2.0 * pow(var,2);
+         cimg_forXY(mask, x, y){
+             mask(x,y) =  exp( -(pow(x-1,2) + pow(y-1,2)) / den );
+         }
+        return ( mask *= c );
     }
 
 }
