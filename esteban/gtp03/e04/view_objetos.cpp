@@ -1,5 +1,6 @@
 /**
  * FIXME: que umbral seria el adecuado? la media, u otro?
+ * que ventajas tengo de usar umbral con y sin pre-filtrado(suavizado)
 */
 #include <CHImg.h>
 #include <masks.h>
