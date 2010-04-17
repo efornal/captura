@@ -26,10 +26,10 @@ int main(int argc, char **argv) {
 	CImg<float> mascara2 = generar_mascara_PA_suma0<float>(2);
 	CImg<float> mascara3 = generar_mascara_PA_suma0<float>(3);
 
-	imagen.get_convolve(mascara1).normalize(0,255).display(disp2);
+	imagen.get_convolve(mascara1,1).display(disp2);
 	disp2.set_title("mascara tipo 1 con suma 0");
 
-	imagen.get_convolve(mascara2).normalize(0,255).display(disp3);
+	imagen.get_convolve(mascara2,1).normalize(0,255).display(disp3);
 	disp3.set_title("mascara tipo 2 con suma 0");
 
 	imagen.get_convolve(mascara3).normalize(0,255).display(disp4);

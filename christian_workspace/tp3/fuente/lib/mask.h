@@ -8,6 +8,8 @@
 #include <iostream>
 #include <CImg.h>
 #include <math.h>
+
+
 using namespace std;
 using namespace cimg_library;
 
@@ -177,4 +179,39 @@ CImg<T> generar_mascara_PA(int nx, int ny, bool suma_1 = true) {
 		// la suma de la mascara debe ser 0
 		mascara(fila_x, columna_y) = cant - 2;
 	return mascara;
+}
+template<class T>
+T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la resta de 2 terminos... primer termino-segundo termino
+	// para llamarla por ejemplo :restar<double>(l,m);
+
+	T imagen = primer_termino - segundo_termino;
+	if (normalizado) {
+		cimg_forXY(imagen, x,y)
+			{
+				imagen(x, y) = (imagen(x, y) + 255) / 2;
+				/* observar que en la linea de arriba estoy normalizando, los valores de intensidad van de 0 a 255:
+				 * 0-255 = -255 -> (-255+255)/2=0
+				 * 255-0=  255 -> (255+255)/2=255
+				 * 255-255= 0 -> (0+255)/2 = 127
+				 * 0-0= 0+255 -> 255/2 =127
+				 * */
+			}
+		return imagen;
+	}
+	return (primer_termino - segundo_termino);
+}
+
+template <class T>
+CImg <T> fil_masc_difusa (CImg <T> imagen, CImg <T> mascara){
+	//devuelve filtrado por masacara difusa
+	// la imagen filtrada segun: f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
+	return restar <CImg <T> > (imagen, imagen.get_convolve(mascara));
+}
+
+template <class T>
+CImg <T> fil_high_boost (CImg <T> imagen, CImg <T> mascara, int coefA=1){
+	//devuelve filtrado de alta potencia
+	// la imagen filtrada segun: A*f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
+	return restar <CImg <T> > (coefA*imagen, imagen.get_convolve(mascara));
 }
