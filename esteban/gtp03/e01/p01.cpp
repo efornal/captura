@@ -13,6 +13,9 @@
  *                            int plot_type=1, 
  *                            int vertex_type=1, 
  *                            ...lavels )
+ * NOTA:
+ * ojo , si se especifican los valores value_min , value_max
+ * es como hacer un zoom en esa zona, no se ve el histo completo,
  */
 
 #include <CImg.h>
