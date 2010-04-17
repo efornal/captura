@@ -1,3 +1,6 @@
+/**
+FIXME: diferencias gausseana con promedio???
+*/
 #include <CHImg.h>
 #include <masks.h>
 
@@ -19,7 +22,11 @@ int main( int argc, char **argv ) {
     img.get_convolve( masks::gaussiana(n,n,var) ).normalize(0,255).display(disp2);
     disp2.set_title("imagen filtrada con mask gaussiana");
 
+    img.get_convolve( masks::promedio(n,n) ).normalize(0,255).display(disp3);
+    disp3.set_title("imagen filtrada con mask promedio");
+
     masks::gaussiana(n,n,var).normalize(0,255).display("mask gaussiana");
+    masks::promedio(n,n).normalize(0,255).display("mask promedio");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) { wait(); }
     return 0;
