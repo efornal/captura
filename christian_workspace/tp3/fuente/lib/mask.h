@@ -114,8 +114,9 @@ CImg<T> generar_mascara_PA_suma1(int tipo) {
 		break;
 	default:
 		break;
-		return imagen;
+
 	}
+	return imagen;
 }
 template<class T>
 CImg<T> generar_mascara_PA_suma0(int tipo) {
