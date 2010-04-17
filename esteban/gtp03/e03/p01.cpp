@@ -1,5 +1,7 @@
 /**
-*/
+ * tener en cuenta que al convolucionar la mascara con la imagen
+ * lo que estamos haciendo es aplicar el filtro en frecuencia.
+ */
 
 #include <CHImg.h>
 #include <masks.h>
