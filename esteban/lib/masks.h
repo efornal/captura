@@ -69,16 +69,19 @@ namespace masks {
 
     /**
      * retorna una mascara promediadora de tamanio especificado 
+     * por defecto k = 1/N^2   (N = m*n)
      * m * 1/N^2  N = m*n
+     *
      *  1 1 . 1
      *  1 1 . 1 * 1/N^2   (N = m*n)
      *  . . . 1
      *  1 1 1 1
      */
-    CImg<double> promedio( int x=3, int y=3 ) {
+    CImg<double> promedio( int x=3, int y=3, double k=0 ) {
         int z=1, c=1;
+        k = ( k == 0 ) ? ( 1.0/(x*y) ) : k; // N^2 por defecto
         CImg<double> mask( x, y, z, c, 1);
-        return  mask * ( 1.0 / (x*y) );
+        return  ( mask * k );
     }
 
     // =============== filtros no simetrico ============

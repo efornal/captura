@@ -17,16 +17,17 @@ int main( int argc, char **argv ) {
     img.display(disp);
     disp.set_title("imagen original");
 
-    img.get_convolve( masks::signo_mas() ).display(disp2);
+    img.get_convolve( masks::signo_mas() ).normalize(0,255).display(disp2);
     disp2.set_title("imagen filtrada con mask forma signo mas");
-    masks::signo_mas().display("signo mas");
 
     img.get_convolve( masks::media_estandar() ).normalize(0,255).display(disp3);
     disp3.set_title("imagen filtrada con media estandar");
-    masks::media_estandar().normalize(0,255).display("media estandar - norm");
 
     img.get_convolve( masks::media_ponderada() ).normalize(0,255).display(disp4);
     disp4.set_title("imagen filtrada con media ponderada");
+
+    masks::signo_mas().normalize(0,255).display("signo mas");
+    masks::media_estandar().normalize(0,255).display("media estandar - norm");
     masks::media_ponderada().normalize(0,255).display("media ponderada - norm");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) { wait(); }
