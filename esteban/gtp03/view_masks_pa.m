@@ -44,4 +44,16 @@ suma_uno_alto(2,2)=9;
 suma_uno_alto
 figure
 mesh( [1:nx], [1:ny], suma_uno_alto );
-title("mascara suma uno medio")
+title("mascara suma uno alto")
+
+# =============== suma cero =================
+# -1  -1  -1
+# -1   8  -1 
+# -1  -1  -1
+
+suma_cero = ones(nx,ny).*(-1);
+suma_cero(2,2)=8;
+suma_cero
+figure
+mesh( [1:nx], [1:ny], suma_cero );
+title("mascara suma cero")
