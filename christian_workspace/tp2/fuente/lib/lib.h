@@ -186,7 +186,7 @@ T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 //resta
 template<class T>
 T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
+	//funcion que retorna la resta de 2 terminos... primer termino-segundo termino
 	// para llamarla por ejemplo :restar<double>(l,m);
 
 	T imagen = primer_termino - segundo_termino;
