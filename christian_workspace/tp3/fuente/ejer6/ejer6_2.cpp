@@ -15,8 +15,9 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	/* Una forma de enfatizar alas altas frecuencias sin perder los detalles de la bajas
 	 * frecuencias es el filtrado de alta pontencia: f_hb=A*f(x,y)-PB(f(x,y)) A>=1
+	 * mayor A -> dejo mas vivas las bajas frecuencias
 	 * */
-	//FIXME: que es eso de investigra metodos de calculo ne una pasaada?
+	//TODO: que es eso de investigra metodos de calculo ne una pasaada?
 
 	//filtrado por mascara difusa : f(x,y)- PB( f(x,y) )
 	CImg<float> imagenc("../../imagenes/camaleon.tif");
