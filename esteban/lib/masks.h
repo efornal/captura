@@ -105,6 +105,71 @@ namespace masks {
          }
         return ( mask *= c );
     }
+    // =============== filtros PA: acentuados ============
+    
+    /**
+       retorna filtro pasa altos con suma 1
+       * la suma de todos los coef da 1,
+       *  0  -1   0
+       * -1   5  -1 
+       *  0  -1   0
+       *  
+     */
+     CImg<double> suma_uno_bajo( ) {
+         CImg<double> mask( 3, 3, 1, 1, 0);
+         mask(1,0) = -1;
+         mask(0,1) = -1;
+         mask(2,1) = -1;
+         mask(1,2) = -1;
+         mask(1,1) =  5;
+         return mask;
+     }
+
+    /**
+       retorna filtro pasa altos con suma 1
+       * la suma de todos los coef da 1,
+       * -1  -1  -1
+       * -1   9  -1 
+       * -1  -1  -1
+       *  
+     */
+     CImg<double> suma_uno_alto( ) {
+         CImg<double> mask( 3, 3, 1, 1, -1);
+         mask(1,1) =  9;
+         return mask;
+     }
+
+    /**
+       retorna filtro pasa altos con suma 1
+       * la suma de todos los coef da 1,
+       *  1  -2   1
+       * -2   5  -2 
+       *  1  -2   1
+       *  
+     */
+     CImg<double> suma_uno_medio( ) {
+         CImg<double> mask( 3, 3, 1, 1, 1);
+         mask(1,1) =  5;
+         mask(0,1) =  -2;
+         mask(1,0) =  -2;
+         mask(2,1) =  -2;
+         mask(1,2) =  -2;
+         return mask;
+     }
+
+    /**
+       retorna filtro pasa altos con suma 0
+       * la suma de todos los coef da 0,
+       * -1  -1  -1
+       * -1   8  -1 
+       * -1  -1  -1
+       *  
+     */
+     CImg<double> suma_cero( ) {
+         CImg<double> mask( 3, 3, 1, 1, -1);
+         mask(1,1) =  8;
+         return mask;
+     }
 
     // =============== filtros no simetrico ============
     // no simetrico si A != A transpuesta
