@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 	// filtros pasa altos
 	CImg<float> imagen("../../imagenes/camaleon.tif");
 
-	//FIXME: como que no funciona... hay que normalizar la mascara o como es el tema?
+	//FIXME: como que no funciona... hay que normalizar la mascara o como es el tema? que uso convolve o correlate independientemente sea simetrica o no..?
 	/* supuestamente cuando la suma de la mascara es 1 no elimina las zonas homogeneas
 	 * */
 	CImgDisplay disp1, disp2, disp3, disp4;
