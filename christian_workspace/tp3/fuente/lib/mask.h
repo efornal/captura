@@ -46,6 +46,7 @@ CImg<T> generar_mascara3x3_no_simetrica() {
 }
 template<class T>
 CImg<T> generar_mascara(int tamanio) {
+	//mascara de promediado
 	CImg<T> imagen(tamanio, tamanio, 1, 1, 1);
 	return imagen * (1.0 / pow(tamanio, 2.0));
 }
@@ -214,4 +215,25 @@ CImg <T> fil_high_boost (CImg <T> imagen, CImg <T> mascara, int coefA=1){
 	//devuelve filtrado de alta potencia
 	// la imagen filtrada segun: A*f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
 	return restar <CImg <T> > (coefA*imagen, imagen.get_convolve(mascara));
+}
+template<class T>
+T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
+	//funcion que retorna la suma de 2 terminos...
+	// para llamarla por ejemplo : sumar<double>(l,m);
+	if (normalizado)
+		return (primer_termino + segundo_termino) / 2;
+	return (primer_termino + segundo_termino);
+}
+CImg<unsigned char> multiplicar(CImg<unsigned char> im1,
+		CImg<unsigned char> im2, bool normalizar) {
+	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
+
+	cimg_forXY(im1, x, y)
+		{
+			imagen(x, y) = im1(x, y) * im2(x, y);
+		}
+	if (normalizar)
+		return imagen.normalize();
+	else
+		return imagen;
 }
