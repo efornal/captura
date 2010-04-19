@@ -14,7 +14,7 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	// filtros pasa altos
-	CImg<float> imagen("../../imagenes/camaleon.tif");
+	CImg<double> imagen("../../imagenes/camaleon.tif");
 
 	//FIXME: como que no funciona... hay que normalizar la mascara o como es el tema? que uso convolve o correlate independientemente sea simetrica o no..?
 	/* supuestamente cuando la suma de la mascara es 1 no elimina las zonas homogeneas
@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
 	CImgDisplay disp1, disp2, disp3, disp4;
 	imagen.display(disp1);
 	disp1.set_title("imagen original");
-	CImg<float> mascara1 = generar_mascara_PA_suma1<float>(1);
-	CImg<float> mascara2 = generar_mascara_PA_suma1<float>(2);
-	CImg<float> mascara3 = generar_mascara_PA_suma1<float>(3);
+	CImg<double> mascara1 = generar_mascara_PA_suma1<double>(1);
+	CImg<double> mascara2 = generar_mascara_PA_suma1<double>(2);
+	CImg<double> mascara3 = generar_mascara_PA_suma1<double>(3);
 
 	imagen.get_convolve(mascara1,1).display(disp2);
 	disp2.set_title("mascara tipo 1 con suma 1");
