@@ -21,7 +21,7 @@ struct punto {
 int main(int argc, char *argv[]) {
 	CImg<unsigned char>
 			imagen(
-					"../../imagenes/imagenes/parrot.tif");
+					"../../imagenes/parrot.tif");
 	CImg<unsigned char> vent_grafico(500, 400, 1, 3, 0);
 
 	imagen.blur(2.5);
