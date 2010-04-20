@@ -16,8 +16,13 @@ int main(int argc, char **argv) {
 	// filtros pasa altos
 	CImg<double> imagen("../../imagenes/camaleon.tif");
 
-	//FIXME: como que no funciona... hay que normalizar la mascara o como es el tema? que uso convolve o correlate independientemente sea simetrica o no..?
-	/* supuestamente cuando la suma de la mascara es 1 no elimina las zonas homogeneas
+	/* POSTA:
+	 * * Si la suma de los elemnetos de la mascara es 1 no elimina zonas homogenas
+	 * * El resultado de aplicar la convolucion o la correlacion con una mascara es el mismo solo si la
+	 * mascara es simetrica.
+	 * * En el caso de usar una mascara no simetrica -> se puede hacer correlate o sino se rota 90 grados la imagen
+	 * y se hace convolve.. ambos en este caso y procediendo de dicha manera arrojaran los mismos resultados
+	 * FIXME: porque el fondo gris? no sale como en las diapositivas??
 	 * */
 	CImgDisplay disp1, disp2, disp3, disp4;
 	imagen.display(disp1);
