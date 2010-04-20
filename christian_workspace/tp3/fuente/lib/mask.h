@@ -37,19 +37,19 @@ CImg<T> generar_mascara3x3_todos1_promediadora(float coef = 9.0) {
 template<class T>
 CImg<T> generar_mascara3x3_no_simetrica(float coef = 10.0) {
 	/*genera una mascara no simetrica cualquiera!
-	 *    			| 0  2  0 |
-	 *   (1/coef)*  |-2  2 -2 |
-	 *  			| 0 -1  0 |
+	 *    			| 0  1  0 |
+	 *   (1/coef)*  |-1  1 -1 | //suma 1 -> mantiene homogenos
+	 *  			| 0  1  0 |
 	 * */
 	CImg<T> imagen(3, 3, 1, 1);
 	imagen(0, 0) = 0 * (1 / coef);
-	imagen(0, 1) = 2 * (1 / coef);
+	imagen(0, 1) = 1 * (1 / coef);
 	imagen(0, 2) = 0 * (1 / coef);
-	imagen(1, 0) = -2 * (1 / coef);
-	imagen(1, 1) = 2 * (1 / coef);
-	imagen(1, 2) = -2 * (1 / coef);
+	imagen(1, 0) = -1 * (1 / coef);
+	imagen(1, 1) = 1 * (1 / coef);
+	imagen(1, 2) = -1 * (1 / coef);
 	imagen(2, 0) = 0 * (1 / coef);
-	imagen(2, 1) = -1 * (1 / coef);
+	imagen(2, 1) = 1 * (1 / coef);
 	imagen(2, 2) = 0 * (1 / coef);
 	return imagen;
 }
