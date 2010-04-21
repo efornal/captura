@@ -1,9 +1,11 @@
 //============================================================================
-// Name        :
-// Author      : Christian Pfarher
-// Version     :
-// Copyright   : GNU Public License
-// Description : Captura 2010, Ansi-style
+/*
+ * ejer2_1.cpp
+ *
+ *  Created on: 20/04/2010
+ *      Author: christian
+ */
+
 //============================================================================
 /*	 # grafica los valores de la fila completa de la image seleccionada
  con el mouse.*/
@@ -21,10 +23,10 @@ struct punto {
 int main(int argc, char *argv[]) {
 	CImg<unsigned char>
 			imagen(
-					"../../imagenes/parrot.tif");
+					"../../imagenes/patron.tif");
 	CImg<unsigned char> vent_grafico(500, 400, 1, 3, 0);
 
-	imagen.blur(2.5);
+	//imagen.blur(2.5);
 
 	const unsigned char red[] = { 255, 0, 0 }, green[] = { 0, 255, 0 },
 			blue[] = { 0, 0, 255 };
@@ -59,7 +61,7 @@ int main(int argc, char *argv[]) {
 			 \param border_condition = Dirichlet (false) or Neumann border conditions.
 			 **/
 
-			imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width() - 1, p1.y, 0, 0).display(); //fila 0, y donde clieckee - toda la fila (imagen.width()-1)
+			imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width() - 1, p1.y, 0, 0); //fila 0, y donde clieckee - toda la fila (imagen.width()-1)
 			//                                     width, height, dept, spec, data,
 			vent_grafico.draw_graph(imagen.get_crop(p1.x, p1.y, 0, 0, imagen.width()
 					- 1, p1.y, 0, 0), red, 1, 3, 0, 255, 0); // canal red (el espectrum esta en 0 cuando hago el get_crop)

@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 	imagen.display(disp1);
 	disp1.set_title("imagen original");
 
-	CImg<float> resultado = imagen.get_convolve(generar_mascara<float> (7));
+	CImg<float> resultado = imagen.get_convolve(generar_mascara_promediadora<float> (7));
 	resultado.display(disp2);
 	disp2.set_title("imagen filtrada");
 	float threshold=128.0;

@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 	 * frecuencias es el filtrado de alta pontencia: f_hb=A*f(x,y)-PB(f(x,y)) A>=1
 	 * mayor A -> dejo mas vivas las bajas frecuencias
 	 * */
-	//TODO: que es eso de investigra metodos de calculo ne una pasaada?
+	//FIXME: que es eso de investigra metodos de calculo ne una pasaada y que uso de PB ?
 
 	//filtrado por mascara difusa : f(x,y)- PB( f(x,y) )
 	CImg<float> imagenc("../../imagenes/camaleon.tif");

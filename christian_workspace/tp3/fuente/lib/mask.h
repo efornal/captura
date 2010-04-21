@@ -9,15 +9,13 @@
 #include <CImg.h>
 #include <math.h>
 
-
 using namespace std;
 using namespace cimg_library;
-
 
 #define pi 4.0*atan(1.0)
 
 template<class T>
-CImg<T> generar_mascara3x3_todos1_promediadora(float coef=9.0){
+CImg<T> generar_mascara3x3_todos1_promediadora(float coef = 9.0) {
 	/*genera una mascara del tipo promediadora todos 1 (suaviza)
 	 *    			| 1  1  1 |
 	 *   (1/coef)*  | 1  1  1 |
@@ -37,26 +35,26 @@ CImg<T> generar_mascara3x3_todos1_promediadora(float coef=9.0){
 }
 
 template<class T>
-CImg<T> generar_mascara3x3_no_simetrica(float coef=10.0) {
+CImg<T> generar_mascara3x3_no_simetrica(float coef = 10.0) {
 	/*genera una mascara no simetrica cualquiera!
-		 *    			| 1  2  1 |
-		 *   (1/coef)*  | 1  1  1 |
-		 *  			| 1  1  1 |
-		 * */
+	 *    			| 0  1  0 |
+	 *   (1/coef)*  |-1  1 -1 | //suma 1 -> mantiene homogenos
+	 *  			| 0  1  0 |
+	 * */
 	CImg<T> imagen(3, 3, 1, 1);
-	imagen(0, 0) = 1 * (1 / coef);
-	imagen(0, 1) = 2 * (1 / coef);
-	imagen(0, 2) = 1 * (1 / coef);
-	imagen(1, 0) = 1 * (1 / coef);
+	imagen(0, 0) = 0 * (1 / coef);
+	imagen(0, 1) = 1 * (1 / coef);
+	imagen(0, 2) = 0 * (1 / coef);
+	imagen(1, 0) = -1 * (1 / coef);
 	imagen(1, 1) = 1 * (1 / coef);
-	imagen(1, 2) = 1 * (1 / coef);
-	imagen(2, 0) = 1 * (1 / coef);
+	imagen(1, 2) = -1 * (1 / coef);
+	imagen(2, 0) = 0 * (1 / coef);
 	imagen(2, 1) = 1 * (1 / coef);
-	imagen(2, 2) = 1 * (1 / coef);
+	imagen(2, 2) = 0 * (1 / coef);
 	return imagen;
 }
 template<class T>
-CImg<T> generar_mascara_promediadora(int dim=3) {
+CImg<T> generar_mascara_promediadora(int dim = 3) {
 	/* Genera una mascara de dimension dim x dim
 	 * del tipo:
 	 * 			|	1	1	1	...dim    |
@@ -79,25 +77,35 @@ T clipp(T valor) {
 }
 
 template<class T>
-CImg<T> generar_mascara_gaussiana(int x=3, int y=3, double var=1.0) {
-    /**
-       retorna una mascara gausseana
-       *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
-       * dada la formula, con +-x = x^2 , e y+- = y^2
-       * por lo que siempre retorna una mascara tipo signo mas
-       *  0  a  0
-       *  a 255 a
-       *  0  a  0
-       * FIXME : no funciona para valores diferentes de 3x3 !
-       *
-     */
-         CImg<T> mask( x, y, 1, 1, 1);
-         T c = 1.0/sqrt(2.0*pi);
-         T den = 2.0 * pow(var,2);
-         cimg_forXY(mask, x, y){
-             mask(x,y) =  exp( -(pow(x-1,2) + pow(y-1,2)) / den );
-         }
-        return ( mask *= c );
+CImg<T> generar_mascara_gaussiana(int x = 3, int y = 3, double var = 1.0) {
+	/**
+	 retorna una mascara gausseana
+	 *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
+	 * dada la formula, con +-x = x^2 , e y+- = y^2
+	 * por lo que siempre retorna una mascara tipo signo mas
+	 *  0  a  0
+	 *  a 255 a
+	 *  0  a  0
+	 * FIXME : no funciona para valores diferentes de 3x3 !
+	 *
+	 *-1,-1 	-1,0		-1,1
+	 * 0,-1 	 0,0		 0,1		 => para 3x3    el for va desde -1 hasta 1
+	 * 1,-1 	 1,0		 1,1
+	 * 								=> para 5x5 el for va de -2 hasta 2
+	 * 								=> para 7x7 va de -3 =valor
+	 * la serie sera valor=((tam-1)/2)
+	 */
+	CImg<T> mask(x, y, 1, 1, 1);
+	int xm = (x - 1) / 2;
+	int ym = (y - 1) / 2;
+
+	T c = 1.0 / sqrt(2.0 * pi);
+	T den = 2.0 * pow(var, 2);
+	cimg_forXY(mask, xm, ym)
+		{
+			mask(x+xm, y+ym) = exp(-(pow(x-xm, 2) + pow(y-ym, 2)) / den);
+		}
+	return (mask *= c);
 }
 
 template<class T>
@@ -155,30 +163,27 @@ template<class T>
 CImg<T> generar_mascara_PA_suma0(int tipo) {
 	/*########################################################################
 	 * SUMA =1:
-	 * tipo=1:					tipo=2:					tipo=3
-	 *	 0	-1	 0				-1	-1	-1				1	-2	1
-	 *	-1	 4	-1				-1	 8	-1			   -2	 4 -2
-	 * 	 0	-1	 0				-1  -1  -1				1	-2	1
+	 * tipo=1:					tipo=2:
+	 *	 0	-1	 0				-1	-1	-1
+	 *	-1	 4	-1				-1	 8	-1
+	 * 	 0	-1	 0				-1  -1  -1
 	 *########################################################################
 	 * */
 	CImg<T> imagen(3, 3, 1, 1);
 	switch (tipo) {
 	case 1:
-		imagen=generar_mascara_PA_suma1 <T> (1);
+		imagen = generar_mascara_PA_suma1<T> (1);
 		imagen(1, 1) = 4.0;
 		break;
 	case 2:
-		imagen=generar_mascara_PA_suma1 <T> (2);
+		imagen = generar_mascara_PA_suma1<T> (2);
 		imagen(1, 1) = 8.0;
-		break;
-	case 3:
-		imagen=generar_mascara_PA_suma1 <T> (3);
-		imagen(1, 1) = 4.0;
 		break;
 	default:
 		break;
-		return imagen;
+
 	}
+	return imagen;
 }
 
 //no tiene mucho sentido hacer la mascara asi:
@@ -234,18 +239,18 @@ T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	return (primer_termino - segundo_termino);
 }
 
-template <class T>
-CImg <T> fil_masc_difusa (CImg <T> imagen, CImg <T> mascara){
+template<class T>
+CImg<T> fil_masc_difusa(CImg<T> imagen, CImg<T> mascara) {
 	//devuelve filtrado por masacara difusa
 	// la imagen filtrada segun: f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
-	return restar <CImg <T> > (imagen, imagen.get_convolve(mascara));
+	return restar<CImg<T> > (imagen, imagen.get_convolve(mascara));
 }
 
-template <class T>
-CImg <T> fil_high_boost (CImg <T> imagen, CImg <T> mascara, int coefA=1){
+template<class T>
+CImg<T> fil_high_boost(CImg<T> imagen, CImg<T> mascara, int coefA = 1) {
 	//devuelve filtrado de alta potencia
 	// la imagen filtrada segun: A*f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
-	return restar <CImg <T> > (coefA*imagen, imagen.get_convolve(mascara));
+	return restar<CImg<T> > (coefA * imagen, imagen.get_convolve(mascara));
 }
 template<class T>
 T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
