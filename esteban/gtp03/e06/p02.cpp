@@ -14,8 +14,8 @@ int main( int argc, char **argv ) {
     img.display(disp);
     disp.set_title("imagen original");
 
-    img.get_mascara_difusa( masks::promedio(3,3), 1 ).normalize(0,255).display(disp3);
-    disp3.set_title("mascara difusa");
+    img.get_alta_potencia( masks::suma_uno_medio(), 1 ).normalize(0,255).display(disp3);
+    disp3.set_title("alta potencia");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) { 
         disp.wait();
