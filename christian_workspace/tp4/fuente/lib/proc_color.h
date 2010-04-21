@@ -45,3 +45,17 @@ CImg<float> aplicar_paleta(CImg<float> imagen, string nombre_paleta) {
 			}
 	return imagen_con_paleta_aplicada;
 }
+template <class T>
+CImg<T> get_binary(CImg<T> imagen) {
+	//convierte una imagen en escala de grises a binaria
+	/** by chaco:
+	 CImg<T>& threshold( T value,
+	 bool soft_threshold = false,
+	 bool strict_threshold = false )
+
+	 binariza la imagen segun un valor de umbral, sea valor de umbral=100
+	 para valores menores a 100 toma 0
+	 para valores mayores a 100 toma 1
+	 */
+	return imagen.threshold(imagen.max() / 2);
+}
