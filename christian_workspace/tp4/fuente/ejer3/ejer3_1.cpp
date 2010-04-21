@@ -40,21 +40,20 @@ int main(int argc, char **argv) {
 			3);
 	CImg<float> la_paleta(256, 256, 1, 3);
 	//TODO: hacer funcion cargar paleta que lo aplique sobre unaimagen..
+
 	cimg_forXY(imagen_con_paleta_aplicada, x, y)
 		{ //es una lut:
-			imagen_con_paleta_aplicada(x, y, 1, 0) = paleta[imagen(x, y)][0]
+			imagen_con_paleta_aplicada(x, y, 0, 0) = paleta[imagen(x, y)][0]
 					* 255.0; //canal rojo
-			imagen_con_paleta_aplicada(x, y, 1, 1) = paleta[imagen(x, y)][1]
+			imagen_con_paleta_aplicada(x, y, 0, 1) = paleta[imagen(x, y)][1]
 					* 255.0; //canal verde
-			imagen_con_paleta_aplicada(x, y, 1, 2) = paleta[imagen(x, y)][2]
+			imagen_con_paleta_aplicada(x, y, 0, 2) = paleta[imagen(x, y)][2]
 					* 255.0; //canal azul
 
-			la_paleta(x, y, 1, 0) = paleta[x][0] * 255;
-			la_paleta(x, y, 1, 1) = paleta[x][1] * 255;
-			la_paleta(x, y, 1, 2) = paleta[x][2] * 255;
+			la_paleta(x, y, 0, 0) = paleta[x][0] * 255;
+			la_paleta(x, y, 0, 1) = paleta[x][1] * 255;
+			la_paleta(x, y, 0, 2) = paleta[x][2] * 255;
 		}
-	/*FIXME: porque la ultima linea de las imagens se ven mal!?
-	 * porque en la paleta si bien en el archivo tiene valores 0 cuando la despliego no aparece dicho valor?*/
 	la_paleta.print();
 	imagen.display(disp1);
 	disp1.set_title("imagen a la que se le aplica la paleta");
