@@ -135,7 +135,38 @@ template<typename T> struct CHImg : public CImg<T> {
         return promedio;
     }
     
-
+    /**
+     * Realiza un filtrado de alta potencia - HighBoost usando
+     * mascara difusa (con factor variable)
+     * g(x,y) = A*f(x,y) - PB{ f(x,y) }
+     * Si factor=1 =>  g(x,y) = PA{ f(x,y) }  pasa altos normal
+     * Si factor>1 =>  g(x,y) = k*f(x,y) + PA{ f(x,y) } agrega parte baja frec
+     * @mask mascara pasa bajos
+     * @factor facator  A aplicado a la imagen
+     * FIXME:
+     * habria que tener en cuenta positivizar la imagen, esta expresion??
+     */
+    CImg<double> get_mascara_difusa( CImg<double> mask, int factor=1 ) { 
+        CImg<double> img = *this;
+        return factor*img - img.get_convolve( mask );
+    }
+    /**
+     * Realiza un filtrado de alta potencia - HighBoost
+     * g(x,y) = (A-1)*f(x,y) + PA{ f(x,y) }   donde factor = A 
+     * Si factor=1 =>  g(x,y) = PA{ f(x,y) }  pasa altos normal
+     * Si factor>1 =>  g(x,y) = k*f(x,y) + PA{ f(x,y) } agrega parte baja frec
+     * @mask mascara pasa altos
+     * @factor facator  A aplicado a la imagen
+     * FIXME:
+     * Podria calcularse mediante mascara difusa (formula con pasa bajos)
+     * g(x,y) = (A*f(x,y) - PB{ f(x,y) }
+     * pero habria que tener en cuenta positivizar la imagen, esta expresion
+     * con (A-1)... es mas util para la implementacion
+     */
+    CImg<double> get_alta_potencia( CImg<double> mask, int factor=1 ) { 
+        CImg<double> img = *this;
+        return (factor-1)*img + img.get_convolve( mask );
+    }
 
 };
 
