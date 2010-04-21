@@ -142,6 +142,11 @@ template<typename T> struct CHImg : public CImg<T> {
      * Si factor>1 =>  g(x,y) = k*f(x,y) + PA{ f(x,y) } agrega parte baja frec
      * @mask mascara pasa altos
      * @factor facator  A aplicado a la imagen
+     * FIXME:
+     * Podria calcularse mediante mascara difusa (formula con pasa bajos)
+     * g(x,y) = (A*f(x,y) - PB{ f(x,y) }
+     * pero habria que tener en cuenta positivizar la imagen, esta expresion
+     * con (A-1)... es mas util para la implementacion
      */
     CImg<double> get_alta_potencia( CImg<double> mask, int factor=1 ) { 
         CImg<double> img = *this;
