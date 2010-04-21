@@ -135,7 +135,18 @@ template<typename T> struct CHImg : public CImg<T> {
         return promedio;
     }
     
-
+    /**
+     * Realiza un filtrado de alta potencia - HighBoost
+     * g(x,y) = (A-1)*f(x,y) + PA{ f(x,y) }   donde factor = A 
+     * Si factor=1 =>  g(x,y) = PA{ f(x,y) }  pasa altos normal
+     * Si factor>1 =>  g(x,y) = k*f(x,y) + PA{ f(x,y) } agrega parte baja frec
+     * @mask mascara pasa altos
+     * @factor facator  A aplicado a la imagen
+     */
+    CImg<double> get_alta_potencia( CImg<double> mask, int factor=1 ) { 
+        CImg<double> img = *this;
+        return (factor-1)*img + img.get_convolve( mask );
+    }
 
 };
 
