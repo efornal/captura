@@ -30,7 +30,8 @@ CImg<T> invertir_HSI(CImg<T> imagen) {
 
 template<class T>
 CImg<float> aplicar_paleta(CImg<float> imagen, string nombre_paleta) {
-	/* carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
+	/* esto no anda!
+	 * carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
 	 * devuelve la imagen con la paleta aplicada
 	 * OJO SOLO FUNCIONA PARA IMAGENES DE UN SOLO CANAL
 	 * */
