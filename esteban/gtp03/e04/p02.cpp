@@ -1,5 +1,8 @@
 /**
- * FIXME: que umbral seria el adecuado? la media, u otro?
+ * Preguunta: que umbral seria el adecuado? la media, u otro?
+ * POSTA: la media no nos da un indicador para esto,
+ * una opcion mas adecuada seria ver el histograma y en base a eso
+ * evaluar el umbral, pero el proceso es manual, no automatizado.
 */
 #include <CHImg.h>
 #include <masks.h>
