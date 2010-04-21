@@ -163,7 +163,7 @@ namespace masks {
        * -1  -1  -1
        * -1   8  -1 
        * -1  -1  -1
-       *  
+       *  FIXME: no deberia multiplicar luego por 1/9 para normalizar?
      */
      CImg<double> suma_cero( ) {
          CImg<double> mask( 3, 3, 1, 1, -1);
