@@ -12,6 +12,9 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
+	/*FIXME: analizar el histograma
+	 * no se como analizarlo... a que se debe esa forma tipo gaussiana?
+	 * */
 	CImg<float> rio("../../imagenes/rio.jpg"); //tiene valores entre 0 y 255
 	CImgDisplay disp1(rio, "imagen del rio", 1), disp2, disp3;
 	rio.get_histogram(255).display_graph(disp2, 3);
