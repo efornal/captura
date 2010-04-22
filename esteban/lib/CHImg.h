@@ -1,3 +1,10 @@
+#define cimg_use_fftw3 1
+#ifdef cimg_use_fftw3
+extern "C"{
+    #include "fftw3.h"
+}
+#endif
+
 #include <CImg.h>
 
 using namespace cimg_library;
@@ -168,5 +175,27 @@ template<typename T> struct CHImg : public CImg<T> {
         return (factor-1)*img + img.get_convolve( mask );
     }
 
-};
+    // ==================================================== \\
+    // --------------- espectro frecuencia  ---------------- \\
 
+    void fft_modulo( bool centrada=false ) {
+        CImg<double> img = *this, modulo;
+        CImgList<double> tdf;
+        
+        tdf = image.get_FFT( false );  // lista: parte real e imag
+
+        //CImg<double> modulo( tdf[0].width(), tdf[0].height(), 1, 3, 0 );
+        for (int i=0; i<img.width(); i++){
+            for (int j=0; j<img.height(); j++) {
+                modulo(i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
+                                    pow( tdf[1](i,j), 2.0 ) ) +
+                    0.000001;
+            }
+        }
+
+        return modulo;
+    }
+
+    // ==================================================== \\
+    // ------------- ..  ------------- \\
+};
