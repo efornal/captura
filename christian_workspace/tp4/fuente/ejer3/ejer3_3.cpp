@@ -20,13 +20,13 @@ int main(int argc, char **argv) {
 	cimg_forXY(imagen, x, y)
 		{
 			if (imagen(x, y) > 128.0) {
-				coloreada(x, y, 1, 0) = 0.0;//red
-				coloreada(x, y, 1, 1) = 0.0;//green
-				coloreada(x, y, 1, 2) = 255.0;//blue
+				coloreada(x, y, 0, 0) = 0.0;//red
+				coloreada(x, y, 0, 1) = 0.0;//green
+				coloreada(x, y, 0, 2) = 255.0;//blue
 			} else {
-				coloreada(x, y, 1, 0) = 255.0;//red
-				coloreada(x, y, 1, 1) = 0.0;//green
-				coloreada(x, y, 1, 2) = 0.0;//blue
+				coloreada(x, y, 0, 0) = 255.0;//red
+				coloreada(x, y, 0, 1) = 0.0;//green
+				coloreada(x, y, 0, 2) = 0.0;//blue
 			}
 		}
 
@@ -35,10 +35,9 @@ int main(int argc, char **argv) {
 
 	imagen.threshold(128).display(disp2); // ya esta normalizada
 	disp2.set_title("imagen binaria");
-	/*FIXME: para que ande hay que comentar las dos lineas que estan aqui debajo... porque!!?*/
-	coloreada.display();
-	 coloreada.display(disp3);
-	 disp3.set_title("imagen coloreada");
+
+	coloreada.display(disp3);
+	disp3.set_title("imagen coloreada");
 
 	while (!disp1.is_closed() && !disp3.is_closed()) {
 		disp3.wait();
