@@ -13,18 +13,23 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<unsigned char> imagen_rgb;
+	//FIXME: esto no funciona arreglarlo.. reeverlo
+	CImg<double> imagen_rgb;
 	CImg<double> imagen_hsi;
 
 	imagen_rgb.load("../../imagenes/patron.tif");
+	cout<<"imagen rgb: "<<imagen_rgb.print();
 
 	CImgDisplay disp1, disp2, disp3;
-
+	imagen_rgb.normalize(0, 255.0);
 	imagen_hsi = imagen_rgb.get_RGBtoHSI();
+	imagen_hsi.print();
 	CImg<double> ihsi_h = imagen_hsi.get_channel(0);
+	cout<<"ihsi_h: "<<ihsi_h.print();
 	CImg<double> ihsi_s = imagen_hsi.get_channel(1);
+	cout<<"ihsi_s: "<<ihsi_s.print();
 	CImg<double> ihsi_i = imagen_hsi.get_channel(2);
-
+	cout<<"ihsi_i: "<<ihsi_i.print();
 	cimg_forXY(imagen_hsi, x,y)
 		{
 			/*POSTA: el H va entre 0 y 360 y S e I van de 0 a 1 com ola lista normaliza si
@@ -41,7 +46,6 @@ int main(int argc, char **argv) {
 	disp1.set_title("hsi");
 	lista1.display(disp1, 'y', 'c');
 
-//FIXME: esto no funciona
 	int H1;
 	cimg_forXY(imagen_hsi, x,y)
 		{
@@ -54,7 +58,7 @@ int main(int argc, char **argv) {
 			} else if (H >= 120 && H < 240) {
 				H1 = 240 - (H - 120);
 			} else {//h esta entre 240 y 360}
-				H1 = H - 360;
+				H1 = 360-H;
 			}
 			imagen_hsi(x, y, 0, 0) = (H1 / 360) * 255;
 			imagen_hsi(x, y, 0, 1) = imagen_hsi(x, y, 0, 1) * 255;
