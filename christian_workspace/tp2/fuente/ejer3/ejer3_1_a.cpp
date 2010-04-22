@@ -10,6 +10,7 @@ using namespace cimg_library;
  * "suma de imagenes letras1 y su negativo - NO normalizado"
  * "suma de imagenes letras 1 y su negativo - normalizado"
  * Notar que cuando normalizo queda gris esto se debe a lo siguiente:
+ * FIXME: solo en los extremos!?
  * La suma de una imagen con su negativo da una figura blanca (255). Ahora, la implementación correcta
  * de la suma es (Img1(i,j)+Img2(i,j))/2 con lo que te debería dar el gris intermedio de la escala [0-255].
  *

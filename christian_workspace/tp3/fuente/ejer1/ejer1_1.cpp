@@ -15,40 +15,31 @@ using namespace cimg_library;
 int main() {
 	CImg<unsigned char> img;
 	img.load("../../imagenes/camaleon.tif");
+	int n=100;
+	CImg<unsigned char> img_histograma = img.get_histogram(n);
+	/*POSTA: para el n=100 me agrupa los valores cada 9.8 -> (25*100)/100
+	 * en el caso de n=1 me apareceria un rectangulo con valor maximo M*N pixeles de la imagen
+	 * */
+	CImg<unsigned char> img_ecualizada = img.get_equalize(n);
+	CImg<unsigned char> img_histo_ecua = img_ecualizada.get_histogram(n);
 
-	CImg<unsigned char> img_histograma = img.get_histogram(100);
+	CImgDisplay disp1, disp1h, disp2, disp2h;
 
-	CImg<unsigned char> img_ecualizada = img.get_equalize(100);
+	img.display(disp1); //muestro imagen original
+	disp1.set_title("imagen original");
 
-	CImgDisplay disp1, disp2, disp3;
-	img.display(disp1);
+	img_ecualizada.display(disp2); //muestro imagen ecualizada
+	disp2.set_title("imagen ecualizada");
 
-	disp1.set_title("original");
+	img_histograma.display_graph(disp1h, 3); //muestro histograma original
+	disp1h.set_title("histograma imagen original");
 
-	//img_histograma.display_graph("histograma de imagen original", 3);
-	//img_ecualizada.display_graph("ecualizacion de imagen original", 3);
-	img_histograma.display_graph(disp2, 3);
-	img_histograma.display_graph();
-	disp2.set_title("imagen de histograma");
-	img_histograma.display("imagen aplicando histograma");
-	img_ecualizada.display_graph(disp3, 3);
+	img_histo_ecua.display_graph(disp2h, 3); //muestro histograma ecualizada
+	disp2h.set_title("histograma de imagen ecualizada");
 
-	/*
-	 img_histograma.display_graph(disp2, 3);
-	 img_ecualizada.display_graph(disp3, 3);
-	 cout << endl;
-	 int levels = 1;
-	 while (!disp1.is_closed() || disp1.is_keyQ()) {
-	 if (disp1.is_keyARROWUP())
-	 levels++;
-	 else if (disp1.is_keyARROWDOWN() && levels > 1)
-	 levels--;
+	while (!disp1.is_closed()) {
+		disp1.wait();
+	}
 
-	 img.get_histogram(levels).display_graph(disp2, 3);
-	 img.get_equalize(levels).display_graph(disp3, 3);
-
-	 cout << "Niveles de histograma: " << levels << endl;
-	 }
-	 */
 	return 0;
 }

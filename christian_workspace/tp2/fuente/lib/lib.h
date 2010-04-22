@@ -124,13 +124,11 @@ CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 CImg<unsigned char> logaritmo(CImg<unsigned char> original, int factor = 1) {
 	// transforacion logaritmica
 	// por defecto clipea
-
-	//TODO: modificar logaritmo factor= 255/log(1+abs(r)) ---> s=c*log(1+abs(r))
 	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
 
 	cimg_forXY(original,x,y)
 		{
-			modificada(x, y) = clipp(log(1 + original(x, y)) * factor);
+			modificada(x, y) = clipp(log(1 + abs(original(x, y))) * factor);
 		}
 
 	return modificada;
@@ -188,7 +186,7 @@ T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 //resta
 template<class T>
 T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la resta de 2 terminos... segundo_termino-primer_termino
+	//funcion que retorna la resta de 2 terminos... primer termino-segundo termino
 	// para llamarla por ejemplo :restar<double>(l,m);
 
 	T imagen = primer_termino - segundo_termino;
@@ -288,7 +286,6 @@ CImg<unsigned char> get_binary(CImg<unsigned char> imagen) {
 	 para valores mayores a 100 toma 1
 	 */
 	return imagen.threshold(imagen.max() / 2);
-	// FIXME: cuantiza en 2 niveles... se puede decir que cuantizar y aplicar un threshold sobre el rango es lo mismo?
 }
 
 template<class T>
