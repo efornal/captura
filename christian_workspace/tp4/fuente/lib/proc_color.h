@@ -13,6 +13,19 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
+CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
+		CImg<T> canal_azul) {
+	CImg<T> imagen(canal_rojo.width(), canal_rojo.height(), canal_rojo.depth(),
+			3);
+	cimg_forXY(imagen, x, y)
+		{
+			imagen(x, y, 0, 0) = canal_rojo(x, y);
+			imagen(x, y, 0, 1) = canal_verde(x, y);
+			imagen(x, y, 0, 2) = canal_azul(x, y);
+		}
+	return imagen;
+}
+template<class T>
 CImg<T> invertir_HSI(CImg<T> imagen) {
 	/* si era rojo tiene que ser azul....
 	 * para ello modifico el canal H
@@ -28,25 +41,62 @@ CImg<T> invertir_HSI(CImg<T> imagen) {
 	return imm;
 }
 
-template<class T>
-CImg<float> aplicar_paleta(CImg<float> imagen, string nombre_paleta) {
-	/* esto no anda!
-	 * carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
+CImg <float> aplicar_paleta(CImg <float> imagen, int numero_paleta = 1) {
+	/* carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
 	 * devuelve la imagen con la paleta aplicada
-	 * OJO SOLO FUNCIONA PARA IMAGENES DE UN SOLO CANAL
+	 * @numeropaleta=1 -> ../../paletas/bone.pal
+	 * @numeropaleta=2 -> ../../paletas/cool.pal
+	 * @numeropaleta=3 -> ../../paletas/copper.pal
+	 * @numeropaleta=4 -> ../../paletas/gray.pal
+	 * @numeropaleta=5 -> ../../paletas/hot.pal
+	 * @numeropaleta=6 -> ../../paletas/hsv.pal
+	 * @numeropaleta=7 -> ../../paletas/jet.pal
+	 * @numeropaleta=8 -> ../../paletas/pink.pal
 	 * */
-	vector<vector<float> > paleta; //creo un vecotr de vecotres
-	cargar_paleta(paleta, nombre_paleta);
-	CImg<float> imagen_con_paleta_aplicada(imagen.width(), imagen.height(), 1, 3);
-		cimg_forXY(imagen_con_paleta_aplicada, x, y)
-			{ //es mas o menos una lut...
-			imagen_con_paleta_aplicada(x, y, 1, 0) = paleta[imagen(x, y)][0]*255; //canal rojo
-			imagen_con_paleta_aplicada(x, y, 1, 1) = paleta[imagen(x, y)][1]*255; //canal verde
-			imagen_con_paleta_aplicada(x, y, 1, 2) = paleta[imagen(x, y)][2]*255; //canal azul
-			}
+	vector< vector<float> > paleta; //creo un vecotr de vecotres
+	switch (numero_paleta) {
+	case 1:
+		cargar_paleta(paleta, "../../paletas/bone.pal");
+		break;
+	case 2:
+		cargar_paleta(paleta, "../../paletas/cool.pal");
+		break;
+	case 3:
+		cargar_paleta(paleta, "../../paletas/copper.pal");
+		break;
+	case 4:
+		cargar_paleta(paleta, "../../paletas/gray.pal");
+		break;
+	case 5:
+		cargar_paleta(paleta, "../../paletas/hot.pal");
+		break;
+	case 6:
+		cargar_paleta(paleta, "../../paletas/hsv.pal");
+		break;
+	case 7:
+		cargar_paleta(paleta, "../../paletas/jet.pal");
+		break;
+	case 8:
+		cargar_paleta(paleta, "../../paletas/pink.pal");
+		break;
+	default:
+		break;
+	}
+
+	CImg<float> imagen_con_paleta_aplicada(imagen.width(), imagen.height(), 1,
+			3);
+	cimg_forXY(imagen_con_paleta_aplicada, x, y)
+		{ //es mas o menos una lut...
+			imagen_con_paleta_aplicada(x, y, 0, 0) = paleta[imagen(x, y)][0]
+					* 255.0; //canal rojo
+			imagen_con_paleta_aplicada(x, y, 0, 1) = paleta[imagen(x, y)][1]
+					* 255.0; //canal verde
+			imagen_con_paleta_aplicada(x, y, 0, 2) = paleta[imagen(x, y)][2]
+					* 255.0; //canal azul
+		}
 	return imagen_con_paleta_aplicada;
 }
-template <class T>
+template<class T>
 CImg<T> get_binary(CImg<T> imagen) {
 	//convierte una imagen en escala de grises a binaria
 	/** by chaco:
