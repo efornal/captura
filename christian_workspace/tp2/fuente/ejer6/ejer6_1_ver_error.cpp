@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 	cout << ejey[7];
 	cout << " ])";
 
-	/* FIXME:
+	/* FIXME: falta verificar
 	 * ver el cout que hago en consola, copiar tal cual lo que tira donde dice Linea octave (inversa...) eso hace el grafico
 	 * del error caudratico medio y la imagen en x=0 del grafico esta el error cuadratico medio de reconstruccion solo con el
 	 * plano 7 (bit mas significativo)
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 	 * en x=1 del grafico esta el MSE de la reconstruccion entre la imagen original y los planos 7+6 y asi sucesivamente...
 	 *  porque cuando sumo los planos 7+6+5+4 segun la grafica el error cuadratico medio vuelve a ser cero??
 	 *
-	 *  TODO: Conceptualmente no debe dar así, correcto? El error cuadrático no puede ser cero salvo que sea la misma imagen.
+	 *   Conceptualmente no debe dar así, correcto? El error cuadrático no puede ser cero salvo que sea la misma imagen.
 	 *  Debe haber un error, proba haciendo el MSE a pata en un pedacito chiquito de la imagen donde puedas conocer los valores
 	 *  y hacer a pata el cálculo.
 	 * */

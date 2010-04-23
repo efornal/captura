@@ -8,6 +8,7 @@
 #include <iostream>
 #include <CImg.h>
 #include <vector>
+#include <string>
 #include "../lib/proc_color.h"
 
 using namespace std;
@@ -15,54 +16,41 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	CImg<float> imagen(256, 256, 1, 1);
-	CImgDisplay disp1;
 	cimg_forXY(imagen, x,y)
 		{
 			imagen(x, y) = x; //genero imagen en tonos de grises
 		}
-	imagen.normalize(0, 255.0);
-	/*
-	 * ../../paletas/bone.pal
-	 ../../paletas/cool.pal
-	 ../../paletas/copper.pal
-	 ../../paletas/gray.pal
-	 ../../paletas/hot.pal
-	 ../../paletas/hsv.pal
-	 ../../paletas/jet.pal
-	 ../../paletas/pink.pal
-	 ../../paletas/ver.txt
-	 * */
-	/*	char *paletas[10] = { "../../paletas/bone.pal", "../../paletas/bone.pal",
-	 "../../paletas/cool.pal", "../../paletas/copper.pal",
-	 "../../paletas/gray.pal", "../../paletas/hot.pal",
-	 "../../paletas/hsv.pal", "../../paletas/jet.pal",
-	 "../../paletas/pink.pal", "../../paletas/ver.txt" };*/
 
-	/*	cout<<paleta[0][0]<<"    "<<paleta[0][1]<<"     "<< paleta[0][2]<<endl;
-	 cout<<paleta[1][0]<<"    "<<paleta[1][1]<<"      "<<paleta[1][2]<<endl*/;
+	vector<vector<float> > paleta; //creo un vector de vectores
+	cargar_paleta(paleta, "../../paletas/bone.pal");
 
-	vector<vector<float> > paleta; //creo un vecotr de vecotres
-	cargar_paleta(paleta, "../../paletas/pink.pal");
+	CImgDisplay disp1, disp2;
 
-	CImg<float> imagen_con_paleta_aplicada(imagen.width(), imagen.height(), 1,
-			3);
-	CImg<float> la_paleta(256, 1, 1, 3);
-	cimg_forXY(imagen_con_paleta_aplicada, x, y)
-		{ //es una lut:
-			imagen_con_paleta_aplicada(x, y, 1, 0) = paleta[imagen(x, y)][0]*255; //canal rojo
-			imagen_con_paleta_aplicada(x, y, 1, 1) = paleta[imagen(x, y)][1]*255; //canal verde
-			imagen_con_paleta_aplicada(x, y, 1, 2) = paleta[imagen(x, y)][2]*255; //canal azul
-		/*	la_paleta(x, y, 1, 0) = paleta[x][0]*255;
-			la_paleta(x, y, 1, 1) = paleta[x][1]*255;
-			la_paleta(x, y, 1, 2) = paleta[x][2]*255;*/
+	CImg<float> imagen_con_paleta_aplicada = aplicar_paleta(imagen, 1);
 
-		}
-//	la_paleta.normalize().display();
 	imagen.display(disp1);
+	disp1.set_title("USAR TECLAS-imagen a la que se le aplica la paleta");
 
+	imagen_con_paleta_aplicada.display(disp2);
+	disp2.set_title("imagen con paleta aplicada");
+
+	int nro_pal = 1;
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
+		if (disp1.is_keyARROWUP()) {
+			if (nro_pal >= 1 && nro_pal < 8)
+				nro_pal++;
+		} else if (disp1.is_keyARROWDOWN()) {
+			if (nro_pal > 1 && nro_pal <= 8)
+				nro_pal--;
+		}
+		imagen_con_paleta_aplicada = aplicar_paleta(imagen, nro_pal);
+		imagen.display(disp1);
+		disp1.set_title("imagen a la que se le aplica la paleta");
+		cout << "paleta: " << nro_pal << endl;
+		imagen_con_paleta_aplicada.display(disp2);
+		disp2.set_title("imagen con paleta aplicada");
 	}
 	return 0;
 }

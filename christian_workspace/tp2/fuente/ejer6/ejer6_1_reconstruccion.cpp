@@ -43,11 +43,5 @@ int main(int argc, char **argv) {
 
 		disp.set_title("reconstruccion");
 	}
-	/* FIXME: explicarselo a marcelo porque no lo entendio por mail.... y tien razon! jeje
-	 * tuve que hacerlo con la funcion que obtiene la reconstruccion desde el plano 0... o sea hacer un for siempre. no
-	 * es que la obtiene simplemente anadiendole un termino o elimnando otro (sumando y restando respectivamente) porque
-	 * si lo hacia de esa manera no me andaba del _todo bien y aveces quedaba una cosa y aveces otra.. se debera a los
-	 * decimales de la potenciacion?
-	 * */
 	return 0;
 }

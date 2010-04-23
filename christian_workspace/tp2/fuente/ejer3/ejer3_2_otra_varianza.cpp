@@ -19,11 +19,11 @@ int main(int argc, char **argv) {
 	 * 	en los parámetros se especifica el tipo de ruido (gaussiano es el default) y la varianza.
 	 * La media del ruido generado es cero. El ruido generado es aditivo.*/
 
-
 	//le cambie la varianza
-	CImg<float> imagen_limpia;
+	CImg<double> imagen_limpia;
 	imagen_limpia.load("../../imagenes/tablero.png");
-	double varianza = 10;
+	double varianza = 30;
+
 	CImgDisplay disp1, disp2, disp3;
 	imagen_limpia.display(disp1);
 	disp1.set_title("imagen original");
@@ -35,22 +35,27 @@ int main(int argc, char **argv) {
 	 Returns:
 	 A noisy version of the instance image.
 	 */
-	int cantidad_cuadros=200; //FIXME: mejora muy poco la imagen o me parece y esperaba mas del metodo?
-	CImg<float> imagen_sucia [cantidad_cuadros];
-	for (int i=0;i<cantidad_cuadros;i++){
-		imagen_sucia[i]=imagen_limpia.get_noise(varianza);
+	int cantidad_cuadros = 100; //FIXME: mejora muy poco la imagen o me parece y esperaba mas del metodo?
+	CImg<double> imagen_sucia[cantidad_cuadros];
+	for (int i = 0; i < cantidad_cuadros; i++) {
+		imagen_sucia[i] = imagen_limpia.get_noise(varianza); //contamino la imagen con ruido
 	}
-	imagen_sucia[10].display(disp3);
+
+	imagen_sucia[10].display(disp3); //muestro la imagen_sucia 10
 	disp3.set_title("imagen sucia 10");
-	CImg<float> reconstruida=imagen_sucia[0];
-	for (int i=1;i<cantidad_cuadros;i++){
-		reconstruida=sumar < CImg <float> >(reconstruida, imagen_sucia[i]);
+
+	CImg<double> reconstruida = imagen_sucia[0];
+	for (int i = 1; i < cantidad_cuadros; i++) {
+		reconstruida = sumar<CImg<double> > (reconstruida, imagen_sucia[i],
+				false); //pongo false para que no me ladivida por 2
 	}
-	cimg_forXY(reconstruida, x, y){
-		reconstruida(x,y)/=cantidad_cuadros;
-	}
+	cimg_forXY( reconstruida, x, y )
+		{
+			reconstruida(x, y) = (reconstruida(x, y) / (double) cantidad_cuadros);
+		}
 	reconstruida.display(disp2);
 	disp2.set_title("reconstruida con 200 cuadros");
-	while (!disp2.is_closed()){}
+	while (!disp2.is_closed()) {
+	}
 	return 0;
 }

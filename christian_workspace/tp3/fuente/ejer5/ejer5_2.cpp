@@ -17,7 +17,8 @@ int main(int argc, char **argv) {
 	CImg<float> imagen("../../imagenes/camaleon.tif");
 
 	/* POSTA: Si la suma de la mascara es 0 elimina zonas homogeneas.. o sea no queda nada de bajos...
-	 * FIXME: porque el gris? porque se ve asi?
+	 * Tener en cuenta que en las diapositivas hizo un clipping de los valores negativos! por eso aca se ven todas
+	 * grises.. pero solo lo hizo para mostrar los bordes..
 	 * */
 	CImgDisplay disp1, disp2, disp3;
 	imagen.display(disp1);

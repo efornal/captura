@@ -12,56 +12,44 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	/*TODO: calcular el histograma y solo aplicar al valor del centro...
-	 * tomar imagen vecindad como una nueva imagen.. . cortamos ese pedazo le  hcemos la imagen ecualizada... tomamos le valor delo medio
-	 * y reemplazamos la imagen por eso... y asi sucesivamente
-	 * */
-	CImg<unsigned char> imagen("../../imagenes/ej7a.tif");
-
-	CImgDisplay disp1, disp2, disp3, disp4;
 	int nlevels = 255;
+	CImg<unsigned char> imagen("../../imagenes/ej7a.tif");
 	CImg<unsigned char> imagen_ecualizada = imagen.get_equalize(nlevels);
+	CImgDisplay disp1, disp2, disp3, disp4;
 
-	CImg <unsigned char> aux1(imagen), aux2 (imagen);
-	/*ecualizacion local:
-	 * 0, 0    - 255,255
-	 * 255,0   - aux1.width()-1, 255
-	 * 0,255   - 255,aux.height()-1
-	 * 255,255 - aux1.widht()-1, aux1.height()-1
-	 * */
+	imagen.display(disp1);
+	disp1.set_title("imagen original");
 
-	for (int i=0; i<255;i++){
-		for (int j=0;j<255;j++){
-			aux2(i,j)=aux1.get_crop(0,0, 255,255).get_equalize(255)(i,j);
-		}
-	}
-	for (int i=255; i<aux1.width()-1;i++){
-			for (int j=0;j<255;j++){
-				aux2(i,j)=aux1.get_crop(255,0, aux1.width()-1,255).get_equalize(255)(i,j);
+	imagen_ecualizada.display(disp2);
+	disp2.set_title("imagen ecualizada globalmente");
+
+	CImg<unsigned char> imagen_ecualizada_localmente(imagen);
+	imagen_ecualizada_localmente.display(disp3);
+
+	CImg<unsigned char> auxiliar(imagen);
+	unsigned char rojo[] = { 255, 0, 0 };
+	int deltax = 20;
+	int deltay = 20;
+	while (!disp3.is_closed()) {
+		disp3.wait();
+		{
+			if (disp3.is_keyPAGEUP()) {
+				deltax++;
+				deltay++;
+			} else if (disp1.is_keyPAGEDOWN()) {
+				deltax--;
+				deltay--;
 			}
+			/*imagen_ecualizada_localmente.draw_rectangle(disp3.mouse_x(),
+			 disp3.mouse_y(), disp3.mouse_x() + deltax, disp3.mouse_y()
+			 + deltay, rojo, 1, 1);*/
+//TODO: aplicar la mascara
+			auxiliar.draw_image(disp3.mouse_x(), disp3.mouse_y(), 0, 0, imagen_ecualizada_localmente.get_crop(disp3.mouse_x(),
+							disp3.mouse_y(), disp3.mouse_x() + deltax,
+							disp3.mouse_y() + deltay).get_normalize(0, 255), imagen, 1,
+					1);
+			imagen_ecualizada_localmente.display(disp3);
 		}
-	for (int i=0; i<255;i++){
-			for (int j=255;j<aux1.height()-1;j++){
-				aux2(i,j)=aux1.get_crop(0,255, 255,aux1.height()-1).get_equalize(255)(i,j);
-			}
-		}
-	for (int i=255; i<aux1.width()-1;i++){
-			for (int j=255;j<aux1.height()-1;j++){
-				aux2(i,j)=aux1.get_crop(255,255, aux1.width()-1,aux1.height()-1).get_equalize(255)(i,j);
-			}
-		}
-	aux2.display (disp4);
-	aux1.get_crop(255,0, aux1.width()-1,255).get_equalize(255).display();
-	aux1.get_crop(0, 255, 255, aux1.height()-1).get_equalize(255).display();
-	aux1.get_crop(255, 255, aux1.width()-1, aux1.height()-1).get_equalize(255).display();
-
-	CImgList<unsigned char> lista(imagen, imagen_ecualizada, aux1);
-	lista.display(disp1);
-	disp1.set_title(
-			"imagen original - imagen ecualizada globalemnte - imagen ecualizada por zonas (localmente)");
-
-	while (!disp1.is_closed()) {
-		disp1.wait();
 	}
 	return 0;
 }

@@ -13,21 +13,13 @@ int main() {
 
 	imagenblanca.fill(255);
 	imagennegra.fill(0);
+	CImgList<unsigned char> lista(imagennegra, imagenblanca, restar<CImg<
+			unsigned char> > (imagenblanca, imagennegra, true));
+	CImgDisplay dis(lista, "resta de imagen - imagen blanca-imagen negra");
 
-	CImgDisplay display1;
-	imagennegra.display(display1);
-	display1.set_title("im1+");
-	sleep(3);
-	imagenblanca.display(display1);
-	display1.set_title("-negativo (im1)");
-	sleep(3);
-	sumar(imagennegra, imagenblanca, true).display(display1); //FIXME: seria lo mismo que poner en vez de imagenblanca negativo(imagen_negra) pero por eso mande a consulta para ver en qu ele estoy herrando
-	display1.set_title("= (resta normalizada)");
-	sleep(3);
-	sumar(imagennegra, imagenblanca, false).display(display1);
-	display1.set_title("= (resta no normalizada)");
-	while (!display1.is_closed()) {
-	}
+	CImgList<unsigned char> listai(imagennegra, imagenblanca, restar<CImg<
+				unsigned char> > (imagenblanca, imagennegra, true));
+		CImgDisplay disi(listai, "resta de imagen - imagen negra-imagen blanca");
 
 	im1.load("../../imagenes/letras1.tif"); //cargo imagenes
 	im2.load("../../imagenes/letras2.tif");

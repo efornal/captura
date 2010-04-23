@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	disp2.set_title("original aplicando mascara de promediado");
 	/* Al aumentar el tamanio de la mascara gaussiana con la misma varianza la imagen se hace notoramiente mas
 	 * Disfuminada...
-	 * FIXME: Al aume*ntar el tamanio lo que estaria haciendo es estirarla y por tanto la varianza seria mayor?
+	 * Al aumentar el tamanio lo que estaria haciendo es estirarla y por tanto la varianza seria mayor respecto a la media
 	 * si para la gaussiana usamos 3x3 la forma es /\ y no tienen mucha forma de gausseana
 	 * (mas bien parece la promedio)... si aumentamos el tamaño toma mas forma de gaussiana: \/\/
 	 */

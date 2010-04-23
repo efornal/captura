@@ -25,8 +25,10 @@ int main(int argc, char **argv) {
 
 	CImgDisplay disp1, disp2;
 
-	/*FIXME: cuadno dice segun que imagen se negativize el ejecto sera relieve interior o exterior...
-	 * en cual es exterior y en cual interior... se refiere a las dos lienas que puse aca abajo?*/
+	/* Efecto de relieve interior y exterior,es dependiente de la imagen. Puede que lo corra con valores positivos y que me de
+	 * relieve interior en una imagen y en otra diferente me podria dar exterior.. depende de los valores de los pixeles de la
+	 * imagen
+	 * */
 	emboss(imagen, 1, 1, false).display(disp1);
 	emboss(negativo(imagen), 1, 1, false).display(disp2);
 	while (!disp1.is_closed()) {

@@ -65,10 +65,6 @@ int main(int argc, char **argv) {
 	for (int i = 1; i < cantidad_cuadros; i++) {
 		reconstruida = sumar<CImg<unsigned char> > (reconstruida, imagen_sucia[i]);
 	}
-	cimg_forXY(reconstruida, x, y)
-		{
-			reconstruida(x, y) = reconstruida(x, y)/cantidad_cuadros;
-		}
 	reconstruida.display(disp2);
 	disp2.set_title("reconstruida con 60 cuadros");
 	while (!disp2.is_closed()) {
