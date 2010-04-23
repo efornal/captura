@@ -79,6 +79,7 @@ T clipp(T valor) {
 template<class T>
 CImg<T> generar_mascara_gaussiana(int x = 3, int y = 3, double var = 1.0) {
 	/**
+	 * OJO: SOLO FUNCIONA PARA MASCARAS DE 3x3
 	 retorna una mascara gausseana
 	 *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
 	 * dada la formula, con +-x = x^2 , e y+- = y^2
@@ -86,7 +87,6 @@ CImg<T> generar_mascara_gaussiana(int x = 3, int y = 3, double var = 1.0) {
 	 *  0  a  0
 	 *  a 255 a
 	 *  0  a  0
-	 * FIXME : no funciona para valores diferentes de 3x3 !
 	 *
 	 *-1,-1 	-1,0		-1,1
 	 * 0,-1 	 0,0		 0,1		 => para 3x3    el for va desde -1 hasta 1
