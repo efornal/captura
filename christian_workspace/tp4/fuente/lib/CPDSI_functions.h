@@ -43,6 +43,7 @@ const int NFilas256=256, NColumnas256=256;
 /// Transformada Hough directa
 /// Todavia no funciona el cuantizado del plano ro-theta
 ///****************************************
+
 CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool getHist=0) {
 
   CImg<double> iHough(img); iHough.fill(0.0);
@@ -101,6 +102,7 @@ CImg<double> hough_inversa(CImg<double> img) {
 ///****************************************
 /// Gaussian filter mask
 ///****************************************
+double pi=3.14159;
 CImg<double> gaussian_mask(int size, double sigma){
 int ini,fin;
 double aux;

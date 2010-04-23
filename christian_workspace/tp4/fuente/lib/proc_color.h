@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 #include "../lib/CPDSI_functions.h"
-
 using namespace std;
 using namespace cimg_library;
 
