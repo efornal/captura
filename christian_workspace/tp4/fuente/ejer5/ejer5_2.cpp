@@ -27,9 +27,10 @@ int main(int argc, char **argv) {
 	int dx = camino.width();
 	int dy = camino.height();
 
-	CImg<float> camino_R(dx, dy, 1, 0), camino_G(dx, dy, 1, 0), camino_B(dx,
-			dy, 1, 0);
+	CImg<float> camino_R(dx, dy, 1, 1), camino_G(dx, dy, 1, 1), camino_B(dx,
+			dy, 1, 1);
 	descomponer_rgb<float> (camino, camino_R, camino_G, camino_B);
+
 	//c--------------------------------------------------------------------------------
 	//procese casa componente por separado y genera una nueva imagen
 	camino_R = camino_R.get_convolve(mascara);
@@ -39,7 +40,7 @@ int main(int argc, char **argv) {
 	CImg<float> imagen_procesada = componer_imagen<float> (camino_R, camino_G,
 			camino_B);
 	CImgDisplay disp2(imagen_procesada,
-			"imagen a la cual se le aplico la mascara por canales", 0);
+			"imagen a la cual se le aplico la mascara por canales RGB", 0);
 
 	//d--------------------------------------------------------------------------------
 	// obtener componentes HSI de la imagen original
@@ -50,10 +51,18 @@ int main(int argc, char **argv) {
 
 	//e--------------------------------------------------------------------------------
 	// filtrar compoennte de intensiddad y visualizar los resultados
-	camino_HSI_I=camino_HSI_I.get_convolve(mascara);
+	camino_HSI_I = camino_HSI_I.get_convolve(mascara);
 
-	CImg <float> camino_filtrado_intensidad=(componer_imagen_hsi <float> (camino_HSI_H, camino_HSI_S, camino_HSI_I)).HSItoRGB();
-
+	CImg<float> camino_filtrado_intensidad = (componer_imagen_hsi<float> (
+			camino_HSI_H, camino_HSI_S, camino_HSI_I)).HSItoRGB();
+	CImgDisplay
+			disp3(
+					camino_filtrado_intensidad,
+					"imagen a la caul se le aplico la mascara en el canal de intensidada y se reconstruyo",
+					0);
+	/*POSTA: aplicar mascaras en imagenes de colores en HSI (en esta caso en intensidad) logra los resutlaods esperados que aplicarlos
+	 con imagnes en RGB.*/
+	//FIXME: siempre se da asi?
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
