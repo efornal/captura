@@ -25,23 +25,38 @@ CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
 		}
 	return imagen;
 }
+
 template<class T>
-CImg<T> invertir_HSI(CImg<T> imagen) {
+CImg<T> componer_imagen_hsi(CImg<T> canal_h, CImg<T> canal_s,
+		CImg<T> canal_i) {
+	/*Tener en cuenta que los canales que deben pasarseles a esta funcion son tal cula fueron devueltos por la fucnion
+	 * get_RGB_TO_HSI()*/
+	CImg<T> imagen(canal_h.width(), canal_h.height(), 1,
+			3);
+	cimg_forXY(imagen, x, y)
+		{
+			imagen(x, y, 0, 0) = canal_h(x, y, 0, 0);
+			imagen(x, y, 0, 1) = canal_s(x, y, 0, 0);
+			imagen(x, y, 0, 2) = canal_i(x, y, 0, 0);
+		}
+	return imagen;
+}
+
+template<class T>
+CImg<T> invertir_HSI(CImg<T> imagen_H) {
 	/* si era rojo tiene que ser azul....
 	 * para ello modifico el canal H
 	 * */
-	CImg<T> imm(imagen);
-	cimg_forXY(imagen, x, y)
+	cimg_forXY(imagen_H, x, y)
 		{
-			imm(x, y, 0, 0) = ((imagen(x, y, 0, 0) / 360) * 255) + 240;
-
-			//imm(x,y,0,0)=imagen(imagen.width()-x-1,y,0,0);
-
+		imagen_H(x, y, 0, 0) = imagen_H(imagen_H.height()-1-x, y, 0, 0); //reflexion horizontal
 		}
-	return imm;
+	return imagen_H;
 }
 
-CImg <float> aplicar_paleta(CImg <float> imagen, int numero_paleta = 1) {
+
+
+CImg<float> aplicar_paleta(CImg<float> imagen, int numero_paleta = 1) {
 	/* carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
 	 * devuelve la imagen con la paleta aplicada
 	 * @numeropaleta=1 -> ../../paletas/bone.pal
@@ -53,7 +68,7 @@ CImg <float> aplicar_paleta(CImg <float> imagen, int numero_paleta = 1) {
 	 * @numeropaleta=7 -> ../../paletas/jet.pal
 	 * @numeropaleta=8 -> ../../paletas/pink.pal
 	 * */
-	vector< vector<float> > paleta; //creo un vecotr de vecotres
+	vector<vector<float> > paleta; //creo un vecotr de vecotres
 	switch (numero_paleta) {
 	case 1:
 		cargar_paleta(paleta, "../../paletas/bone.pal");
