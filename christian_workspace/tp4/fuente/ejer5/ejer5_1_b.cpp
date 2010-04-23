@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 	CImg<float> imagen_oscura_ecualizada(imagen_oscura), imagen_oscura_R_eq(dx,
 			dy, 1, 3), imagen_oscura_G_eq(dx, dy, 1, 3), imagen_oscura_B_eq(dx,
 			dy, 1, 3);
-	descomponer_rgb<float> (imagen_oscura_ecualizada, imagen_oscura_R_eq,
+	descomponer_rgb3<float> (imagen_oscura_ecualizada, imagen_oscura_R_eq,
 			imagen_oscura_G_eq, imagen_oscura_B_eq, true);
 	CImgList<float> lista1(imagen_oscura_ecualizada, imagen_oscura_R_eq,
 			imagen_oscura_G_eq, imagen_oscura_B_eq);
