@@ -12,10 +12,11 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	/*FIXME: analizar el histograma
-	 * no se como analizarlo... a que se debe esa forma tipo gaussiana?
+	/* En la parte mas a la izquierda del histograma se puede ver el pico que correspoende
+	 * a los colores oscuros correspondientes al rio.
 	 * */
 	CImg<float> rio("../../imagenes/rio.jpg"); //tiene valores entre 0 y 255
+	rio.print();
 	CImgDisplay disp1(rio, "imagen del rio", 1), disp2, disp3;
 	rio.get_histogram(255).display_graph(disp2, 3);
 	int umbral = 20;

@@ -237,13 +237,16 @@ CImg<unsigned char> multiplicar(CImg<unsigned char> im1,
 //divicion
 CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 		bool normalizar) {
+	/*
+	 * Division. Se implementa como la multiplicacion de una imagen por la reciproca de la otra
+	 * */
 	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
 	cimg_forXY(im1, x, y)
 		{
 			if (floor(im2(x, y)) == 0)
-				imagen(x, y) = im1(x, y); // FIXME: en el caso que el pixel balga cero que hago? dejo el original o lo cambio por el de la nueva imagen?
+				imagen(x, y) = im1(x, y);
 			else
-				imagen(x, y) = im1(x, y) / im2(x, y);
+				imagen(x, y) = im1(x, y) * negativo(im2(x, y));
 		}
 	if (normalizar)
 		return imagen.normalize();
@@ -253,8 +256,8 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 
 CImg<unsigned char> emboss(CImg<unsigned char> imagen, int des_x, int des_y,
 		bool normalizado = true) {
-/* normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
- * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO*/
+	/* normalizado: true (por defecto) -> la imagen se corta si el valor del pixel es menor que 0 o mayor que 255
+	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO*/
 
 	if (normalizado)
 		return sumar<CImg<unsigned char> > (desplazar<unsigned char> (negativo(

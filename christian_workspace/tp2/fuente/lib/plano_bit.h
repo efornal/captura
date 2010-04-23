@@ -20,14 +20,6 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 		cimg_forXY(img,x,y)
 			{
 				img(x, y) = (img(x, y) >> nro) & 0x00000001;
-				//cout<<img(x,y)<<endl;
-				/*FIXME: si se descomentan las barras del coemntario de arriba y
-				 * ejecutando el ejercicio ejer6_1_gris la salida no me sale en formato binario
-				 * como puedo hacer para que me salgan bien los numeritos?
-				 *
-				 * TODO: Talves el cout no esta interpretando el tipo de dato correctamente.
-				 * Fijate si definis una vble y le asignas el valor y luego imprimis esa en pantalla.
-				 * */
 			}
 	} else {
 		cimg_forXY(img,x,y)
@@ -35,7 +27,6 @@ CImg<unsigned char> plano_de_bit(CImg<unsigned char> img, int nro = 0) {
 				img(x, y) = (img(x, y)) & 0x00000001;
 			}
 	}
-
 	/* 0   ==  0000 0000     => 0 >> 1   =  0000 0000  ==  0
 	 2   ==  0000 0010     => 2 >> 1   =  0000 0001  ==  1
 	 & -> operador and bit a bit o bitand
