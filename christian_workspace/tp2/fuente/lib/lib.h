@@ -11,6 +11,13 @@ T clipp(T valor) {
 	else
 		return valor;
 }
+template<class T>
+T promedio(T img, int n = 2) {
+	for (int i = 0; i < n; i++) {
+		img += img;
+	}
+	return img / n;
+}
 
 template<class T>
 CImg<T> desplazar(CImg<T> imagen, int des_x, int des_y) {
@@ -62,7 +69,7 @@ CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
 
-CImg<unsigned char> negativo(CImg<unsigned char> & img1) { //retorna el negativo de una imagen
+CImg<unsigned char> negativo(CImg<unsigned char> img1) { //retorna el negativo de una imagen
 	//ojo solo anda para imagenes en tonos de grises
 	int a = -1;
 	unsigned char c = 255; // maximo de la "escala"
@@ -178,9 +185,21 @@ template<class T>
 T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
 	//funcion que retorna la suma de 2 terminos...
 	// para llamarla por ejemplo : sumar<double>(l,m);
-	if (normalizado)
-		return (primer_termino + segundo_termino) / 2;
-	return (primer_termino + segundo_termino);
+	T imagen(primer_termino);
+	if (normalizado) {
+		cimg_forXY(primer_termino, x, y)
+			{
+				primer_termino(x, y) = (primer_termino(x, y) + segundo_termino(
+						x, y)) / 2.0;
+			}
+	} else {
+		cimg_forXY(primer_termino, x, y)
+			{
+				primer_termino(x, y) = (primer_termino(x, y) + segundo_termino(
+						x, y));
+			}
+	}
+	return imagen;
 }
 
 //resta
@@ -240,14 +259,8 @@ CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
 	/*
 	 * Division. Se implementa como la multiplicacion de una imagen por la reciproca de la otra
 	 * */
-	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
-	cimg_forXY(im1, x, y)
-		{
-			if (floor(im2(x, y)) == 0)
-				imagen(x, y) = im1(x, y);
-			else
-				imagen(x, y) = im1(x, y) * negativo(im2(x, y));
-		}
+	CImg<unsigned char> imagen = multiplicar(im1, negativo(im2), true);
+
 	if (normalizar)
 		return imagen.normalize();
 	else
