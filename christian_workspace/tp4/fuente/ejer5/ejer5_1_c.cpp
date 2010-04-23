@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 			imagen_oscura_HSI_S(x, y) = imagen_oscura_HSI(x, y, 0, 1);
 			imagen_oscura_HSI_I(x, y) = imagen_oscura_HSI(x, y, 0, 2);
 		}
-	visualizar_HSI(imagen_oscura_HSI_H, imagen_oscura_HSI_S,
+	visualizar_HSI <float> (imagen_oscura_HSI_H, imagen_oscura_HSI_S,
 			imagen_oscura_HSI_I);
 	CImgDisplay disp1(imagen_oscura_HSI_H, "canal H", 0);
 	CImgDisplay disp2(imagen_oscura_HSI_S, "canal S", 0);
