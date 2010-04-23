@@ -1,5 +1,5 @@
 /*
- * ejer1_1_b2.cpp
+ * ejer1_1_b3.cpp
  *
  *  Created on: 23/04/2010
  *      Author: christian
