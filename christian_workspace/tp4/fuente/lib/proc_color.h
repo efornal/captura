@@ -38,10 +38,11 @@ CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
 }
 
 template<class T>
-void descomponer_rgb(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
+void descomponer_rgb3(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
 		CImg<T> &canal_G, CImg<T> &canal_B, bool ecualizar_por_separado = false) {
 	/* Descompone una imagen RGB en sus canales
 	 * devuelve los canales R, G y B con sus colores correspondientes por referencia
+	 * OJO LOS CANALES QUE SE PASAN DEBEN SER DE 3 CANALES - ESTA ECHO ASI PARA LA VISUALIZACION
 	 * ecualizar_por_separado = false implica que no haya ecualizacion por canal
 	 * ecualizar_por_separado = true implica que devuelve por referencia cada canal ecualizado
 	 */
@@ -61,7 +62,28 @@ void descomponer_rgb(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
 		cout << endl << "Se ecualizaron los canales por serparado" << endl;
 	}
 }
-
+template<class T>
+void descomponer_rgb(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
+		CImg<T> &canal_G, CImg<T> &canal_B, bool ecualizar_por_separado = false) {
+	/* Descompone una imagen RGB en sus canales
+	 * devuelve los canales R, G y B con sus colores correspondientes por referencia
+	 * ecualizar_por_separado = false implica que no haya ecualizacion por canal
+	 * ecualizar_por_separado = true implica que devuelve por referencia cada canal ecualizado
+	 */
+	cimg_forXY(imagen_a_descomponer,x,y)
+		{
+			canal_R(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 0);//canal rojo
+			canal_G(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 1);//canal rojo
+			canal_B(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 2);//canal rojo
+		}
+	if (ecualizar_por_separado) { //ecualizacion de cada canal por serparado
+		canal_R.equalize(0, 255);
+		canal_G.equalize(0, 255);
+		canal_B.equalize(0, 255);
+		imagen_a_descomponer = componer_imagen<T> (canal_R, canal_G, canal_B);
+		cout << endl << "Se ecualizaron los canales por serparado" << endl;
+	}
+}
 template<class T>
 CImg<T> ecualizar_por_separado(CImg<T> imagen) {
 	/* Ecualiza cada canal por serparado y devuelve una imagen con los 3 canales ecualizados
