@@ -9,6 +9,7 @@ extern "C"{
 
 using namespace cimg_library;
 
+
 template<typename T> struct CHImg : public CImg<T> {
 
     // Constructores replicados
@@ -178,13 +179,13 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
-    void fft_modulo( bool centrada=false ) {
-        CImg<double> img = *this, modulo;
+    CImg<double> get_fft_modulo( bool centrada=false ) {
+        CImg<double> img = *this;
+        CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
         CImgList<double> tdf;
         
-        tdf = image.get_FFT( false );  // lista: parte real e imag
+        tdf = img.get_FFT( false );  // lista: parte real e imag
 
-        //CImg<double> modulo( tdf[0].width(), tdf[0].height(), 1, 3, 0 );
         for (int i=0; i<img.width(); i++){
             for (int j=0; j<img.height(); j++) {
                 modulo(i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
@@ -193,9 +194,12 @@ template<typename T> struct CHImg : public CImg<T> {
             }
         }
 
+        if ( centrada ) { 
+            //parametros de shift: x, y , z, v, border_condition
+            modulo.shift( modulo.width()/2, modulo.height()/2, 0, 0, 2 );
+        }
+
         return modulo;
     }
 
-    // ==================================================== \\
-    // ------------- ..  ------------- \\
 };
