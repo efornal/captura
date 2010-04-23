@@ -241,7 +241,7 @@ if (centrada){
     (magnitud).shift(magnitud.width()/2,magnitud.height()/2,0,0,2); //parametros de scroll:x,y,z,v,border_condition
 }
 //DEVUELVE LA TDF CON LA PALETA DESEADA
-if (cargar_paleta(paleta,"./paletas/gray.pal")!=0){
+if (cargar_paleta(paleta,"../../paletas/gray.pal")!=0){
     cout<<"Error al cargar la paleta."<<endl;
     exit(1);
 }
