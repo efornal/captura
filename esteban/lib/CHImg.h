@@ -176,6 +176,32 @@ template<typename T> struct CHImg : public CImg<T> {
         return (factor-1)*img + img.get_convolve( mask );
     }
 
+
+    /**
+     * Equalizacion local: realiza un ecualizado segun tam mask
+     */
+    CImg<double> get_local_equalize( int dx=3, int dy=3, int nivel_equalize=255 ) {
+        CImg<double> img = *this;
+        CImg<double> mask(3,3),
+            dest( img.width(), img.height(), 1, 1, 0 );
+        int midx=(dx/2), midy=(dy/2);
+
+        for( int i=midx; i<=img.width()-midx; i+=(2*midx) ) {
+            for( int j=midy; j<=img.height()-midy; j+=(2*midy) ) {
+                mask = img.get_crop( i-midx, j-midy, i+midx, j+midy );
+
+                mask.equalize( nivel_equalize );
+
+                for( int x=-midx; x<=midx; x++){
+                    for(int y=-midy; y<=midy; y++){
+                        dest( i+x, j+y ) = mask( x+midx, y+midy );
+                    }
+                }
+            
+            }
+        }
+        return dest;
+    }
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
