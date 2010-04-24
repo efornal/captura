@@ -208,7 +208,7 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // ----------------------- color  --------------------- \\
 
-    CImg<double> to_paleta(int nro_paleta=1){
+    CImg<double> get_aplicar_paleta(int nro_paleta=1){
         CImg<double> img = *this;
         return aplicar_paleta(img,nro_paleta);
     }
