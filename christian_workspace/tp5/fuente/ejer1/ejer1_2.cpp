@@ -21,51 +21,87 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
+	cout << "USE: " << endl
+			<< "rueda del mouse para aumentar o disminuir tamaños" << endl
+			<< "      R->rectangulo," << endl << "      C->circulo," << endl
+			<< "      H->Linea Horizontal," << endl
+			<< "      V->Linea Vertical," << endl;
 	CImg<double> imagen0(300, 300, 1, 1);
-	CImg<unsigned char> mod_0(300, 300, 1, 1);
-
-	CImg<double> imagen1(300, 300, 1, 1);
-	CImg<unsigned char> mod_1(300, 300, 1, 1);
-
-	CImg<double> imagen2(300, 300, 1, 1);
-	CImg<unsigned char> mod_2(300, 300, 1, 1);
-
-	CImg<double> imagen3(300, 300, 1, 1);
-	CImg<unsigned char> mod_3(300, 300, 1, 1);
-
+	CImg<unsigned char> mod_0_centrada(300, 300, 1, 1);
+	CImg<unsigned char> mod_0_nocentrada(300, 300, 1, 1);
+	CImg<double> fase0(300, 300, 1, 1);
+	//FIXME: ver cuadrado y fases de las lineas.. estara bien?
 	float radio = 50.0;
 	int posx = imagen0.width() / 2;
 	int posy = imagen0.height() / 2;
 
 	circulo_centrado(posx, posy, imagen0, radio);
-	cuadrado_centrado(imagen1, 30, 30);
-	linea_vertical(imagen2, imagen2.width() / 2);
-	linea_horizontal(imagen3, imagen3.height() / 3);
 
-	magn_tdf(imagen0, mod_0, 1);
-	CImgDisplay disp1, disp1_1;
-	imagen0.display(disp1);
-	mod_0.display(disp1_1);
+	magn_tdf(imagen0, mod_0_centrada, 1);
+	magn_tdf(imagen0, mod_0_nocentrada, 0);
 
-	magn_tdf(imagen1, mod_1, 1);
-	magn_tdf(imagen2, mod_2, 1);
-	magn_tdf(imagen3, mod_3, 1);
+	int dimx = 50;
+	int dimy = 50;
+	fase0 = get_fase(imagen0);
+	CImgDisplay disp1;
+	fase0.display(disp1);
+	CImgDisplay disp0;
+	CImgList<double> lista0(imagen0, mod_0_centrada, mod_0_nocentrada);
+	lista0.display(disp0);
+	bool c = true; //circulo
+	bool h = false; //linea horizontal
+	bool v = false; // linea vertical
+	bool r = false; //linea rectangular
+	while (!disp0.is_closed()) {
+		if (disp0.is_keyC()) {
+			c = true; //circulo
+			h = false; //linea horizontal
+			v = false; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyH()) {
+			c = false; //circulo
+			h = true; //linea horizontal
+			v = false; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyV()) {
+			c = false; //circulo
+			h = false; //linea horizontal
+			v = true; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyR()) {
+			c = false; //circulo
+			h = false; //linea horizontal
+			v = false; // linea vertical
+			r = true; //linea rectangular
+		}
 
-	CImgList<double> lista1(imagen1, mod_1);
-	CImgList<double> lista2(imagen2, mod_2);
-	CImgList<double> lista3(imagen3, mod_3);
+		if (c) { //circulo
+			circulo_centrado(disp0.mouse_x(), disp0.mouse_y(), imagen0, radio
+					+ disp0.wheel());
+			cout << "Radio del circulo: " << radio + disp0.wheel() << endl;
+		} else if (h) { //linea horizontal
+			linea_horizontal<double> (imagen0, disp0.mouse_y());
+		} else if (v) { //linea vertical
+			linea_vertical(imagen0, disp0.mouse_x());
+		} else if (r) { //rectangulo
+			cuadrado_centrado(imagen0, dimx + disp0.wheel(), dimy
+					+ disp0.wheel(), disp0.mouse_x(), disp0.mouse_y());
+			cout << "Cuadrado: " << dimx + disp0.wheel() << endl;
+		}
+		lista0.clear();
+		magn_tdf(imagen0, mod_0_centrada, 1);
+		magn_tdf(imagen0, mod_0_nocentrada, 0);
+		fase0 = get_fase(imagen0);
 
-	CImgDisplay disp2(lista1, "imagen y su transformada");
-	CImgDisplay disp3(lista2, "imagen y su transformada");
-	CImgDisplay disp4(lista3, "imagen y su transformada");
+		lista0.insert(imagen0);
+		lista0.insert(mod_0_centrada);
+		lista0.insert(mod_0_nocentrada);
+		fase0.display(disp1);
+		disp1.set_title("fase");
+		lista0.display(disp0);
 
-	while (!disp1.is_closed()) {
-		//mostrar
-		circulo_centrado(disp1.mouse_x(), disp1.mouse_y(), imagen0, radio
-				+ disp1.wheel());
-		magn_tdf(imagen0, mod_0, 1);
-		imagen0.display(disp1);
-		mod_0.display(disp1_1);
+		disp0.set_title(
+				"imagen original, magnitu centrada, magnitud no centrada");
 	}
 	return 0;
 }
