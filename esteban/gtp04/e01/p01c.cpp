@@ -1,9 +1,9 @@
 /**
  * FIXME confirmar:
  * la variacion de intensidad aumenta o disminuye
- * la intencidad del color (pureza)
- * para valores muy bajos (->0) el color tiende a gris
- * para valores mas altos (->1) el color tiende a puro
+ * el brillo de la imagen
+ * para valores muy bajos (->0) la imagen se oscurece
+ * para valores mas altos (->1) la imagen se abrillanta
  * 
  * mas interesante aun : ./p01c -f ../../imagenes/futbol.jpg
  * FIXME:
