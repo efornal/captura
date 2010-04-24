@@ -8,39 +8,100 @@
 
 #ifdef cimg_use_fftw3
 extern "C" {
-	#include "fftw3.h"
+#include "fftw3.h"
 }
 #endif
 
 #include <iostream>
 #include <CImg.h>
 #include "../lib/lib5.h"
-#include "../lib/CPDSI_functions.h"
+#include "../../../tp4/fuente/lib/CPDSI_functions.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<double> imagen(300, 300, 1, 1);
-	//cuadrado_centrado(imagen, 100, 100);
-	circulo_centrado(imagen, 150);
+	cout << "USE: " << endl
+			<< "rueda del mouse para aumentar o disminuir tamaños" << endl
+			<< "      R->rectangulo," << endl << "      C->circulo," << endl
+			<< "      H->Linea Horizontal," << endl
+			<< "      V->Linea Vertical," << endl;
+	CImg<double> imagen0(300, 300, 1, 1);
+	CImg<unsigned char> mod_0_centrada(300, 300, 1, 1);
+	CImg<unsigned char> mod_0_nocentrada(300, 300, 1, 1);
+	CImg<double> fase0(300, 300, 1, 1);
+	//FIXME: ver cuadrado y fases de las lineas.. estara bien?
+	float radio = 50.0;
+	int posx = imagen0.width() / 2;
+	int posy = imagen0.height() / 2;
 
-	CImgList<double> tdf_imagen = imagen.get_FFT(); //obtengo la transofrmada
+	circulo_centrado(posx, posy, imagen0, radio);
 
-	CImg<double> tdf_imagen_real = tdf_imagen[0];
-	CImg<double> tdf_imagen_imag = tdf_imagen[1];
+	magn_tdf(imagen0, mod_0_centrada, 1);
+	magn_tdf(imagen0, mod_0_nocentrada, 0);
 
-	CImg<double> magnitud_imagen = (tdf_imagen_real.get_pow(2)
-			+ tdf_imagen_imag.get_pow(2)).sqrt();
-
+	int dimx = 50;
+	int dimy = 50;
+	fase0 = get_fase(imagen0);
 	CImgDisplay disp1;
-	magnitud_imagen.log().normalize(0, 255).shift(magnitud_imagen.width()/2, magnitud_imagen.height()/2, 0, 0, 2).display(disp1);
+	fase0.display(disp1);
+	CImgDisplay disp0;
+	CImgList<double> lista0(imagen0, mod_0_centrada, mod_0_nocentrada);
+	lista0.display(disp0);
+	bool c = true; //circulo
+	bool h = false; //linea horizontal
+	bool v = false; // linea vertical
+	bool r = false; //linea rectangular
+	while (!disp0.is_closed()) {
+		if (disp0.is_keyC()) {
+			c = true; //circulo
+			h = false; //linea horizontal
+			v = false; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyH()) {
+			c = false; //circulo
+			h = true; //linea horizontal
+			v = false; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyV()) {
+			c = false; //circulo
+			h = false; //linea horizontal
+			v = true; // linea vertical
+			r = false; //linea rectangular
+		} else if (disp0.is_keyR()) {
+			c = false; //circulo
+			h = false; //linea horizontal
+			v = false; // linea vertical
+			r = true; //linea rectangular
+		}
 
-	CImgDisplay disp2;
-	CImg <unsigned char> modulo;
-	magn_tdf(imagen, modulo, 1);
-	modulo.display(disp2);
-	while (!disp1.is_closed()){}
+		if (c) { //circulo
+			circulo_centrado(disp0.mouse_x(), disp0.mouse_y(), imagen0, radio
+					+ disp0.wheel());
+			cout << "Radio del circulo: " << radio + disp0.wheel() << endl;
+		} else if (h) { //linea horizontal
+			linea_horizontal<double> (imagen0, disp0.mouse_y());
+		} else if (v) { //linea vertical
+			linea_vertical(imagen0, disp0.mouse_x());
+		} else if (r) { //rectangulo
+			cuadrado_centrado(imagen0, dimx + disp0.wheel(), dimy
+					+ disp0.wheel(), disp0.mouse_x(), disp0.mouse_y());
+			cout << "Cuadrado: " << dimx + disp0.wheel() << endl;
+		}
+		lista0.clear();
+		magn_tdf(imagen0, mod_0_centrada, 1);
+		magn_tdf(imagen0, mod_0_nocentrada, 0);
+		fase0 = get_fase(imagen0);
 
+		lista0.insert(imagen0);
+		lista0.insert(mod_0_centrada);
+		lista0.insert(mod_0_nocentrada);
+		fase0.display(disp1);
+		disp1.set_title("fase");
+		lista0.display(disp0);
+
+		disp0.set_title(
+				"imagen original, magnitu centrada, magnitud no centrada");
+	}
 	return 0;
 }

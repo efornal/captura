@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 	//le cambie la varianza
 	CImg<double> imagen_limpia;
 	imagen_limpia.load("../../imagenes/tablero.png");
-	double varianza = 30;
+	double varianza = 50;
 
 	CImgDisplay disp1, disp2, disp3;
 	imagen_limpia.display(disp1);
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	 Returns:
 	 A noisy version of the instance image.
 	 */
-	int cantidad_cuadros = 100; //FIXME: mejora muy poco la imagen o me parece y esperaba mas del metodo?
+	int cantidad_cuadros = 100;
 	CImg<double> imagen_sucia[cantidad_cuadros];
 	for (int i = 0; i < cantidad_cuadros; i++) {
 		imagen_sucia[i] = imagen_limpia.get_noise(varianza); //contamino la imagen con ruido
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
 	CImg<double> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
-		reconstruida = sumar<CImg<double> > (reconstruida, imagen_sucia[i],
+		reconstruida = sumar <CImg<double> > (reconstruida, imagen_sucia[i],
 				false); //pongo false para que no me ladivida por 2
 	}
 	cimg_forXY( reconstruida, x, y )
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 			reconstruida(x, y) = (reconstruida(x, y) / (double) cantidad_cuadros);
 		}
 	reconstruida.display(disp2);
-	disp2.set_title("reconstruida con 200 cuadros");
+	disp2.set_title("reconstruida con 100 cuadros");
 	while (!disp2.is_closed()) {
 	}
 	return 0;
