@@ -11,17 +11,40 @@
 using namespace std;
 using namespace cimg_library;
 
-template <class T>
-void visualizar_HSI(CImg <T> &canal_h, CImg <T> &canal_s, CImg <T> &canal_i){
+template<class T>
+
+CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
+		float *color_a_rellenar) {
+	float distancia, r_original, g_original, b_original;
+	R /= 256.0, G /= 256.0, B /= 256.0; // centro de la esfera
+	CImg<T> img_segmentada = img.normalize(0, 1);
+	cimg_forXY(img_segmentada,x,y)
+		{
+			r_original = img(x, y, 0, 0);
+			g_original = img(x, y, 0, 1);
+			b_original = img(x, y, 0, 2);
+			distancia = (r_original - R) * (r_original - R) + (g_original - G) * (g_original - G) + (b_original - B) * (b_original
+					- B); //ecuacion de la esfera ojo r^2...
+			distancia = sqrt(abs(distancia)); //r
+			if (distancia < radio_tol) {
+				img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
+				img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
+				img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+			}
+		}
+	return img_segmentada;
+}
+
+template<class T>
+void visualizar_HSI(CImg<T> &canal_h, CImg<T> &canal_s, CImg<T> &canal_i) {
 	/* devuleve por referencia los canales HSI para poder ser visualizadas correctamente*/
 	cimg_forXY(canal_h,x,y)
 		{
-		canal_h(x, y) = canal_h(x, y) / 360.0 * 255.0; //recordar que H esta entre 0 y 360
-		canal_s(x, y) = canal_s(x, y) * 255.0; //recordar que S va de 0 a 1.0
-		canal_i(x, y) = canal_i(x, y) * 255.0; //recordar que I esta entre 0 y 1.0
+			canal_h(x, y) = canal_h(x, y) / 360.0 * 255.0; //recordar que H esta entre 0 y 360
+			canal_s(x, y) = canal_s(x, y) * 255.0; //recordar que S va de 0 a 1.0
+			canal_i(x, y) = canal_i(x, y) * 255.0; //recordar que I esta entre 0 y 1.0
 		}
 }
-
 
 template<class T>
 CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
