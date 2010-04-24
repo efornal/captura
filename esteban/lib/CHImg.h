@@ -1,6 +1,14 @@
+#define cimg_use_fftw3 1
+#ifdef cimg_use_fftw3
+extern "C"{
+    #include "fftw3.h"
+}
+#endif
+
 #include <CImg.h>
 
 using namespace cimg_library;
+
 
 template<typename T> struct CHImg : public CImg<T> {
 
@@ -168,5 +176,56 @@ template<typename T> struct CHImg : public CImg<T> {
         return (factor-1)*img + img.get_convolve( mask );
     }
 
-};
 
+    /**
+     * Equalizacion local: realiza un ecualizado segun tam mask
+     */
+    CImg<double> get_local_equalize( int dx=3, int dy=3, int nivel_equalize=255 ) {
+        CImg<double> img = *this;
+        CImg<double> mask(3,3),
+            dest( img );
+        int midx=(dx/2), midy=(dy/2), z=0, c=0;
+        
+        for( int i=midx; i<=img.width()-midx; i+=(2*midx) ) {
+            for( int j=midy; j<=img.height()-midy; j+=(2*midy) ) {
+                mask = img.get_crop( i-midx, j-midy, i+midx, j+midy );
+
+                mask.equalize( nivel_equalize );
+
+                for( int x=-midx; x<=midx; x++){
+                    for(int y=-midy; y<=midy; y++){
+                        dest( i+x, j+y) = mask( x+midx, y+midy );
+                    }
+                }
+            }
+        }
+        return dest;
+    }
+
+    // ==================================================== \\
+    // --------------- espectro frecuencia  ---------------- \\
+
+    CImg<double> get_fft_modulo( bool centrada=false ) {
+        CImg<double> img = *this;
+        CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
+        CImgList<double> tdf;
+        
+        tdf = img.get_FFT( false );  // lista: parte real e imag
+
+        for (int i=0; i<img.width(); i++){
+            for (int j=0; j<img.height(); j++) {
+                modulo(i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
+                                    pow( tdf[1](i,j), 2.0 ) ) +
+                    0.000001;
+            }
+        }
+
+        if ( centrada ) { 
+            //parametros de shift: x, y , z, v, border_condition
+            modulo.shift( modulo.width()/2, modulo.height()/2, 0, 0, 2 );
+        }
+
+        return modulo;
+    }
+
+};
