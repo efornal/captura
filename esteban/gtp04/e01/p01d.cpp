@@ -21,11 +21,11 @@ int main( int argc, char **argv ) {
     cimg_forXY(img_hsi,x,y){
         img_hsi(x,y,0,2) =  1;
     }
-    img_hsi.get_channel(2).display("i = 1 CTE");
 
     img_rgb = img_hsi.get_HSItoRGB();
     img_rgb.display("i = 1 CTE(max brillo)");
 
+    img_hsi.get_channel(2).display("i = 1 CTE");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();

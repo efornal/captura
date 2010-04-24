@@ -8,6 +8,14 @@
  * b) partiendo de R-y-G-c-B(0-240º) restando 180 obtenemos GBR
  * en ambos casos se considera que si pasa de 240 comienza en cero!
  * la opcion que queda es invertir valores el R<->B
+ *
+ * FIXME: otras imagenes
+ * usando ./p01b -f ../../imagenes/pattern.tif
+ * inversion de color sencilla.
+ * mas interesante aun : ./p01b -f ../../imagenes/histo2.tif 
+ * y ./p01b -f ../../imagenes/parrot.tif 
+ * SE PODRIA REEMPLAZAR el color deseado por otro (pintar)
+ * muuy prolijamente,??
 */
 
 #include <CImg.h>

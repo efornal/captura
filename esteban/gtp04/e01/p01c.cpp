@@ -4,6 +4,11 @@
  * la intencidad del color (pureza)
  * para valores muy bajos (->0) el color tiende a gris
  * para valores mas altos (->1) el color tiende a puro
+ * 
+ * mas interesante aun : ./p01c -f ../../imagenes/futbol.jpg
+ * FIXME:
+ * ./p01b -f ../../imagenes/histo2.tif  porque EN COLOR ROJO!??
+ * y ./p01b -f ../../imagenes/parrot.tif 
 */
 #include <CImg.h>
 #include <iostream>
@@ -32,11 +37,11 @@ int main( int argc, char **argv ) {
     cimg_forXY(img_hsi,x,y){
         img_hsi(x,y,0,1) =  m*(x-w) + 1;
     }
-    img_hsi.get_channel(1).display("variacion s creciente");
 
     img_rgb = img_hsi.get_HSItoRGB();
     img_rgb.display("img s creciente");
 
+    img_hsi.get_channel(1).display("variacion s creciente");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
