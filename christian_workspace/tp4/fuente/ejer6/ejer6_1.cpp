@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	CImg<float> imagen("../../imagenes/futbol.jpg");
 	//imagen.display();
 	CImgDisplay disp1(imagen, "imagen de futbol", 0);
-	CImgDisplay disp2;
+	CImgDisplay disp2, dish1, dish2, dish3;
 	//b---------------------------------------------------------------------------------------
 	// tome una muestra representativa del color a segmentar y calcule el centro de la esfera
 	// (valor medio de cada compoennete)
@@ -41,7 +41,15 @@ int main(int argc, char **argv) {
 	float color_original[] = { imagen(posx, posy, 0, 0), imagen(posx, posy, 0,
 			1), imagen(posx, posy, 0, 2) };
 
-	float tol = 0.01;
+	//FIXME: como uso el histograma para darme cuenta del radio a utilizAR?!!
+	imagen.get_channel(0).get_histogram(255).display_graph(dish1, 3);
+	dish1.set_title("canal R");
+	imagen.get_channel(1).get_histogram(255).display_graph(dish2, 3);
+	dish2.set_title("canal G");
+	imagen.get_channel(2).get_histogram(255).display_graph(dish3, 3);
+	dish3.set_title("canal B");
+
+	float tol = 0.5;
 	segmentaRGB<float> (imagen, tol, imagen(posx, posy, 0, 0), imagen(posx,
 			posy, 0, 1), imagen(posx, posy, 0, 2), color_original).display(
 			disp2);
@@ -51,16 +59,15 @@ int main(int argc, char **argv) {
 		if (disp1.button()) {
 			posx = disp1.mouse_x();
 			posy = disp1.mouse_y();
-			color_original[0]=imagen(posx, posy, 0, 0);
-			color_original[1]=imagen(posx, posy, 0, 1);
-			color_original[2]=imagen(posx, posy, 0, 2);
-
+			color_original[0] = imagen(posx, posy, 0, 0);
+			color_original[1] = imagen(posx, posy, 0, 1);
+			color_original[2] = imagen(posx, posy, 0, 2);
 		}
-		segmentaRGB<float> (imagen, tol + (disp1.wheel() * tol), imagen(posx,
-				posy, 0, 0), imagen(posx, posy, 0, 1), imagen(posx),
-				color_original).display(disp2);
+		segmentaRGB<float> (imagen, tol + (disp1.wheel() * 0.01), imagen(posx,
+				posy, 0, 0), imagen(posx, posy, 0, 1),
+				imagen(posx, posy, 0, 2), color_original).display(disp2);
+		cout << "Tolerancia: " << tol + (disp1.wheel() * 0.01) << endl;
 		disp2.set_title("imagen segmentada");
-		cout << "tolerancia: " << tol + (disp1.wheel() * tol) << endl;
 	}
 
 	return 0;
