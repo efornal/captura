@@ -16,7 +16,7 @@ template<class T>
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 		float *color_a_rellenar) {
 	float distancia, r_original, g_original, b_original;
-	R /= 256.0, G /= 256.0, B /= 256.0; // centro de la esfera
+	R /= 255.0, G /= 255.0, B /= 255.0; // centro de la esfera
 	CImg<T> img_segmentada = img.normalize(0, 1);
 	cimg_forXY(img_segmentada,x,y)
 		{
