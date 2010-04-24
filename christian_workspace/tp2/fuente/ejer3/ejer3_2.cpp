@@ -26,15 +26,9 @@ int main(int argc, char **argv) {
 	 * media cero
 	 * */
 
-	CImg<unsigned char> imagen_limpia;
+	CImg<double> imagen_limpia;
 	imagen_limpia.load("../../imagenes/tablero.png");
-	imagen_limpia=imagen_limpia.get_channel(0);
-	/* FIXME: a lo de aca arriba se referia con lo que me contesto en el mail?
-	 * el tipo de datos estaba puesto a float ya que si ponia unsigned char
-	 * me muestra la imagen de promediaddo en negro.. no se porque... y respecto a lo del canal
-	 * parece que no tiene nada que ver.. entonces :(
-	 * */
-	double varianza = 16;
+	double varianza = 0.05;
 	CImgDisplay disp1, disp2, disp3;
 	imagen_limpia.display(disp1);
 	cout<<"Media de la imagen original: "<<imagen_limpia.mean()<<endl;
@@ -49,7 +43,7 @@ int main(int argc, char **argv) {
 	 */
 
 	int cantidad_cuadros = 60;
-	CImg<unsigned char> imagen_sucia[cantidad_cuadros];
+	CImg<double> imagen_sucia[cantidad_cuadros];
 	for (int i = 0; i < cantidad_cuadros; i++) {
 		imagen_sucia[i] = imagen_limpia.get_noise(varianza);
 	}
@@ -61,9 +55,9 @@ int main(int argc, char **argv) {
 	cout<<"Media de la imagen con ruido: "<<imagen_sucia[10].mean()<<endl;
 
 	disp3.set_title("imagen sucia 10");
-	CImg<unsigned char> reconstruida = imagen_sucia[0];
+	CImg<double> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
-		reconstruida = sumar<CImg<unsigned char> > (reconstruida, imagen_sucia[i]);
+		reconstruida = sumar<CImg<double> > (reconstruida, imagen_sucia[i], false); //false para que no divida por 2
 	}
 	reconstruida.display(disp2);
 	disp2.set_title("reconstruida con 60 cuadros");

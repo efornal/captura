@@ -23,30 +23,24 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	CImg<double> imagen0(300, 300, 1, 1);
 	CImg<double> imagen1(300, 300, 1, 1);
+	CImg<unsigned char> mod_0(300, 300, 1, 1);
 	CImg<unsigned char> mod_1(300, 300, 1, 1);
 	CImg<double> imagen2(300, 300, 1, 1);
 	CImg<unsigned char> mod_2(300, 300, 1, 1);
 	CImg<double> imagen3(300, 300, 1, 1);
 	CImg<unsigned char> mod_3(300, 300, 1, 1);
-
-	circulo_centrado(imagen0, 100);
+	float radio = 50.0;
+	int posx=imagen0.width()/2;
+	int posy=imagen0.height()/2;
+	circulo_centrado(posx, posy, imagen0, radio);
 	cuadrado_centrado(imagen1, 30, 30);
 	linea_vertical(imagen2, imagen2.width() / 2);
 	linea_horizontal(imagen3, imagen3.height() / 3);
 
-	CImgList<double> tdf_imagen = imagen0.get_FFT(); //obtengo la transofrmada
-
-	CImg<double> tdf_imagen_real = tdf_imagen[0]; //parte real de la transformada
-	CImg<double> tdf_imagen_imag = tdf_imagen[1]; //parte imaginaria
-
-	CImg<double> magnitud_imagen = (tdf_imagen_real.get_pow(2)
-			+ tdf_imagen_imag.get_pow(2)).sqrt(); //obtengo la magnitud de la transformada
-
-	CImgList<double> lista0(imagen0,
-			magnitud_imagen.log().normalize(0, 255).shift(
-					magnitud_imagen.width() / 2, magnitud_imagen.height() / 2,
-					0, 0, 2)); //muestreo la transformada shifteada
-	CImgDisplay disp1(lista0, "Imagen y su transformada respectivamente", 0);
+	magn_tdf(imagen0, mod_0, 1);
+	CImgDisplay disp1, disp1_1;
+	imagen0.display(disp1);
+	mod_0.display(disp1_1);
 
 	magn_tdf(imagen1, mod_1, 1);
 	magn_tdf(imagen2, mod_2, 1);
@@ -63,7 +57,28 @@ int main(int argc, char **argv) {
 	 magn_tdf(imagen, modulo, 1); //transformada con la funcion de la catedra
 	 CImgDisplay disp2(modulo, "modulo de la imagen", 0);*/
 	while (!disp1.is_closed()) {
-	}
 
+		if (disp1.is_keyPAGEUP()) {//crecer radio
+			radio++;
+			cout<<"radio: "<<radio<<endl;
+		} else if (disp1.is_keyPAGEDOWN()) {
+			//decrece radio
+			radio-=1.0;
+			cout<<"radio: "<<radio<<endl;
+		} else if (disp1.is_keyARROWRIGHT()){
+			posx++;
+		} else if (disp1.is_keyARROWLEFT()){
+			posx--;
+		} else if (disp1.is_keyARROWUP()){
+			posy--;
+		} else if (disp1.is_keyARROWDOWN()){
+			posy++;
+		}
+		//mostrar
+		circulo_centrado(posx, posy, imagen0, radio);
+		magn_tdf(imagen0, mod_0, 1);
+		imagen0.display(disp1);
+		mod_0.display(disp1_1);
+	}
 	return 0;
 }

@@ -183,19 +183,19 @@ T obtener_grafica_mapeo_potencia(float exponente) {
 //suma
 template<class T>
 T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la suma de 2 terminos...
-	// para llamarla por ejemplo : sumar<double>(l,m);
+	//funcion que retorna la suma de 2 terminos... si normalizao=false no divide x 2
+	// para llamarla por ejemplo : sumar<CImg <double>> (l,m);
 	T imagen(primer_termino);
 	if (normalizado) {
 		cimg_forXY(primer_termino, x, y)
 			{
-				primer_termino(x, y) = (primer_termino(x, y) + segundo_termino(
+				imagen(x, y) = (primer_termino(x, y) + segundo_termino(
 						x, y)) / 2.0;
 			}
 	} else {
 		cimg_forXY(primer_termino, x, y)
 			{
-				primer_termino(x, y) = (primer_termino(x, y) + segundo_termino(
+				imagen(x, y) = (primer_termino(x, y) + segundo_termino(
 						x, y));
 			}
 	}
