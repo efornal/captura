@@ -11,8 +11,41 @@
 using namespace std;
 using namespace cimg_library;
 
+/*//TODO: seguir con esto:
 template<class T>
+CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
+		float *color_a_rellenar, bool color_verdadero = false) {
+	float distancia, h_original, s_original;
+	H/=360.0;
+	CImg<T> img_segmentada = img.normalize(0, 1);
+	cimg_forXY(img_segmentada,x,y)
+		{
+			h_original = img.get_RGBtoHSI()[0](x,y,0,0);
+			s_original = img.get_RGBtoHSI()[1](x,y,0,0);
 
+			distancia = pow((h_original - H), 2) + pow((s_original - S), 2); //ecuacion de la esfera ojo r^2...
+			distancia = sqrt(abs(distancia)); //r
+			if (color_verdadero) {
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
+					img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
+				} else {
+					img_segmentada(x, y, 0, 0) = 0;
+					img_segmentada(x, y, 0, 1) = 0;
+					img_segmentada(x, y, 0, 2) = 0;
+				}
+			} else { //relleno con el color que se paso por parametro
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
+					img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
+					img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+				}
+			}
+		}
+	return img_segmentada;
+}*/
+
+template<class T>
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 		float *color_a_rellenar, bool color_verdadero = false) {
 	float distancia, r_original, g_original, b_original;

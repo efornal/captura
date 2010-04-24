@@ -34,16 +34,21 @@ int main(int argc, char **argv) {
 	 * */
 	//a---------------------------------------------------------------------------------------
 	//cargue la imagen futbol.jpg
+	//TODO: seguir con este ejercicio....
 	CImg<float> imagen("../../imagenes/futbol.jpg");
 	CImgDisplay disp1(imagen, "imagen de futbol", 0);
 
 	CImg<float> imagen_HSI = imagen.get_RGBtoHSI();
 
 	CImg<float> H = imagen_HSI.get_channel(0);
+
 	CImg<float> S = imagen_HSI.get_channel(1);
 	CImg<float> I = imagen_HSI.get_channel(2);
+	H.print();
+		S.print();
 	visualizar_HSI<float> (H, S, I);
 	CImgDisplay disp2(H, "componenete H");
+
 	CImgDisplay disp3(S, "componenete S");
 	while (!disp1.is_closed()) {
 		disp1.wait();
