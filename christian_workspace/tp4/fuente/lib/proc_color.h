@@ -14,7 +14,7 @@ using namespace cimg_library;
 template<class T>
 
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
-		float *color_a_rellenar) {
+		float *color_a_rellenar, bool color_verdadero = false) {
 	float distancia, r_original, g_original, b_original;
 	R /= 255.0, G /= 255.0, B /= 255.0; // centro de la esfera
 	CImg<T> img_segmentada = img.normalize(0, 1);
@@ -23,13 +23,25 @@ CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 			r_original = img(x, y, 0, 0);
 			g_original = img(x, y, 0, 1);
 			b_original = img(x, y, 0, 2);
-			distancia = (r_original - R) * (r_original - R) + (g_original - G) * (g_original - G) + (b_original - B) * (b_original
-					- B); //ecuacion de la esfera ojo r^2...
+			distancia = pow((r_original - R), 2) + pow((g_original - G), 2)
+					+ pow((b_original - B), 2); //ecuacion de la esfera ojo r^2...
 			distancia = sqrt(abs(distancia)); //r
-			if (distancia < radio_tol) {
-				img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
-				img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
-				img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+			if (color_verdadero) {
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
+					img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
+					img_segmentada(x, y, 0, 2) = img(x, y, 0, 2);
+				} else {
+					img_segmentada(x, y, 0, 0) = 0;
+					img_segmentada(x, y, 0, 1) = 0;
+					img_segmentada(x, y, 0, 2) = 0;
+				}
+			} else { //relleno con el color que se paso por parametro
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
+					img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
+					img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+				}
 			}
 		}
 	return img_segmentada;

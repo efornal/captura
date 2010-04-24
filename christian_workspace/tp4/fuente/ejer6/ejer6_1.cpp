@@ -53,9 +53,14 @@ int main(int argc, char **argv) {
 	segmentaRGB<float> (imagen, tol, imagen(posx, posy, 0, 0), imagen(posx,
 			posy, 0, 1), imagen(posx, posy, 0, 2), color_original).display(
 			disp2);
-	disp1.set_title("use la ruedita del raton y el click");
+	disp1.set_title(
+			"use la ruedita del raton y el click - C para alternar entre color verdadero y color seteado");
+	bool color_verd = false;
 	while (!disp1.is_closed()) {
 		disp1.wait();
+		if (disp1.is_keyC()) {//cambia a color verdadero
+			color_verd = !color_verd;
+		}
 		if (disp1.button()) {
 			posx = disp1.mouse_x();
 			posy = disp1.mouse_y();
@@ -65,7 +70,8 @@ int main(int argc, char **argv) {
 		}
 		segmentaRGB<float> (imagen, tol + (disp1.wheel() * 0.01), imagen(posx,
 				posy, 0, 0), imagen(posx, posy, 0, 1),
-				imagen(posx, posy, 0, 2), color_original).display(disp2);
+				imagen(posx, posy, 0, 2), color_original, color_verd).display(
+				disp2);
 		cout << "Tolerancia: " << tol + (disp1.wheel() * 0.01) << endl;
 		disp2.set_title("imagen segmentada");
 	}
