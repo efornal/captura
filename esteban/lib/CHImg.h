@@ -1,4 +1,4 @@
-//#include <color.h>
+#include <color.h>
 
 #define cimg_use_fftw3 1
 #ifdef cimg_use_fftw3

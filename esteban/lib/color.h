@@ -1,7 +1,10 @@
 #include <CImg.h>
 #include <string>
 #include <vector>
+#ifndef MAX_LINE_LENGTH
 #include <CPDSI_functions.h>
+#endif
+
 
 using namespace std;
 using namespace cimg_library;
