@@ -1,5 +1,6 @@
 /**
- *   FIXME: no funciona la mascara no se como se usa!!
+ *   FIXME: porque no funciona con la imagen de los cuadros:
+ *   ../../imagenes/ej7a.tif
 */
 #include <CHImg.h>
 
@@ -7,7 +8,7 @@ using namespace cimg_library;
 using namespace std;
 
 int main( int argc, char **argv ) {
-    const char *filename = cimg_option( "-f", "../../imagenes/ej7a.tif", 
+    const char *filename = cimg_option( "-f", "../../imagenes/tablero.png", 
                                         "ruta archivo imagen" );
     const int dx = cimg_option( "-dx", 3, "dx mask" );
     const int dy = cimg_option( "-dy", 3, "dy mask" );

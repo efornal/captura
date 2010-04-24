@@ -183,9 +183,9 @@ template<typename T> struct CHImg : public CImg<T> {
     CImg<double> get_local_equalize( int dx=3, int dy=3, int nivel_equalize=255 ) {
         CImg<double> img = *this;
         CImg<double> mask(3,3),
-            dest( img.width(), img.height(), 1, 1, 0 );
-        int midx=(dx/2), midy=(dy/2);
-
+            dest( img );
+        int midx=(dx/2), midy=(dy/2), z=0, c=0;
+        
         for( int i=midx; i<=img.width()-midx; i+=(2*midx) ) {
             for( int j=midy; j<=img.height()-midy; j+=(2*midy) ) {
                 mask = img.get_crop( i-midx, j-midy, i+midx, j+midy );
@@ -194,14 +194,14 @@ template<typename T> struct CHImg : public CImg<T> {
 
                 for( int x=-midx; x<=midx; x++){
                     for(int y=-midy; y<=midy; y++){
-                        dest( i+x, j+y ) = mask( x+midx, y+midy );
+                        dest( i+x, j+y) = mask( x+midx, y+midy );
                     }
                 }
-            
             }
         }
         return dest;
     }
+
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
