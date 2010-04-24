@@ -28,8 +28,9 @@ int main(int argc, char **argv) {
 
 	CImg<unsigned char> auxiliar(imagen);
 	unsigned char rojo[] = { 255, 0, 0 };
-	int deltax = 20;
-	int deltay = 20;
+	int deltax = 100;
+	int deltay = 100;
+
 	while (!disp3.is_closed()) {
 		disp3.wait();
 		{
@@ -40,16 +41,18 @@ int main(int argc, char **argv) {
 				deltax--;
 				deltay--;
 			}
-			/*imagen_ecualizada_localmente.draw_rectangle(disp3.mouse_x(),
-			 disp3.mouse_y(), disp3.mouse_x() + deltax, disp3.mouse_y()
-			 + deltay, rojo, 1, 1);*/
-//TODO: aplicar la mascara
-			auxiliar.draw_image(disp3.mouse_x(), disp3.mouse_y(), 0, 0, imagen_ecualizada_localmente.get_crop(disp3.mouse_x(),
+			//TODO: aplicar la mascara
+			imagen_ecualizada_localmente.get_crop(disp3.mouse_x(),
+					disp3.mouse_y(), disp3.mouse_x() + deltax, disp3.mouse_y()
+							+ deltay).equalize(255).display(disp4);
+
+			imagen_ecualizada.draw_image(disp3.mouse_x(), disp3.mouse_y(),
+					imagen_ecualizada_localmente.get_crop(disp3.mouse_x(),
 							disp3.mouse_y(), disp3.mouse_x() + deltax,
-							disp3.mouse_y() + deltay).get_normalize(0, 255), imagen, 1,
-					1);
-			imagen_ecualizada_localmente.display(disp3);
-		}
+							disp3.mouse_y() + deltay).equalize(255), 1);
+
+		imagen_ecualizada_localmente.display(disp3);
 	}
-	return 0;
+}
+return 0;
 }
