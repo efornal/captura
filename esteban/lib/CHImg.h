@@ -1,9 +1,12 @@
+//#include <color.h>
+
 #define cimg_use_fftw3 1
 #ifdef cimg_use_fftw3
 extern "C"{
     #include "fftw3.h"
 }
 #endif
+
 
 #include <CImg.h>
 
@@ -200,6 +203,14 @@ template<typename T> struct CHImg : public CImg<T> {
             }
         }
         return dest;
+    }
+
+    // ==================================================== \\
+    // ----------------------- color  --------------------- \\
+
+    CImg<double> to_paleta(int nro_paleta=1){
+        CImg<double> img = *this;
+        return aplicar_paleta(img,nro_paleta);
     }
 
     // ==================================================== \\
