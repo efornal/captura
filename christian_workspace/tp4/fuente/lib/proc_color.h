@@ -11,24 +11,29 @@
 using namespace std;
 using namespace cimg_library;
 
-/*//TODO: seguir con esto:
 template<class T>
 CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
 		float *color_a_rellenar, bool color_verdadero = false) {
+
 	float distancia, h_original, s_original;
-	H/=360.0;
+	H /= 360.0; //pongo H entre 0 y 1
 	CImg<T> img_segmentada = img.normalize(0, 1);
+
+	CImg<T> imagenh(img.width(), img.height(), 1, 3), imagens(img.width(),
+			img.height(), 1, 3);
 	cimg_forXY(img_segmentada,x,y)
 		{
-			h_original = img.get_RGBtoHSI()[0](x,y,0,0);
-			s_original = img.get_RGBtoHSI()[1](x,y,0,0);
-
-			distancia = pow((h_original - H), 2) + pow((s_original - S), 2); //ecuacion de la esfera ojo r^2...
+			imagenh = img.get_RGBtoHSI();
+			imagens = img.get_RGBtoHSI();
+			h_original = imagenh.get_channel(0)(x, y, 0, 0);
+			s_original = imagens.get_channel(0)(x, y, 0, 0);
+			distancia = pow((h_original - H), 2) + pow((s_original - S), 2); //diferencia de vectores si la distnacia entre el pixel y el que clieckee...
 			distancia = sqrt(abs(distancia)); //r
 			if (color_verdadero) {
 				if (distancia < radio_tol) {
 					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
 					img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
+					img_segmentada(x, y, 0, 1) = img(x, y, 0, 2);
 				} else {
 					img_segmentada(x, y, 0, 0) = 0;
 					img_segmentada(x, y, 0, 1) = 0;
@@ -43,7 +48,7 @@ CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
 			}
 		}
 	return img_segmentada;
-}*/
+}
 
 template<class T>
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
