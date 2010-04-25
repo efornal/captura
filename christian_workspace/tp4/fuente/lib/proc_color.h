@@ -11,17 +11,85 @@
 using namespace std;
 using namespace cimg_library;
 
-template <class T>
-void visualizar_HSI(CImg <T> &canal_h, CImg <T> &canal_s, CImg <T> &canal_i){
+/*//TODO: seguir con esto:
+template<class T>
+CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
+		float *color_a_rellenar, bool color_verdadero = false) {
+	float distancia, h_original, s_original;
+	H/=360.0;
+	CImg<T> img_segmentada = img.normalize(0, 1);
+	cimg_forXY(img_segmentada,x,y)
+		{
+			h_original = img.get_RGBtoHSI()[0](x,y,0,0);
+			s_original = img.get_RGBtoHSI()[1](x,y,0,0);
+
+			distancia = pow((h_original - H), 2) + pow((s_original - S), 2); //ecuacion de la esfera ojo r^2...
+			distancia = sqrt(abs(distancia)); //r
+			if (color_verdadero) {
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
+					img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
+				} else {
+					img_segmentada(x, y, 0, 0) = 0;
+					img_segmentada(x, y, 0, 1) = 0;
+					img_segmentada(x, y, 0, 2) = 0;
+				}
+			} else { //relleno con el color que se paso por parametro
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
+					img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
+					img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+				}
+			}
+		}
+	return img_segmentada;
+}*/
+
+template<class T>
+CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
+		float *color_a_rellenar, bool color_verdadero = false) {
+	float distancia, r_original, g_original, b_original;
+	R /= 255.0, G /= 255.0, B /= 255.0; // centro de la esfera
+	CImg<T> img_segmentada = img.normalize(0, 1);
+	cimg_forXY(img_segmentada,x,y)
+		{
+			r_original = img(x, y, 0, 0);
+			g_original = img(x, y, 0, 1);
+			b_original = img(x, y, 0, 2);
+			distancia = pow((r_original - R), 2) + pow((g_original - G), 2)
+					+ pow((b_original - B), 2); //ecuacion de la esfera ojo r^2...
+			distancia = sqrt(abs(distancia)); //r
+			if (color_verdadero) {
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
+					img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
+					img_segmentada(x, y, 0, 2) = img(x, y, 0, 2);
+				} else {
+					img_segmentada(x, y, 0, 0) = 0;
+					img_segmentada(x, y, 0, 1) = 0;
+					img_segmentada(x, y, 0, 2) = 0;
+				}
+			} else { //relleno con el color que se paso por parametro
+				if (distancia < radio_tol) {
+					img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
+					img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
+					img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
+				}
+			}
+		}
+	return img_segmentada;
+}
+
+template<class T>
+void visualizar_HSI(CImg<T> &canal_h, CImg<T> &canal_s, CImg<T> &canal_i) {
 	/* devuleve por referencia los canales HSI para poder ser visualizadas correctamente*/
 	cimg_forXY(canal_h,x,y)
 		{
-		canal_h(x, y) = canal_h(x, y) / 360.0 * 255.0; //recordar que H esta entre 0 y 360
-		canal_s(x, y) = canal_s(x, y) * 255.0; //recordar que S va de 0 a 1.0
-		canal_i(x, y) = canal_i(x, y) * 255.0; //recordar que I esta entre 0 y 1.0
+			canal_h(x, y) = canal_h(x, y) / 360.0 * 255.0; //recordar que H esta entre 0 y 360
+			canal_s(x, y) = canal_s(x, y) * 255.0; //recordar que S va de 0 a 1.0
+			canal_i(x, y) = canal_i(x, y) * 255.0; //recordar que I esta entre 0 y 1.0
 		}
 }
-
 
 template<class T>
 CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
