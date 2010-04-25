@@ -55,7 +55,7 @@ int main( int argc, char **argv ) {
     CImgList<double> rgb_eq ( img_r.get_resize(200,200),
                               img_g.get_resize(200,200),
                               img_b.get_resize(200,200) );
-    rgb.display(disp4);
+    rgb_eq.display(disp4);
     disp4.set_title("rojo - verde - azul (equalizada)");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
