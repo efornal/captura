@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
 
 	int dimx = 50;
 	int dimy = 50;
+	float angulo=0.0;
 	fase0 = get_fase(imagen0);
 	CImgDisplay disp1;
 	fase0.display(disp1);
@@ -76,23 +77,24 @@ int main(int argc, char **argv) {
 		}
 		if (disp0.is_keySHIFTLEFT()){
 			//rotar en sentido antihorario.
-
+			angulo--;
 		}
 		if (disp0.is_keySHIFTRIGHT()) {
 			//rotar en sentido horario.
+			angulo++;
 
 		}
 		if (c) { //circulo
 			circulo_centrado(disp0.mouse_x(), disp0.mouse_y(), imagen0, radio
-					+ disp0.wheel());
+					+ disp0.wheel(), angulo);
 			cout << "Radio del circulo: " << radio + disp0.wheel() << endl;
 		} else if (h) { //linea horizontal
-			linea_horizontal<double> (imagen0, disp0.mouse_y());
+			linea_horizontal<double> (imagen0, disp0.mouse_y(), angulo);
 		} else if (v) { //linea vertical
-			linea_vertical(imagen0, disp0.mouse_x());
+			linea_vertical(imagen0, disp0.mouse_x(), angulo);
 		} else if (r) { //rectangulo
 			cuadrado_centrado(imagen0, dimx + disp0.wheel(), dimy
-					+ disp0.wheel(), disp0.mouse_x(), disp0.mouse_y());
+					+ disp0.wheel(), disp0.mouse_x(), disp0.mouse_y(), angulo);
 			cout << "Cuadrado: " << dimx + disp0.wheel() << endl;
 		}
 		lista0.clear();
