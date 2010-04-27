@@ -59,21 +59,25 @@ int main(int argc, char **argv) {
 			h = false; //linea horizontal
 			v = false; // linea vertical
 			r = false; //linea rectangular
+			angulo=0.0;
 		} else if (disp0.is_keyH()) {
 			c = false; //circulo
 			h = true; //linea horizontal
 			v = false; // linea vertical
 			r = false; //linea rectangular
+			angulo=0.0;
 		} else if (disp0.is_keyV()) {
 			c = false; //circulo
 			h = false; //linea horizontal
 			v = true; // linea vertical
 			r = false; //linea rectangular
+			angulo=0.0;
 		} else if (disp0.is_keyR()) {
 			c = false; //circulo
 			h = false; //linea horizontal
 			v = false; // linea vertical
 			r = true; //linea rectangular
+			angulo=0.0;
 		}
 		if (disp0.is_keySHIFTLEFT()){
 			//rotar en sentido antihorario.
