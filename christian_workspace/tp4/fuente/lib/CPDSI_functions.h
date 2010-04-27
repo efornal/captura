@@ -102,13 +102,13 @@ CImg<double> hough_inversa(CImg<double> img) {
 ///****************************************
 /// Gaussian filter mask
 ///****************************************
-double pi=3.14159;
+//double pi=3.14159;
 CImg<double> gaussian_mask(int size, double sigma){
 int ini,fin;
 double aux;
 CImg<double> mask(size,size);
 int x,y;
-//const double pi=3.14159;
+const double pi=3.14159;
 ini=(int)(-1)*(size-1)/2;
 fin=(int)(size-1)/2;
 for (x=ini;x<fin+1;x++){
