@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 					0);
 	/*POSTA: aplicar mascaras en imagenes de colores en HSI (en esta caso en intensidad) logra los resutlaods esperados que aplicarlos
 	 con imagnes en RGB.*/
-	//FIXME: siempre se da asi?
+	//FIXME: siempre se da asi? -> esta bien el RGB? tan feo da? correr el de chaco a ver si esta bien
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
