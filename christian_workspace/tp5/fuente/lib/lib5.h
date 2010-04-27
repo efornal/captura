@@ -15,14 +15,14 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
-void linea_horizontal(CImg<T> &imagen, int coord_y) {
+void linea_horizontal(CImg<T> &imagen, int coord_y, float angulo=0) {
 	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
 	imagen.fill(0);
 	imagen.draw_line(0, coord_y, imagen.height(), coord_y, blanco);
 }
 
 template<class T>
-void linea_vertical(CImg<T> &imagen, int coord_x) {
+void linea_vertical(CImg<T> &imagen, int coord_x, float angulo=0) {
 	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
 	imagen.fill(0);
 	imagen.draw_line(coord_x, 0, coord_x, imagen.height(), blanco);
@@ -49,7 +49,7 @@ CImg<T> get_fase(CImg<T> imagen) {
 
 template<class T>
 void cuadrado_centrado(CImg<T> &imagen, int dimx = 20, int dimy = 20, int x0 =
-		0, int y0 = 0) {
+		0, int y0 = 0, float angulo=0) {
 	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
 	imagen.fill(0);
 	int x1 = x0 + dimx;
@@ -58,9 +58,10 @@ void cuadrado_centrado(CImg<T> &imagen, int dimx = 20, int dimy = 20, int x0 =
 }
 
 template<class T>
-void circulo_centrado(int x0, int y0, CImg<T> &imagen, int radio = 20) {
+void circulo_centrado(int x0, int y0, CImg<T> &imagen, int radio = 20, float angulo=0) {
 	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
 	imagen.fill(0);
 	imagen.draw_circle(x0, y0, abs(radio), blanco, 1);
+	imagen.rotate(angulo);
 }
 
