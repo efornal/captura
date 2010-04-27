@@ -15,7 +15,8 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	CImg<float> imagen_oscura("../../imagenes/chairs_oscura.jpg"); //cargo la imagen
 	CImg<float> imagen_oscura_intensidad_ecualizada(imagen_oscura);
-	//imagen_oscura.resize(-80, -80);
+	imagen_oscura.resize(500,500);
+	imagen_oscura_intensidad_ecualizada.resize(500,500);
 	int dx = imagen_oscura.width();
 	int dy = imagen_oscura.height();
 
@@ -26,16 +27,16 @@ int main(int argc, char **argv) {
 
 	cimg_forXY(imagen_oscura_HSI, x, y) //obtengo componenes HSI de la imagen oscura
 		{ //obtengo componenes HSI
-			imagen_oscura_HSI_H(x, y) = imagen_oscura_HSI(x, y, 0, 0);
-			imagen_oscura_HSI_S(x, y) = imagen_oscura_HSI(x, y, 0, 1);
-			imagen_oscura_HSI_I(x, y) = imagen_oscura_HSI(x, y, 0, 2);
+			imagen_oscura_HSI_H(x, y, 0, 0) = imagen_oscura_HSI(x, y, 0, 0);
+			imagen_oscura_HSI_S(x, y, 0, 0) = imagen_oscura_HSI(x, y, 0, 1);
+			imagen_oscura_HSI_I(x, y, 0, 0) = imagen_oscura_HSI(x, y, 0, 2);
 		}
 
 	imagen_oscura_HSI_I.equalize(255); //ecuaizo solo la compoennte de intensidad
 
 	imagen_oscura_intensidad_ecualizada = componer_imagen_hsi<float> (
 			imagen_oscura_HSI_H, imagen_oscura_HSI_S, imagen_oscura_HSI_I);
-	CImgDisplay disp1(imagen_oscura, "Imagen original", 0);
+	CImgDisplay disp1(imagen_oscura, "Imagen original");
 	imagen_oscura_intensidad_ecualizada
 			= imagen_oscura_intensidad_ecualizada.HSItoRGB();
 
@@ -47,17 +48,18 @@ int main(int argc, char **argv) {
 	imagen_oscura_intensidad_ecualizada.get_histogram(255).display_graph(disp3,
 			3);
 	disp3.set_title("histograma de la que se equalizo la intensidad");
-	/*POSTA: equalizando solo la intensidad de una imagen en HSI y recomeponiendo se logra un efecto bueno
-	 sin  tocar los que corresponde a saturacion y brillo...
+
+	/*FIXME: equalizando solo la intensidad de una imagen en HSI y recomeponiendo se logra un efecto bueno
+	 sin  tocar los que corresponde a saturacion y brillo... pero... no se ve!?
+	 ver el histograma d ela original y de la ecualizada solo de intesnidad.. com se entiendE?
 	 */
 	CImgDisplay disp2(imagen_oscura_intensidad_ecualizada,
-			"Imagen con intensidad ecualizada", 0);
-	//FIXME: ver el histograma d ela original y de la ecualizada solo de intesnidad.. com se entiendE?
+			"Imagen con intensidad ecualizada");
 	CImg<float> imagen_chairs("../../imagenes/chairs.jpg");
-	CImgDisplay dispp(imagen_chairs, "imagen chairs", 0);
+	imagen_chairs.resize(500,500);
+	CImgDisplay dispp(imagen_chairs, "imagen chairs");
 	CImgDisplay displ;
-	imagen_chairs.get_histogram(255).display_graph(displ,
-			3);
+
 	displ.set_title("histograma de la que se equalizo la intensidad");
 
 	while (!disp1.is_closed()) {

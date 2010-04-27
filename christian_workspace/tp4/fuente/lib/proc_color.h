@@ -61,8 +61,8 @@ CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 			r_img = img(x, y, 0, 0);
 			g_img = img(x, y, 0, 1);
 			b_img = img(x, y, 0, 2);
-			distancia = pow((r_img - R), 2) + pow((g_img - G), 2)
-					+ pow((b_img - B), 2); //ecuacion de la esfera r^2=(x-x0)^2+(y-y0)^2+(z-z0)^2
+			distancia = pow((r_img - R), 2) + pow((g_img - G), 2) + pow((b_img
+					- B), 2); //ecuacion de la esfera r^2=(x-x0)^2+(y-y0)^2+(z-z0)^2
 			distancia = sqrt(abs(distancia)); //obtengo r - distancia= distancia entre el punto que seleccione y el que estoy recorriendo de la imagen.
 			if (color_verdadero) {
 				if (distancia < radio_tol) {
@@ -99,12 +99,21 @@ void visualizar_HSI(CImg<T> &canal_h, CImg<T> &canal_s, CImg<T> &canal_i) {
 template<class T>
 CImg<T> componer_imagen(CImg<T> canal_rojo, CImg<T> canal_verde,
 		CImg<T> canal_azul) {
+	// a paritr de los canales pasados como parametros compone una imagen en RGB
 	CImg<T> imagen(canal_rojo.width(), canal_rojo.height(), 1, 3);
 	cimg_forXY(imagen, x, y)
 		{
-			imagen(x, y, 0, 0) = canal_rojo(x, y);
-			imagen(x, y, 0, 1) = canal_verde(x, y);
-			imagen(x, y, 0, 2) = canal_azul(x, y);
+			imagen(x, y, 0, 0) = canal_rojo(x, y, 0, 0);
+			if (canal_verde.spectrum() == 3) { //si tiene 3 canales
+				imagen(x, y, 0, 1) = canal_verde(x, y, 0, 1);
+			} else { //solo tiene un canal
+				imagen(x, y, 0, 1) = canal_verde(x, y, 0, 0); //esto lo hago por si canal verde es de un solo canal
+			}
+			if (canal_azul.spectrum() == 3) { //si tiene 3 canales
+				imagen(x, y, 0, 2) = canal_azul(x, y, 0, 2);
+			} else { //solo tiene un canal
+				imagen(x, y, 0, 2) = canal_azul(x, y, 0, 0); //esto lo hago por si canal verde es de un solo canal
+			}
 		}
 	return imagen;
 }
@@ -123,13 +132,19 @@ void descomponer_rgb3(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
 			canal_R(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 0);//canal rojo
 			canal_R(x, y, 0, 1) = 0; //POSTA: guarda porque la cimg_forXY te hace para todos los C si no le especificas nada!!
 			canal_R(x, y, 0, 2) = 0;
-			canal_G(x, y, 0, 1) = imagen_a_descomponer(x, y, 0, 1);//canal rojo
-			canal_B(x, y, 0, 2) = imagen_a_descomponer(x, y, 0, 2);//canal rojo
+
+			canal_G(x, y, 0, 0) = 0;//canal verde
+			canal_G(x, y, 0, 1) = imagen_a_descomponer(x, y, 0, 1);//canal verde
+			canal_G(x, y, 0, 2) = 0;//canal verde
+
+			canal_G(x, y, 0, 0) = 0;//canal azul
+			canal_G(x, y, 0, 1) = 0;//canal azul
+			canal_B(x, y, 0, 2) = imagen_a_descomponer(x, y, 0, 2);//canal azul
 		}
 	if (ecualizar_por_separado) { //ecualizacion de cada canal por serparado
-		canal_R.equalize(0, 255);
-		canal_G.equalize(0, 255);
-		canal_B.equalize(0, 255);
+		canal_R.equalize(255);
+		canal_G.equalize(255);
+		canal_B.equalize(255);
 		imagen_a_descomponer = componer_imagen<T> (canal_R, canal_G, canal_B);
 		cout << endl << "Se ecualizaron los canales por serparado" << endl;
 	}
@@ -140,19 +155,26 @@ void descomponer_rgb(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
 	/* Descompone una imagen RGB en sus canales
 	 * devuelve los canales R, G y B con sus colores correspondientes por referencia
 	 * ecualizar_por_separado = false implica que no haya ecualizacion por canal
-	 * ecualizar_por_separado = true implica que devuelve por referencia cada canal ecualizado
+	 * ecualizar_por_separado = true implica que devuelva los tres canales ecualizados por separado
 	 */
 	cimg_forXY(imagen_a_descomponer,x,y)
 		{
 			canal_R(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 0);//canal rojo
-			canal_G(x, y, 0, 1) = imagen_a_descomponer(x, y, 0, 1);//canal rojo
-			canal_B(x, y, 0, 2) = imagen_a_descomponer(x, y, 0, 2);//canal rojo
+			canal_R(x, y, 0, 1) = 0;// negro al verde
+			canal_R(x, y, 0, 2) = 0;// negro al azul
+
+			canal_G(x, y, 0, 0) = 0;//canal rojo en 0
+			canal_G(x, y, 0, 1) = imagen_a_descomponer(x, y, 0, 1);//canal verde
+			canal_G(x, y, 0, 2) = 0;//canal azul en 0
+
+			canal_B(x, y, 0, 0) = 0;//canal rojo en 0
+			canal_B(x, y, 0, 1) = 0;//canal verde en 0
+			canal_B(x, y, 0, 2) = imagen_a_descomponer(x, y, 0, 2);//canal azul
 		}
 	if (ecualizar_por_separado) { //ecualizacion de cada canal por serparado
-		canal_R.equalize(0, 255);
-		canal_G.equalize(0, 255);
-		canal_B.equalize(0, 255);
-		imagen_a_descomponer = componer_imagen<T> (canal_R, canal_G, canal_B);
+		canal_R.channel(0).equalize(255);
+		canal_G.channel(1).equalize(255);
+		canal_B.channel(2).equalize(255);
 		cout << endl << "Se ecualizaron los canales por serparado" << endl;
 	}
 }

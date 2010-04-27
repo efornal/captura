@@ -15,7 +15,7 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	CImg<float> imagen_oscura("../../imagenes/chairs_oscura.jpg"); //cargo la imagen
 
-	//imagen_oscura.resize(300, 300);
+	imagen_oscura.resize(500, 500);
 	int dx = imagen_oscura.width();
 	int dy = imagen_oscura.height();
 
@@ -32,9 +32,9 @@ int main(int argc, char **argv) {
 		}
 	visualizar_HSI <float> (imagen_oscura_HSI_H, imagen_oscura_HSI_S,
 			imagen_oscura_HSI_I);
-	CImgDisplay disp1(imagen_oscura_HSI_H, "canal H", 0);
-	CImgDisplay disp2(imagen_oscura_HSI_S, "canal S", 0);
-	CImgDisplay disp3(imagen_oscura_HSI_I, "canal I", 0);
+	CImgDisplay disp1(imagen_oscura_HSI_H, "canal H");
+	CImgDisplay disp2(imagen_oscura_HSI_S, "canal S");
+	CImgDisplay disp3(imagen_oscura_HSI_I, "canal I");
 	while (!disp1.is_closed()) {
 		disp1.wait();
 	}
