@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
 	float color_original[] = { imagen(posx, posy, 0, 0), imagen(posx, posy, 0,
 			1), imagen(posx, posy, 0, 2) };
 
-	//FIXME: como uso el histograma para darme cuenta del radio a utilizAR?!!
+	//FIXME: como uso el histograma para darme cuenta del radio a utilizAR?!! etsa bien el ejer?
 	imagen.get_channel(0).get_histogram(255).display_graph(dish1, 3);
 	dish1.set_title("canal R");
 	imagen.get_channel(1).get_histogram(255).display_graph(dish2, 3);
