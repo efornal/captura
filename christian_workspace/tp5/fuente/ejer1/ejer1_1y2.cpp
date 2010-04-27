@@ -74,7 +74,14 @@ int main(int argc, char **argv) {
 			v = false; // linea vertical
 			r = true; //linea rectangular
 		}
+		if (disp0.is_keySHIFTLEFT()){
+			//rotar en sentido antihorario.
 
+		}
+		if (disp0.is_keySHIFTRIGHT()) {
+			//rotar en sentido horario.
+
+		}
 		if (c) { //circulo
 			circulo_centrado(disp0.mouse_x(), disp0.mouse_y(), imagen0, radio
 					+ disp0.wheel());
