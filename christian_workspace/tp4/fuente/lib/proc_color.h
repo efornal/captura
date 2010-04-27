@@ -53,17 +53,17 @@ CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
 template<class T>
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 		float *color_a_rellenar, bool color_verdadero = false) {
-	float distancia, r_original, g_original, b_original;
-	R /= 255.0, G /= 255.0, B /= 255.0; // centro de la esfera
+	float distancia, r_img, g_img, b_img;
+	R /= 255.0, G /= 255.0, B /= 255.0; // centro de la esfera es el punto RGB que seleccionaste...
 	CImg<T> img_segmentada = img.normalize(0, 1);
-	cimg_forXY(img_segmentada,x,y)
+	cimg_forXY(img_segmentada,x,y) //recorro imagen para ver si esta dentro de la esfera el putno o fuera de la misma con un radio te tolerancia
 		{
-			r_original = img(x, y, 0, 0);
-			g_original = img(x, y, 0, 1);
-			b_original = img(x, y, 0, 2);
-			distancia = pow((r_original - R), 2) + pow((g_original - G), 2)
-					+ pow((b_original - B), 2); //ecuacion de la esfera ojo r^2...
-			distancia = sqrt(abs(distancia)); //r
+			r_img = img(x, y, 0, 0);
+			g_img = img(x, y, 0, 1);
+			b_img = img(x, y, 0, 2);
+			distancia = pow((r_img - R), 2) + pow((g_img - G), 2)
+					+ pow((b_img - B), 2); //ecuacion de la esfera r^2=(x-x0)^2+(y-y0)^2+(z-z0)^2
+			distancia = sqrt(abs(distancia)); //obtengo r - distancia= distancia entre el punto que seleccione y el que estoy recorriendo de la imagen.
 			if (color_verdadero) {
 				if (distancia < radio_tol) {
 					img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
