@@ -15,7 +15,7 @@ template<class T>
 CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
 		float *color_a_rellenar, bool color_verdadero = false) {
 
-	float distancia, h_original, s_original;
+	float distancia, h_img, s_img;
 	H /= 360.0; //pongo H entre 0 y 1
 	CImg<T> img_segmentada = img.normalize(0, 1);
 
@@ -25,9 +25,9 @@ CImg<T> segmentaHSI(CImg<T> img, float radio_tol, float H, float S,
 		{
 			imagenh = img.get_RGBtoHSI();
 			imagens = img.get_RGBtoHSI();
-			h_original = imagenh.get_channel(0)(x, y, 0, 0);
-			s_original = imagens.get_channel(0)(x, y, 0, 0);
-			distancia = pow((h_original - H), 2) + pow((s_original - S), 2); //diferencia de vectores si la distnacia entre el pixel y el que clieckee...
+			h_img = imagenh.get_channel(0)(x, y, 0, 0);
+			s_img = imagens.get_channel(0)(x, y, 0, 0);
+			distancia = pow((h_img - H), 2) + pow((s_img - S), 2); //diferencia de vectores si la distnacia entre el pixel y el que clieckee...
 			distancia = sqrt(abs(distancia)); //r
 			if (color_verdadero) {
 				if (distancia < radio_tol) {
@@ -145,8 +145,8 @@ void descomponer_rgb(CImg<T> &imagen_a_descomponer, CImg<T> &canal_R,
 	cimg_forXY(imagen_a_descomponer,x,y)
 		{
 			canal_R(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 0);//canal rojo
-			canal_G(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 1);//canal rojo
-			canal_B(x, y, 0, 0) = imagen_a_descomponer(x, y, 0, 2);//canal rojo
+			canal_G(x, y, 0, 1) = imagen_a_descomponer(x, y, 0, 1);//canal rojo
+			canal_B(x, y, 0, 2) = imagen_a_descomponer(x, y, 0, 2);//canal rojo
 		}
 	if (ecualizar_por_separado) { //ecualizacion de cada canal por serparado
 		canal_R.equalize(0, 255);
