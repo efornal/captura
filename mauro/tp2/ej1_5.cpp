@@ -39,8 +39,9 @@ void aplicar_clip( CImg<T> &imagen, T min=0, T max=1) {
 int main(int argc, char *argv[]) {
 
   if ( !argv[1] ){
-    cout<<argv[0]<<": Aplica una LUT definida haciendo clic sobre el gráfico a la imagen.\n";
-    cout<<"uso: "<<argv[0]<<" <archivo_imagen>"<<endl;
+    cout<<argv[0]<<": Aplica una transformación logarítmica ó de potencia sobre la imagen.\n";
+    cout<<"uso: "<<argv[0]<<" <archivo_imagen> [tipo_transformacion] [gamma]"<<endl;
+    cout<<"        "<<argv[0]<<" donde tipo_transformacion=(log|exp)."<<endl;
     return 1;
   }
   
