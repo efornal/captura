@@ -1,10 +1,11 @@
 #include <CImg.h>
 #include <string>
 #include <vector>
+#include <math.h>
+
 #ifndef MAX_LINE_LENGTH
 #include <CPDSI_functions.h>
 #endif
-
 
 using namespace std;
 using namespace cimg_library;
@@ -43,3 +44,38 @@ CImg<float> aplicar_paleta(CImg<float> img, int nro_paleta=1) {
     }
     return result;
 }
+
+/**
+ * toma la distancia entre dos puntos 3D
+ * usado para segmentacion de color, esfera.
+ */
+int distancia (int x0, int y0, int c0, int x1, int y1, int c1){
+    int x=(x0-x1), y(y0-y1), c=(c0-c1);
+    return sqrt(x*x + y*y + c*c);
+}
+
+/**
+ * genera una mascara binaria de la imagen en RGB
+ * tomando la poisicion del punto x0,y0 (de la imagen)
+ * para obtener las coordenadas RGB de la imagen:
+ * img(x0,y0,0) = R
+ * img(x0,y0,1) = G
+ * img(x0,y0,2) = B
+ * donde P=(R,G,B) representa el punto en el cubo 3D 
+ * del modelo RGB
+*/
+CImg<unsigned char> gen_mascara_segmentacion_rgb( CImg<unsigned char> img, 
+                                              int x0, int y0,
+                                              int radio ){
+    CImg<unsigned char> mask ( img.width(), img.height(), 1, 1, 0 );
+    cimg_forXY( img,x,y){
+        mask(x,y,0,0) = ( distancia (img(x0,y0,0,0),
+                                     img(x0,y0,0,1),
+                                     img(x0,y0,0,2),
+                                     img(x,y,0,0),
+                                     img(x,y,0,1),
+                                     img(x,y,0,2) ) > radio ) ? 0 : 1; 
+    }
+    return mask;
+}
+
