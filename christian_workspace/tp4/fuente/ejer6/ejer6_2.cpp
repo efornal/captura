@@ -59,20 +59,14 @@ int main(int argc, char **argv) {
 	float color_original[] = { imagen(posx, posy, 0, 0), imagen(posx, posy, 0,
 			1), imagen(posx, posy, 0, 2) };
 
-/*	Ho.get_histogram(360).display_graph(dish1, 3); //muestro los histogramas de H, S e I respectivamente
-	dish1.set_title("canal H");
-	So.get_histogram(1, 0, 1).display_graph(dish2, 3);
-	dish2.set_title("canal S");
-	Io.get_histogram(1, 0, 1).get_histogram(255).display_graph(dish3, 3);
-	dish3.set_title("canal I");*/
-
-	float tol = 0.5; //toleracnia
-	segmentaHSI<float> (imagen, tol, Ho(posx, posy, 0, 0),
-			So(posx, posy, 0, 0), color_original).display(disp_seg);
-
-	disp1.set_title(
-			"use la ruedita del raton y el click - C para alternar entre color verdadero y color seteado");
+	float tol_h = 1; //esta entre 0 y 360
+	float tol_s = 0.01; //esta entre 0 y 1
 	bool color_verd = false;
+	segmentaHSI<float> (imagen, tol_h, tol_s, imagen.get_RGBtoHSI()(posx, posy,
+			0, 0), imagen.get_RGBtoHSI()(posx, posy, 0, 1), color_original,
+			color_verd).display(disp_seg);
+
+	disp1.set_title(" C para alternar entre color verdadero y color seteado");
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
@@ -86,10 +80,20 @@ int main(int argc, char **argv) {
 			color_original[1] = imagen(posx, posy, 0, 1);
 			color_original[2] = imagen(posx, posy, 0, 2);
 		}
-		/*segmentaHSI<float> (imagen, tol + (disp1.wheel() * 0.01), Ho(posx,
-				posy, 0, 0), So(posx, posy, 0, 0), color_original, color_verd).display(
-				disp_seg);*/
-		cout << "Tolerancia: " << tol + (disp1.wheel() * 0.01) << endl;
+		if (disp1.is_keyS()) {
+			//aumenta el valor de tolerancia de S
+			tol_s += 0.03;
+		}
+		if (disp1.is_keyX()) {
+			//decrementa el valor de tolerancia de S
+			tol_s -= 0.03;
+		}
+		segmentaHSI<float> (imagen, tol_h + disp1.wheel(), tol_s,
+				imagen.get_RGBtoHSI()(posx, posy, 0, 0), imagen.get_RGBtoHSI()(
+						posx, posy, 0, 1), color_original, color_verd).display(
+				disp_seg);
+		cout << "Tolerancia S: " << tol_s << "     Tolerancia H: " << tol_h
+				+ disp1.wheel() << endl;
 		disp_seg.set_title("imagen segmentada");
 	}
 
