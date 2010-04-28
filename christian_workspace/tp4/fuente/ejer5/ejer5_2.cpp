@@ -6,7 +6,6 @@
  */
 
 #include <iostream>
-#include <math.h>
 #include <CImg.h>
 #include "../../../tp3/fuente/lib/mask.h"
 #include "../lib/proc_color.h"
@@ -27,9 +26,9 @@ int main(int argc, char **argv) {
 	int dx = camino.width();
 	int dy = camino.height();
 
-	CImg<float> camino_R(dx, dy, 1, 1), camino_G(dx, dy, 1, 1), camino_B(dx,
-			dy, 1, 1);
-	descomponer_rgb<float> (camino, camino_R, camino_G, camino_B);
+	CImg<float> camino_R(dx, dy, 1, 3, 0.0), camino_G(dx, dy, 1, 3, 0.0), camino_B(dx,
+			dy, 1, 3, 0.0);
+	descomponer_rgb<float> (camino, camino_R, camino_G, camino_B, false);
 
 	//c--------------------------------------------------------------------------------
 	//procese casa componente por separado y genera una nueva imagen
@@ -40,7 +39,7 @@ int main(int argc, char **argv) {
 	CImg<float> imagen_procesada = componer_imagen<float> (camino_R, camino_G,
 			camino_B);
 	CImgDisplay disp2(imagen_procesada,
-			"imagen a la cual se le aplico la mascara por canales RGB", 0);
+			"imagen a la cual se le aplico la mascara por canales RGB");
 
 	//d--------------------------------------------------------------------------------
 	// obtener componentes HSI de la imagen original
@@ -58,11 +57,10 @@ int main(int argc, char **argv) {
 	CImgDisplay
 			disp3(
 					camino_filtrado_intensidad,
-					"imagen a la caul se le aplico la mascara en el canal de intensidada y se reconstruyo",
-					0);
-	/*POSTA: aplicar mascaras en imagenes de colores en HSI (en esta caso en intensidad) logra los resutlaods esperados que aplicarlos
-	 con imagnes en RGB.*/
-	//FIXME: siempre se da asi? -> esta bien el RGB? tan feo da? correr el de chaco a ver si esta bien
+					"imagen a la caul se le aplico la mascara en el canal de intensidada y se reconstruyo");
+	/*POSTA: aplicar mascaras en imagenes de colores en HSI (en esta caso en intensidad)
+	 * logra mejores resultados con la misma mascara no atenunando los tonos a diferencia de RGB.*/
+	//FIXME: siempre se da asi? -> etara bien esto ahora?
 
 	while (!disp1.is_closed()) {
 		disp1.wait();

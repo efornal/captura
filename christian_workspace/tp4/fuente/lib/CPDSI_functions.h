@@ -43,7 +43,6 @@ const int NFilas256=256, NColumnas256=256;
 /// Transformada Hough directa
 /// Todavia no funciona el cuantizado del plano ro-theta
 ///****************************************
-
 CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool getHist=0) {
 
   CImg<double> iHough(img); iHough.fill(0.0);
@@ -102,19 +101,18 @@ CImg<double> hough_inversa(CImg<double> img) {
 ///****************************************
 /// Gaussian filter mask
 ///****************************************
-double pi=3.14159;
 CImg<double> gaussian_mask(int size, double sigma){
 int ini,fin;
 double aux;
 CImg<double> mask(size,size);
 int x,y;
-//const double pi=3.14159;
+ const double pi_e=3.14159; //cambie nombre porque sino me daba un error
 ini=(int)(-1)*(size-1)/2;
 fin=(int)(size-1)/2;
 for (x=ini;x<fin+1;x++){
     for (y=ini;y<fin+1;y++){
         aux=((double)(x*x)+(double)y*y)/(2*sigma*sigma);
-        mask(x-ini,y-ini)=1/(2*pi*sigma*sigma)*exp(-1*aux);
+        mask(x-ini,y-ini)=1/(2*pi_e*sigma*sigma)*exp(-1*aux);
     }
 }
 CImg<> stats=mask.get_stats();
@@ -241,7 +239,7 @@ if (centrada){
     (magnitud).shift(magnitud.width()/2,magnitud.height()/2,0,0,2); //parametros de scroll:x,y,z,v,border_condition
 }
 //DEVUELVE LA TDF CON LA PALETA DESEADA
-if (cargar_paleta(paleta,"../../paletas/gray.pal")!=0){
+if (cargar_paleta(paleta,"./paletas/gray.pal")!=0){
     cout<<"Error al cargar la paleta."<<endl;
     exit(1);
 }
