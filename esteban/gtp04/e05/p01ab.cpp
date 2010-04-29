@@ -13,16 +13,17 @@ int main( int argc, char **argv ) {
                                         "ruta archivo imagen" );
 
     CImg<double> img ( filename ), 
+        original( "../../imagenes/chairs.jpg" ),
         img_r( img.width(), img.height(), 1, 1, 0 ),
         img_g( img.width(), img.height(), 1, 1, 0 ),
         img_b( img.width(), img.height(), 1, 1, 0 ),
         view_r( img.width(), img.height(), 1, 3, 0 ),
         view_g( img.width(), img.height(), 1, 3, 0 ),
         view_b( img.width(), img.height(), 1, 3, 0 );
-    CImgDisplay disp, disp2, disp3, disp4;
+    CImgDisplay disp, disp2, disp3, disp4, disp5;
 
     img.get_resize(600,600).display(disp);
-    disp.set_title("original");
+    disp.set_title("original oscura");
 
     // separacion de canales
     cimg_forXY(img,x,y){
@@ -31,12 +32,12 @@ int main( int argc, char **argv ) {
         img_b(x,y,0,0) = img(x,y,0,2);
     }
 
-    // Lista canales rgb
-        CImgList<double> rgb ( view_r.get_resize(200,200),
+    // Lista canales rgb TODO: no anda!!
+    CImgList<double> rgb ( view_r.get_resize(200,200),
                                view_g.get_resize(200,200),
                                view_b.get_resize(200,200) );
     rgb.display(disp2);
-    disp2.set_title("rojo - verde - azul (original)");
+    disp2.set_title("rojo - verde - azul (original oscura)");
 
     //equalizado x canal
     img_r.equalize(255);
@@ -63,6 +64,9 @@ int main( int argc, char **argv ) {
                               view_b.get_resize(200,200) );
     rgb_eq.display(disp4);
     disp4.set_title("rojo - verde - azul (equalizada)");
+
+    original.get_resize(600,600).display(disp5);
+    disp5.set_title("original sin oscurecer");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
