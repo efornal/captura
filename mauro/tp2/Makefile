@@ -1,4 +1,4 @@
-all: ej1 ej1_5 ej2 ej3 ej3_2
+all: ej1 ej1_5 ej2 ej3 ej3_2 ej4
 
 ej1: ej1.cpp
 	g++ -lX11 -lm -lpthread ej1.cpp -o ej1  
@@ -14,4 +14,7 @@ ej3: ej3.cpp
 
 ej3_2: ej3_2.cpp
 	g++ -lX11 -lm -lpthread ej3_2.cpp -o ej3_2  
+
+ej4: ej4.cpp
+	g++ -lX11 -lm -lpthread ej4.cpp -o ej4  
 
