@@ -1,3 +1,6 @@
+/**
+ * invariante a rotacion, dver prop fourier
+*/
 #include <CImg.h>
 #include <string>
 #include <vector>
