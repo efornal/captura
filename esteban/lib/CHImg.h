@@ -222,4 +222,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return fft_modulo(img);
     }
 
+    CImg<double> get_fft_modulo_log( bool centrada=false ) {
+        CImg<double> img = *this;
+        return fft_modulo_log(img);
+    }
+
 };

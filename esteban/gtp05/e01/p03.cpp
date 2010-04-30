@@ -21,7 +21,7 @@ int main( int argc, char **argv ) {
     lineav.draw_line(255,0,255,512,color);
 
     CHImg<double> lineav_rotada ( lineav );
-    lineav.get_fft_modulo(true).normalize(0,255).display();
+
     lineav_rotada.rotate(20); // rota 20 grados
     lineav_rotada.crop( 200, 200, 455, 455);
     lineav_rotada.print("linea v rotada");
@@ -29,16 +29,20 @@ int main( int argc, char **argv ) {
     lineav.crop(200, 200, 455, 455);
     lineav.print("linea v");
 
-     CImgList<double> list1( lineav, 
-                             lineav.get_fft_modulo(true).normalize(0,255) );
-     CImgList<double> list2( lineav_rotada, 
-                             lineav_rotada.get_fft_modulo(true).normalize(0,255) );
+     CImgList<double> list1( lineav.normalize(0,255), 
+                             lineav.get_fft_modulo(false).normalize(0,255),
+                             lineav.get_fft_modulo(true).normalize(0,255),
+                             lineav.get_fft_modulo_log(true).normalize(0,255) );
+     CImgList<double> list2( lineav_rotada.normalize(0,255), 
+                             lineav_rotada.get_fft_modulo(false).normalize(0,255),
+                             lineav_rotada.get_fft_modulo(true).normalize(0,255),
+                             lineav_rotada.get_fft_modulo_log(true).normalize(0,255) );
 
      list1.display(disp);
      list2.display(disp2);
 
-    disp.set_title("linea v");
-    disp2.set_title("linea v rotada 20grad");
+    disp.set_title("linea v - fft - fft centrada - fft log");
+    disp2.set_title("linea v rotada - fft - fft centrada - fft log");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
