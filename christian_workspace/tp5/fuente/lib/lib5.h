@@ -69,11 +69,13 @@ CImg<T> get_magnitud(CImg<T> imagen) {
 
 template<class T>
 CImg<T> get_imagen_solo_magnitud(CImg<T> imagen) {
+	//fixme: aca hay un error porque no sale como en las diapos!!!
 	//devuelve la imagen con solo la magnitud (o sea fase=0)
 	// OJO DEVUELVE SOLO LA PARTE CON VALORES REALES DE LA IMAGEN...
 	CImgList<> TDF_imagen = imagen.get_FFT(); //me devuelve la ifft
 
 	CImg <T> magni=get_magnitud<T>(imagen);
+
 
 	cimg_forXY(TDF_imagen[1], x, y) //recorro las imaginarias
 		{
@@ -81,6 +83,7 @@ CImg<T> get_imagen_solo_magnitud(CImg<T> imagen) {
 		TDF_imagen[1](x, y) = 0.0; //hago cero la parte imaginaria por tanto hago cero la fase
 		}
 	//aplico la transofrmada inversa para obtener la imagen solo magnitud.
+	//cimglist_apply(TDF_imagen, shift)(imagen.width()/2, imagen.height()/2, 0, 0,2);
 	return TDF_imagen.get_FFT(true)[0];
 }
 
