@@ -73,9 +73,12 @@ CImg<T> get_imagen_solo_magnitud(CImg<T> imagen) {
 	// OJO DEVUELVE SOLO LA PARTE CON VALORES REALES DE LA IMAGEN...
 	CImgList<> TDF_imagen = imagen.get_FFT(); //me devuelve la ifft
 
+	CImg <T> magni=get_magnitud<T>(imagen);
+
 	cimg_forXY(TDF_imagen[1], x, y) //recorro las imaginarias
 		{
-			TDF_imagen[1](x, y) = 0.0; //hago cero la parte imaginaria por tanto hago cero la fase
+		TDF_imagen[0](x, y) = magni(x,y); //asigno la magnitud a la parte real
+		TDF_imagen[1](x, y) = 0.0; //hago cero la parte imaginaria por tanto hago cero la fase
 		}
 	//aplico la transofrmada inversa para obtener la imagen solo magnitud.
 	return TDF_imagen.get_FFT(true)[0];
