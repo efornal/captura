@@ -14,7 +14,7 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	//filtrado por mascara difusa : f(x,y)- PB( f(x,y) )
-	//FIXME: que tipo de filtro pasa bajos se debe usar en mascara difusa? el que nos sea conveniente..
+
 	CImg<float> imagenc("../../imagenes/camaleon.tif");
 	CImg<float> imagen1("../../imagenes/huang1.jpg");
 	CImg<float> imagenh("../../imagenes/hand.tif");

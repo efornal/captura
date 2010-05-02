@@ -21,14 +21,14 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<double> img("../../imagenes/avion.jpg"); //imagen original
+	CImg<unsigned char> img("../../imagenes/avion.jpg"); //imagen original
 
 	//obtener imagen de solo magnitud considerando fase cero:
-	CImg<double> imagen_solo_magnitud = get_imagen_solo_magnitud<double> (img);
+	CImg<double> imagen_solo_magnitud = get_imagen_solo_magnitud<double> (img); //fixme:esta funcion no anda bien...
 	//obtener imagen de solo fase considerando magnitud1:
 	CImg<double> imagen_solo_fase = get_imagen_solo_fase<double> (img);
 	CImgDisplay disp0(img, "imagen original");
-	CImgDisplay disp1(imagen_solo_magnitud, "imagen solo magnitud", 0); //normalizo para que se vea algo...
+	CImgDisplay disp1(imagen_solo_magnitud, "imagen solo magnitud",0); //normalizo para que se vea algo...
 	CImgDisplay disp2(imagen_solo_fase, "image solo fase");
 	while (!disp2.is_closed()) {
 		disp2.wait();
