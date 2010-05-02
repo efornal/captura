@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	//a---------------------------------------------------------------------------------------
 	//cargue la imagen futbol.jpg
 
-
+	//fixme: hice un quilmbo y sigue sin andar
 	CImg<float> imagen("../../imagenes/futbol.jpg");
 	CImgDisplay disp1(imagen, "imagen de futbol", 0);
 	CImgDisplay dish1, dish2, dish3, disp_seg;
