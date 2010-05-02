@@ -1,4 +1,3 @@
-//FIXME: estan bien las graficas?
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
