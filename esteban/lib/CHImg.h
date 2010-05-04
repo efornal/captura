@@ -1,6 +1,3 @@
-#include <color.h>
-#include <espectro.h>
-
 #define cimg_use_fftw3 1
 #ifdef cimg_use_fftw3
 extern "C"{
@@ -8,11 +5,11 @@ extern "C"{
 }
 #endif
 
-
+#include <color.h>
+#include <espectro.h>
 #include <CImg.h>
 
 using namespace cimg_library;
-
 
 template<typename T> struct CHImg : public CImg<T> {
 
@@ -219,12 +216,12 @@ template<typename T> struct CHImg : public CImg<T> {
 
     CImg<double> get_fft_modulo( bool centrada=false ) {
         CImg<double> img = *this;
-        return fft_modulo(img);
+        return fft_modulo( img, centrada );
     }
 
     CImg<double> get_fft_modulo_log( bool centrada=false ) {
         CImg<double> img = *this;
-        return fft_modulo_log(img);
+        return fft_modulo_log( img, centrada );
     }
 
 };

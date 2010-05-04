@@ -1,6 +1,7 @@
 /**
+   FIXME:
    para visualizar el modulo:
-   log{ sqrt(r^2 + i^2) + eps }   eps=numero muy chico
+   log{ sqrt(r^2 + i^2) + eps }   eps=numero muy chico por que??
 */
 #include <CHImg.h>
 #include <iostream>
@@ -31,18 +32,18 @@ int main( int argc, char **argv ) {
 
      CImgList<double> list1( lineav.normalize(0,255), 
                              lineav.get_fft_modulo(false).normalize(0,255),
-                             lineav.get_fft_modulo(true).normalize(0,255),
-                             lineav.get_fft_modulo_log(true).normalize(0,255) );
+                             lineav.get_fft_modulo_log(true).normalize(0,255),
+                             lineav.get_fft_modulo(true).normalize(0,255) );
      CImgList<double> list2( lineav_rotada.normalize(0,255), 
                              lineav_rotada.get_fft_modulo(false).normalize(0,255),
-                             lineav_rotada.get_fft_modulo(true).normalize(0,255),
-                             lineav_rotada.get_fft_modulo_log(true).normalize(0,255) );
+                             lineav_rotada.get_fft_modulo_log(true).normalize(0,255),
+                             lineav_rotada.get_fft_modulo(true).normalize(0,255) );
 
      list1.display(disp);
      list2.display(disp2);
 
-    disp.set_title("linea v - fft - fft centrada - fft log");
-    disp2.set_title("linea v rotada - fft - fft centrada - fft log");
+    disp.set_title("linea v | fft: modulo - log - centrada");
+    disp2.set_title("linea v rotada | fft: modulo - log - centrada");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
