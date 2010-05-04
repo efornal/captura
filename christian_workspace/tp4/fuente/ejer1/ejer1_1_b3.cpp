@@ -43,6 +43,7 @@ int main(int argc, char **argv) {
 		{
 			HSI_I_copia(x, y) = 1.0; // brillo maximo
 		}
+	//fixme: el brillo maximo es 1.0 o 0.5? porque supuestamente con 1.0 es una indeficinicon cuando volves a RGB? entonces?!
 
 	//rearmo HSI
 	CImg<float> HSI2(dx, HSI_H.height(), 1, 3); //imagen HSI
@@ -58,7 +59,7 @@ int main(int argc, char **argv) {
 		}
 	CImgDisplay disp4(HSI_I_copia, "Canal I con brillo maximo", 0);
 	CImgDisplay disp5(HSI2,
-			"imagen HSI con brillo maximo en HSI", 0);
+			"imagen HSI con brillo maximo en HSI");
 	CImgDisplay disp6(HSI2.get_HSItoRGB(),
 			"imagen HSI con birllo maximo en RGB", 0);
 
