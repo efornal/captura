@@ -14,6 +14,10 @@ using namespace std;
 using namespace cimg_library;
 
 
+/**
+   Modulo de la fft: |fft(f)|
+   |fft(t)| = sqrt{ real^2 + imag^2 }
+*/
 CImg<double> fft_modulo( CImg<double> img, bool centrada=false ) {
 
     CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
@@ -37,6 +41,12 @@ CImg<double> fft_modulo( CImg<double> img, bool centrada=false ) {
     return modulo;
 }
 
+
+/**
+   Modulo de la fft con log aplicado: log{ |fft(f)| }
+   |fft(t)| = sqrt{ real^2 + imag^2 }
+   log{ |fft(f)| }
+*/
 CImg<double> fft_modulo_log( CImg<double> img, bool centrada=false ) {
 
     CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
