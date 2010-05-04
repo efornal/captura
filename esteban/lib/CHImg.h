@@ -1,12 +1,18 @@
 #define cimg_use_fftw3 1
+
 #ifdef cimg_use_fftw3
 extern "C"{
     #include "fftw3.h"
 }
 #endif
 
-#include <color.h>
-#include <espectro.h>
+#ifndef pdi_espectro
+  #include "espectro.h"
+#endif
+#ifndef pdi_color
+  #include "color.h"
+#endif
+
 #include <CImg.h>
 
 using namespace cimg_library;
@@ -214,12 +220,17 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
-    CImg<double> get_fft_modulo( bool centrada=false ) {
+    CImg<double> get_fft_fase( bool centrada=true ) {
+        CImg<double> img = *this;
+        return fft_fase( img, centrada );
+    }
+
+    CImg<double> get_fft_modulo( bool centrada=true ) {
         CImg<double> img = *this;
         return fft_modulo( img, centrada );
     }
 
-    CImg<double> get_fft_modulo_log( bool centrada=false ) {
+    CImg<double> get_fft_modulo_log( bool centrada=true ) {
         CImg<double> img = *this;
         return fft_modulo_log( img, centrada );
     }
