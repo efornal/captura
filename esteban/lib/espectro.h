@@ -77,10 +77,9 @@ CImg<double> fft_modulo_log( CImg<double> img, bool centrada=true ) {
 }
 
 /**
- *   Modulo de la fft , SIN LA FASE
- *   |fft(t)| = sqrt{ real^2 + imag^2 }
+ * Retorna la imagen con espectro de solo fase (modulo = 1)
 */
-CImg<double> fft_fase( CImg<double> img, bool centrada=true ) {
+CImg<double> solo_fase( CImg<double> img ) {
 
     CImg<double> fase( img.width(), img.height(), 1, 1, 0 );
     CImgList<double> tdf;
@@ -91,13 +90,33 @@ CImg<double> fft_fase( CImg<double> img, bool centrada=true ) {
         for (int j=0; j<img.height(); j++) {
             fase(i,j) =  atan( tdf[1](i,j) / tdf[0](i,j) ) + 
                 0.000001;
+            tdf[0](i,j)=cos(fase(i,j));
+            tdf[1](i,j)=sin(fase(i,j));
         }
     }
 
-    if ( centrada ) { 
-        //parametros de shift: x, y , z, v, border_condition
-        fase.shift( fase.width()/2, fase.height()/2, 0, 0, 2 );
+    return tdf.get_FFT(true)[0]; //TDF inversa | solo parte real
+}
+
+/**
+ * Retorna la imagen con espectro de solo modulo (fase = 0)
+ */
+CImg<double> solo_modulo( CImg<double> img ) {
+
+    CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
+    CImgList<double> tdf;
+        
+    tdf = img.get_FFT( false );  // lista: parte real e imag
+
+    for (int i=0; i<img.width(); i++){
+        for (int j=0; j<img.height(); j++) {
+            tdf[0](i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
+                                  pow( tdf[1](i,j), 2.0 ) ) +
+                0.000001; // R=modulo -  negativo!??
+            
+            tdf[1](i,j) = 0; // I=0
+        }
     }
 
-    return fase;
+    return tdf.get_FFT(true)[0]; //TDF inversa | solo parte real
 }

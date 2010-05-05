@@ -220,9 +220,14 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
-    CImg<double> get_fft_fase( bool centrada=true ) {
+    CImg<double> get_solo_fase( ) {
         CImg<double> img = *this;
-        return fft_fase( img, centrada );
+        return solo_fase( img );
+    }
+
+    CImg<double> get_solo_modulo( ) {
+        CImg<double> img = *this;
+        return solo_modulo( img );
     }
 
     CImg<double> get_fft_modulo( bool centrada=true ) {

@@ -19,8 +19,8 @@ int main( int argc, char **argv ) {
 
     CHImg<unsigned char> img ( filename );
 
-    CImgList<double> list1( img.get_fft_modulo_log().normalize(0,255),
-                            img.get_fft_fase().normalize(0,255) );
+    CImgList<double> list1( img.get_solo_modulo().normalize(0,255),
+                            img.get_solo_fase().normalize(0,255) );
     list1.display(disp2);
     
     img.display(disp);
