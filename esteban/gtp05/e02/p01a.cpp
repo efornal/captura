@@ -1,5 +1,7 @@
 /**
- * TODO : solo fase verificar!?
+ * El aporte de la fase dice mucho mas de la imagen que el modulo
+ * con solo fase la imagen pude verse bien
+ * con solo modulo, no se aprecia nada de la imagen
  */
 
 #include <espectro.h>
