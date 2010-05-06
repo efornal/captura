@@ -245,4 +245,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return fft_modulo_log( img, centrada );
     }
 
+    CImg<double> get_a_fase_definida( CImg<double> fase ) {
+        CImg<double> img = *this;
+        return a_fase_definida( img, fase );
+    }
+
 };

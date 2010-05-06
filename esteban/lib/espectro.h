@@ -143,3 +143,22 @@ CImg<double> a_solo_modulo( CImg<double> img ) {
 
     return tdf.get_FFT(true)[0];     //TDF inversa | solo parte real
 }
+
+/**
+ * Retorna la imagen cuyo espectro tiene la fase pasada por parametro
+ * usado para formar imagen con fase de otra imagen
+ */
+CImg<double> a_fase_definida( CImg<double> img, CImg<double> fase ) {
+
+    CImgList<double> tdf;
+
+    tdf = img.get_FFT( false );  // lista: parte real e imag
+
+    for (int i=0; i<img.width(); i++){
+        for (int j=0; j<img.height(); j++) {
+            tdf[1](i,j) = fase(i,j); // defino la fase
+        }
+    }
+
+    return tdf.get_FFT(true)[0];     //TDF inversa | solo parte real
+}
