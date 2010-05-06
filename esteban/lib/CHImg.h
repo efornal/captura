@@ -220,9 +220,19 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
-    CImg<double> get_fft_fase( bool centrada=true ) {
+    CImg<double> get_a_solo_fase( ) {
         CImg<double> img = *this;
-        return fft_fase( img, centrada );
+        return a_solo_fase( img );
+    }
+
+    CImg<double> get_a_solo_modulo( ) {
+        CImg<double> img = *this;
+        return a_solo_modulo( img );
+    }
+
+    CImg<double> get_fft_fase( ) {
+        CImg<double> img = *this;
+        return fft_fase( img );
     }
 
     CImg<double> get_fft_modulo( bool centrada=true ) {
@@ -233,6 +243,11 @@ template<typename T> struct CHImg : public CImg<T> {
     CImg<double> get_fft_modulo_log( bool centrada=true ) {
         CImg<double> img = *this;
         return fft_modulo_log( img, centrada );
+    }
+
+    CImg<double> get_a_fase_definida( CImg<double> fase ) {
+        CImg<double> img = *this;
+        return a_fase_definida( img, fase );
     }
 
 };
