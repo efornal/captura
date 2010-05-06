@@ -14,9 +14,10 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib5.h"
-#include "../../../tp4/fuente/lib/CPDSI_functions.h"
-#include "../../../tp3/fuente/lib/mask.h"
+#include "../lib5/lib5.h"
+#include "../lib5/figuras.h"
+#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
+#include "../../../tp3/fuente/lib3/mask.h"
 
 using namespace std;
 using namespace cimg_library;
@@ -34,7 +35,7 @@ int main(int argc, char **argv) {
 	CImg <float> F_real=F[0]; //parte real
 	CImg <float> F_imag=F[1]; //parte imaginaria
 	//filtrado
-
+//multiplicar(F_real, H);
 	F_real*=H;
 	F_imag*=H;
 	F[0]=F_real;

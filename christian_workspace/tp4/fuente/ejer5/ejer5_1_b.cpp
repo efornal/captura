@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/proc_color.h"
+#include "../lib4/proc_color.h"
 using namespace std;
 using namespace cimg_library;
 

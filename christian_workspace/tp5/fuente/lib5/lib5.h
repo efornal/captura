@@ -4,6 +4,7 @@
  *  Created on: 22/04/2010
  *      Author: christian
  */
+
 #include <math.h>
 #include <vector>
 #include <string>
@@ -13,23 +14,6 @@
 #include "CImg.h"
 using namespace std;
 using namespace cimg_library;
-
-template<class T>
-void linea_horizontal(CImg<T> &imagen, int coord_y, float angulo = 0) {
-	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
-	imagen.fill(0);
-	imagen.draw_line(0, coord_y, imagen.height(), coord_y, blanco);
-	imagen.rotate(angulo, imagen.width() / 2, imagen.height() / 2, 1.0, 2, 1);
-}
-
-template<class T>
-void linea_vertical(CImg<T> &imagen, int coord_x, float angulo = 0) {
-	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
-	imagen.fill(0);
-	imagen.draw_line(coord_x, 0, coord_x, imagen.height(), blanco);
-	imagen.rotate(angulo, imagen.width() / 2, imagen.height() / 2, 1.0, 2, 1);
-}
-
 template<class T>
 CImg<T> get_fase(CImg<T> imagen) {
 	/*devuelve la fase de la transformada de fourier
@@ -69,18 +53,17 @@ CImg<T> get_magnitud(CImg<T> imagen) {
 
 template<class T>
 CImg<T> get_imagen_solo_magnitud(CImg<T> imagen) {
-	//fixme: aca hay un error porque no sale como en las diapos!!!
+	//fixme: estara bien esto che?
 	//devuelve la imagen con solo la magnitud (o sea fase=0)
 	// OJO DEVUELVE SOLO LA PARTE CON VALORES REALES DE LA IMAGEN...
-	CImgList<> TDF_imagen = imagen.get_FFT(); //me devuelve la ifft
+	CImgList<> TDF_imagen = imagen.get_FFT(); //me devuelve la fft
 
-	CImg <T> magni=get_magnitud<T>(imagen);
+	CImg<T> magni = get_magnitud<T> (imagen);
 
-
-	cimg_forXY(TDF_imagen[1], x, y) //recorro las imaginarias
+	cimg_forXY(magni, x, y) //recorro las imaginarias
 		{
-		TDF_imagen[0](x, y) = magni(x,y); //asigno la magnitud a la parte real
-		TDF_imagen[1](x, y) = 0.0; //hago cero la parte imaginaria por tanto hago cero la fase
+			TDF_imagen[0](x, y) = magni(x, y); //asigno la magnitud a la parte real
+			TDF_imagen[1](x, y) = 0.0; //hago cero la parte imaginaria por tanto hago cero la fase
 		}
 	//aplico la transofrmada inversa para obtener la imagen solo magnitud.
 	//cimglist_apply(TDF_imagen, shift)(imagen.width()/2, imagen.height()/2, 0, 0,2);
@@ -98,29 +81,11 @@ CImg<T> get_imagen_solo_fase(CImg<T> imagen) {
 	CImgList<T> tdf = imagen.get_FFT(); //obtengo la fft
 
 	//recordar que si magnitud es 1-> 1*e^jtita=cos(tita)+j*sen (tita)
-	cimg_forXY(tdf[0],x,y) {
-		tdf[0](x,y)=cos (tita(x,y)); //parte real=1*cos tita
-		tdf[1](x,y)=sin (tita(x,y)); // parte imaginaria sen(tita)
-	}
+	cimg_forXY(tdf[0],x,y)
+		{
+			tdf[0](x, y) = cos(tita(x, y)); //parte real=1*cos tita
+			tdf[1](x, y) = sin(tita(x, y)); // parte imaginaria sen(tita)
+		}
 	return tdf.get_FFT(true)[0]; //retorno solo la parte real
-}
-template<class T>
-void cuadrado_centrado(CImg<T> &imagen, int dimx = 20, int dimy = 20, int x0 =
-		0, int y0 = 0, float angulo = 0) {
-	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
-	imagen.fill(0);
-	int x1 = x0 + dimx;
-	int y1 = y0 + dimy;
-	imagen.draw_rectangle(x0, y0, x1, y1, blanco);
-	imagen.rotate(angulo, (int) (x1 - x0) / 2, (int) (y1 - y0) / 2, 1.0, 2, 1);
-}
-
-template<class T>
-void circulo_centrado(int x0, int y0, CImg<T> &imagen, int radio = 20,
-		float angulo = 0) {
-	unsigned char blanco[] = { 255, 255, 255 }; //Define color blanco
-	imagen.fill(0);
-	imagen.draw_circle(x0, y0, abs(radio), blanco, 1);
-	imagen.rotate(angulo, x0, y0, 1.0, 2, 1);
 }
 

@@ -14,8 +14,9 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib5.h"
-#include "../../../tp4/fuente/lib/CPDSI_functions.h"
+#include "../lib5/lib5.h"
+#include "../lib5/figuras.h"
+#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
 
 using namespace std;
 using namespace cimg_library;
