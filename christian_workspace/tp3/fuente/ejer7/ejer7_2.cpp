@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/mask.h"
+#include "../lib3/mask.h"
 
 using namespace std;
 using namespace cimg_library;
@@ -26,10 +26,10 @@ int main(int argc, char **argv) {
 	 * 											 -1  8 -1
 	 * 											 -1 -1 -1
 	 * */
-	b=a.get_convolve(generar_mascara_PA_suma0 <unsigned char > (2));
+	b = a.get_convolve(generar_mascara_PA_suma0<unsigned char> (2));
 
 	//como el coeficiente central de la mascara es positivo se suma el laplaciano con la imagen original
-	c=sumar<CImg <unsigned char> >(a,b);
+	c = sumar<unsigned char> (a, b);
 
 	//la imagen se ve con mucho ruido en c por tanto habria que aplicar un filtro de mediana,
 	// pero eso no es recomendable por ser no lineal y es inaceptable en medicina...
@@ -51,8 +51,8 @@ int main(int argc, char **argv) {
 
 	//filtrado con una mascara de 5x5
 
-CImgList <unsigned char> lista(a, b, c);
-lista.display(disp1);
+	CImgList<unsigned char> lista(a, b, c);
+	lista.display(disp1);
 	while (!disp1.is_closed()) {
 		disp1 .wait();
 	}
