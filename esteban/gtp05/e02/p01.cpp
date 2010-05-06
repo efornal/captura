@@ -4,14 +4,11 @@
  * con solo modulo, no se aprecia nada de la imagen
  */
 
-#include <espectro.h>
 #include <CHImg.h>
 #include <iostream>
 
-
 using namespace cimg_library;
 using namespace std;
-
 
 int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/avion.png", 
