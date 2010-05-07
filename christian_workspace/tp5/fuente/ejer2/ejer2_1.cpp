@@ -4,6 +4,7 @@
  *  Created on: 22/04/2010
  *      Author: christian
  */
+//a la hora de identificar la iamgen, la fase tiene mucho mas importancia
 #define cimg_use_fftw3 1
 
 #ifdef cimg_use_fftw3
