@@ -12,12 +12,40 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
-CImg<T> aplicar_PB_ideal(CImg<T> imagen, int radio = 10) {
-	/*aplica un filtro pasa Bajos IDEAL centrado de radio=Radio. Por defecto 10. (muy selectivo)
+CImg<T> aplicar_PB_ideal(CImg<T> imagen, int frec_corte = 10) {
+	/*aplica un filtro pasa Bajos IDEAL centrado de radio=frec_corte. Por defecto 10. (muy selectivo)
 	 * Devuelve la imagen filtrada para ser mostrada.
 	 */
 	CImg<T> H(imagen.width(), imagen.height(), 1, 1);
-	circulo_centrado<T> (H.width() / 2, H.height() / 2, H, radio, 0); //creo la mascara
+	circulo_centrado<T> (H.width() / 2, H.height() / 2, H, frec_corte, 0); //creo la mascara
+	H.normalize(0.0, 1.0);
+	H.shift(H.width() / 2, H.height() / 2, 0, 0, 2); //centro la func de transferencia
+	CImgList<T> F = imagen.get_FFT();//obtengo la transformada
+	CImg<T> F_real = F[0]; //parte real
+	CImg<T> F_imag = F[1]; //parte imaginaria
+	//realizo el filtrado en el dominio de las frecuecnias:
+	F_real = multiplicar<T> (F_real, H, false);
+	F_imag = multiplicar<T> (F_imag, H, false);
+	F[0] = F_real;
+	F[1] = F_imag;
+	return F.get_FFT(true)[0]; //devuelvo la parte real
+}
+/*template <calss T>
+void Butterworth(CImg <T> &imagen, int frec_corte=10, int orden=1){
+	cimg_forXY(H,x,y){
+		H(x,y)=1/(1+pow((H(x,y)/frec_corte),2.0*orden));
+	}
+}*/
+template<class T>
+CImg<T> aplicar_Butter_PB(CImg<T> imagen, int frec_corte=10, int orden=1) {
+	/*aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.
+	 * Por defecto: frec_corte=10 y orden=1
+	 * Devuelve la imagen filtrada para ser mostrada.
+	 */
+	CImg<T> H(imagen.width(), imagen.height(), 1, 1);
+	cimg_forXY(H,x,y){
+		H(x,y)=1.0/(1.0+pow((H(x,y)/frec_corte),2.0*orden));
+	}
 	H.normalize(0.0, 1.0);
 	H.shift(H.width() / 2, H.height() / 2, 0, 0, 2); //centro la func de transferencia
 	CImgList<T> F = imagen.get_FFT();//obtengo la transformada
