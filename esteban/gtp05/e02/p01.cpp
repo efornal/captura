@@ -24,10 +24,11 @@ int main( int argc, char **argv ) {
     list2.display(disp3);
     disp3.set_title("modulo - fase - modulo log");
 
-    CImgList<double> list1( img.get_a_solo_modulo().log().normalize(0,255),
-                            img.get_a_solo_fase().normalize(0,255) );
+    CImgList<double> list1( img.get_a_solo_modulo().normalize(0,255),
+                            img.get_a_solo_fase().normalize(0,255),
+                            img.get_a_solo_modulo_log().normalize(0,255) );
     list1.display(disp2);
-    disp2.set_title("img de solo modulo - img de solo fase");
+    disp2.set_title("img de solo modulo - img de solo fase - img de solo modulo log");
     
     img.display(disp);
     disp.set_title("imagen original");

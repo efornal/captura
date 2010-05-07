@@ -230,6 +230,11 @@ template<typename T> struct CHImg : public CImg<T> {
         return a_solo_modulo( img );
     }
 
+    CImg<double> get_a_solo_modulo_log( ) {
+        CImg<double> img = *this;
+        return a_solo_modulo_log( img );
+    }
+
     CImg<double> get_fft_fase( ) {
         CImg<double> img = *this;
         return fft_fase( img );
