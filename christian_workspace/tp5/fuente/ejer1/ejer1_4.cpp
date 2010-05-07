@@ -22,7 +22,10 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<float> imagen("../../imagenes/a7v600-SE.gif");
+	const char *filename = cimg_option( "-f", "../../imagenes/a7v600-SE.gif",
+
+	                                        "ruta archivo imagen" );
+	CImg<float> imagen(filename);
 	imagen.print();
 	cout << "Use las teclas Arriba y abajo para cambiar de plate" << endl
 			<< "Use las teclas derecha e izquierda para cambiar de imagen";

@@ -23,7 +23,8 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<unsigned char> img("../../imagenes/huang2.jpg"); //imagen original
+	const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", "ruta archivo imagen" );
+	CImg<unsigned char> img(filename); //imagen original
 	//circulo de altura 1 sobre una matriz de ceros:
 	CImg<float> H(img.width(), img.height(), 1, 1);
 	int radio = 50;

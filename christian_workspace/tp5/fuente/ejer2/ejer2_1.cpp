@@ -22,7 +22,10 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<unsigned char> img("../../imagenes/avion.jpg"); //imagen original
+	const char *filename = cimg_option( "-f", "../../imagenes/avion.jpg",
+
+	                                        "ruta archivo imagen" );
+	CImg<unsigned char> img(filename); //imagen original
 
 	//obtener imagen de solo magnitud considerando fase cero:
 	CImg<double> imagen_solo_magnitud = get_imagen_solo_magnitud<double> (img); //fixme:esta funcion no anda bien... preguntar po rlo del centrado

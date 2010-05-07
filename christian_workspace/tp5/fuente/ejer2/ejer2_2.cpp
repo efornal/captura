@@ -21,8 +21,13 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	CImg<double> img("../../imagenes/avion.jpg"); //imagen original
-	CImg<double> img_aeropuerto("../../imagenes/aeropuerto.jpg");
+	const char *filename = cimg_option( "-f", "../../imagenes/avion.jpg",
+	                                        "ruta archivo imagen" );
+	const char *filename1 = cimg_option( "-i", "../../imagenes/aeropuerto.jpg",
+		                                        "ruta archivo imagen2" );
+	CImg<double> img(filename); //imagen original
+	//TODO:
+	CImg<double> img_aeropuerto(filename1);
 	CImgList<double> lista_imagenes(img, img_aeropuerto);
 	CImgDisplay displis1(lista_imagenes);
 	displis1.set_title("Imagenes originales");
