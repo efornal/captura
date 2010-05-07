@@ -36,6 +36,7 @@ void Butterworth(CImg <T> &imagen, int frec_corte=10, int orden=1){
 		H(x,y)=1/(1+pow((H(x,y)/frec_corte),2.0*orden));
 	}
 }*/
+//TODO: esto todavia no funca...
 template<class T>
 CImg<T> aplicar_Butter_PB(CImg<T> imagen, int frec_corte=10, int orden=1) {
 	/*aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.

@@ -40,28 +40,27 @@ int main(int argc, char **argv) {
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	/*	H.display(disp2);
-
+//TODO: esto no anda...
 	 disp2.set_title("Filtro que se aplica");*/
 	while (!disp1.is_closed()) {
-		disp1.wait();
-		if (disp1.wheel()) {
-			frec_corte += disp1.wheel();
-		}
-		if (disp1.is_keyARROWUP()) {
+		if (disp1.is_keyARROWRIGHT()) {
+			frec_corte++;
+		} else if (disp1.is_keyARROWLEFT()) {
+			frec_corte--;
+		} else if (disp1.is_keyARROWUP()) {
 			orden++;
 		} else if (disp1.is_keyARROWDOWN()) {
 			orden--;
 		}
-		filtrada = aplicar_Butter_PB<float> (img, frec_corte,
-				orden);
-		filtrada.display(disp1);
+		filtrada = aplicar_Butter_PB<float> (img, frec_corte, orden);
+		filtrada.log().display(disp1);
 		disp1.set_title("imagen filtrada");
 
-		H.display(disp1);
-		disp1.set_title("Filtro que se aplica");
+		/*		H.display(disp1);
+		 disp1.set_title("Filtro que se aplica");*/
 
-		cout << "Frec. corte: " << frec_corte << "     Orden: "
-				<< orden << endl;
+		cout << "Frec. corte: " << frec_corte << "     Orden: " << orden
+				<< endl;
 	}
 	return 0;
 }
