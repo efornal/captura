@@ -1,3 +1,6 @@
+/*
+*  FIXME: porque e l modulo con: + 0.000001; 
+*/
 #define pdi_espectro 1
 #define cimg_use_fftw3 1
 
@@ -35,13 +38,12 @@ CImg<double> fft_modulo( CImg<double> img, bool centrada=true ) {
     for (int i=0; i<img.width(); i++){
         for (int j=0; j<img.height(); j++) {
             modulo(i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
-                                pow( tdf[1](i,j), 2.0 ) ) +
-                0.000001;
+                                pow( tdf[1](i,j), 2.0 ) ); // + 0.000001; ?
         }
     }
 
     if ( centrada ) { 
-        //parametros de shift: x, y , z, v, border_condition
+        // parametros de shift: x, y , z, v, border_condition
         modulo.shift( modulo.width()/2, modulo.height()/2, 0, 0, 2 );
     }
 
@@ -134,9 +136,7 @@ CImg<double> a_solo_modulo( CImg<double> img ) {
     for (int i=0; i<img.width(); i++){
         for (int j=0; j<img.height(); j++) {
             tdf[0](i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
-                                pow( tdf[1](i,j), 2.0 ) ) +
-                0.000001;
-            
+                                pow( tdf[1](i,j), 2.0 ) ); //+ 0.000001; ?
             tdf[1](i,j) = 0.0; // I=0
         }
     }
