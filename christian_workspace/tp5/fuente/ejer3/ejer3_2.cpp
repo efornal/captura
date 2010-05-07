@@ -18,51 +18,41 @@ extern "C" {
 #include "../lib5/figuras.h"
 #include "../../../tp4/fuente/lib4/CPDSI_functions.h"
 #include "../../../tp3/fuente/lib3/mask.h"
+#include "../lib5/filtros.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", "ruta archivo imagen" );
+	const char
+			*filename =
+					cimg_option( "-f", "../../imagenes/huang2.jpg", "ruta archivo imagen" );
 	CImg<unsigned char> img(filename); //imagen original
-	img.normalize(0,255);
-	//circulo de altura 1 sobre una matriz de ceros:
-	CImg<float> H(img.width(), img.height(), 1, 1);
+	img.normalize(0, 255);
+	CImgDisplay disporiginal(img, "imagen original");
 	int radio = 150;
-	circulo_centrado <float>(H.width()/2, H.height()/2, H, radio, 0); //creo la mascara
-	H.normalize(0.0,1.0).display();
-	CImgDisplay disp2;	H.display(disp2);
-	CImgList <float> F = img.get_FFT();//obtengo la transformada
-	CImg <float> F_real=F[0]; //parte real
-	CImg <float> F_imag=F[1]; //parte imaginaria
-	//filtrado
-//multiplicar(F_real, H);
+	CImg<float> H(img.width(), img.height(), 1, 1);
+	//circulo de altura 1 sobre una matriz de ceros:
+	circulo_centrado(H.width() / 2, H.height() / 2, H, radio, 0);
+	CImgDisplay disp1, disp2;
 
-	H.shift( H.width()/2, H.height()/2, 0, 0, 2 );
-	//F_real*=H;
-	//F_imag*=H;
-	F_real=multiplicar<float>(F_real, H, false);
-	F_imag=multiplicar<float>(F_imag, H, false);
-/*	cimg_forXY(F_real, x, y){
-		F_real(x,y)*=H(x,y);
-		F_imag(x,y)*=H(x,y);
-	}*/
-	F[0]=F_real;
-	F[1]=F_imag;
-
-	CImg <float> filtrada = F.get_FFT(true)[0];
-	CImgDisplay disp1;
+	CImg<float> filtrada = aplicar_PB_ideal<float> (img, radio);
 	filtrada.display(disp1);
+	disp1.set_title("imagen filtrada");
+	H.display(disp2);
+	disp2.set_title("Filtro que se aplica");
+	while (!disp2.is_closed()) {
+		disp2.wait();
+		circulo_centrado(H.width() / 2, H.height() / 2, H, radio
+				+ disp2.wheel(), 0); //vario radio.
+		filtrada = aplicar_PB_ideal<float> (img, radio + disp2.wheel());
+		filtrada.display(disp1);
+		disp1.set_title("imagen filtrada");
 
-	while (!disp1.is_closed()) {
-		disp1.wait();
-/*		if (disp1.wheel()){
-			radio+=disp1.wheel();
-			cout<<"Frec. Corte en: "<<radio<<endl;
-		}
+		H.display(disp2);
+		disp2.set_title("Filtro que se aplica");
 
-		filtrada.log().display(disp1);*/
-
+		cout << "Frec. corte filtro ideal: " << radio+disp2.wheel() << endl;
 	}
 	return 0;
 }
