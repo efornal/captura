@@ -255,4 +255,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return a_fase_definida( img, fase );
     }
 
+    CImg<double> get_filtrada( CImg<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrar( img, filtro );
+    }
+
 };

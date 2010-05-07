@@ -172,3 +172,21 @@ CImg<double> a_fase_definida( CImg<double> img, CImg<double> fase ) {
 
     return tdf.get_FFT(true)[0];     //TDF inversa | solo parte real
 }
+
+/**
+ * Retorna la imagen filtrada con el filtro pasado
+ * El filtro debe estar diseñado centrado
+ */
+CImg<double> filtrar( CImg<double> img, CImg<double> filtro ) {
+
+    CImgList<double> tdf = img.get_FFT();
+
+    filtro.shift( filtro.width()/2, filtro.height()/2, 0, 0, 2 );    
+
+    cimg_forXY( filtro, x, y ) {
+        tdf[0](x,y) *= filtro(x,y);
+        tdf[1](x,y) *= filtro(x,y);
+    }
+    
+    return tdf.get_FFT(true)[0];
+}
