@@ -1,3 +1,9 @@
+/**
+ * FIXME:
+ * porque con:
+ * ./view_filtrado -wc 0 -f ../../imagenes/pattern.tif
+ * hay colores (como el rojo) que desaparecen!?
+*/
 #include <CHImg.h>
 #include <iostream>
 #include <filtro.h>
@@ -38,7 +44,7 @@ int main( int argc, char **argv ) {
         disp.wait();
 
         if ( disp.is_keyARROWDOWN () ){
-            wc-=2;
+            wc-=5;
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada.normalize(0,255).display(disp4);
             filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
@@ -46,7 +52,7 @@ int main( int argc, char **argv ) {
             printf("wc: %d\n", wc);
         }
         if ( disp.is_keyARROWUP () ){
-            wc+=2;
+            wc+=5;
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada.normalize(0,255).display(disp4);
