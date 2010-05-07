@@ -7,8 +7,8 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../../../tp3/fuente/lib/mask.h"
-#include "../lib/proc_color.h"
+#include "../../../tp3/fuente/lib3/mask.h"
+#include "../lib4/proc_color.h"
 
 using namespace std;
 using namespace cimg_library;

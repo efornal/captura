@@ -7,8 +7,8 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib.h"
-
+#include "../lib2/lut.h"
+//#include "../lib2/op_aritmeticos.h"
 using namespace std;
 using namespace cimg_library;
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
 	CImg<double> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
-		reconstruida = sumar <CImg<double> > (reconstruida, imagen_sucia[i],
+		reconstruida = sumar <double> (reconstruida, imagen_sucia[i],
 				false); //pongo false para que no me ladivida por 2
 	}
 	cimg_forXY( reconstruida, x, y )

@@ -7,8 +7,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <CImg.h>
-#include "../lib/lib.h"
-#include "../lib/plano_bit.h"
+#include "../lib2/lut.h"
+#include "../lib2/plano_bit.h"
 
 using namespace std;
 using namespace cimg_library;

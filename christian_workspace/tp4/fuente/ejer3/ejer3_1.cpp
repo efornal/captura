@@ -9,7 +9,7 @@
 #include <CImg.h>
 #include <vector>
 #include <string>
-#include "../lib/proc_color.h"
+#include "../lib4/proc_color.h"
 
 using namespace std;
 using namespace cimg_library;

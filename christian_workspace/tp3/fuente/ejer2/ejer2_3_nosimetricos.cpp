@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/mask.h"
+#include "../lib3/mask.h"
 
 using namespace std;
 using namespace cimg_library;

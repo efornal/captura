@@ -1,4 +1,6 @@
 #include<CImg.h>
+#include "op_aritmeticos.h"
+
 using namespace std;
 using namespace cimg_library;
 
@@ -11,6 +13,7 @@ T clipp(T valor) {
 	else
 		return valor;
 }
+
 template<class T>
 T promedio(T img, int n = 2) {
 	for (int i = 0; i < n; i++) {
@@ -99,6 +102,7 @@ CImg<unsigned char> lut_tramos(CImg<unsigned char> original, int x0, int x1,
 		}
 	return modificada;
 }
+
 template<class T>
 T lut_tramos2dimensiones(T original, int x0, int y0, int x1, int y1, bool clip,
 		float factor) {
@@ -115,6 +119,7 @@ T lut_tramos2dimensiones(T original, int x0, int y0, int x1, int y1, bool clip,
 		}
 	return modificada;
 }
+
 CImg<unsigned char> obtener_grafica_mapeo_tramos(int x0, int x1, int factor) {
 	unsigned char blanco[] = { 255, 255, 255 };
 	CImg<unsigned char> mapeo(255, 1, 1, 1, 0);
@@ -180,50 +185,7 @@ T obtener_grafica_mapeo_potencia(float exponente) {
 
 //ejercicio 3:
 //1a-
-//suma
-template<class T>
-T sumar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la suma de 2 terminos... si normalizao=false no divide x 2
-	// para llamarla por ejemplo : sumar<CImg <double>> (l,m);
-	T imagen(primer_termino);
-	if (normalizado) {
-		cimg_forXY(primer_termino, x, y)
-			{
-				imagen(x, y) = (primer_termino(x, y) + segundo_termino(
-						x, y)) / 2.0;
-			}
-	} else {
-		cimg_forXY(primer_termino, x, y)
-			{
-				imagen(x, y) = (primer_termino(x, y) + segundo_termino(
-						x, y));
-			}
-	}
-	return imagen;
-}
 
-//resta
-template<class T>
-T restar(T primer_termino, T segundo_termino, bool normalizado = true) {
-	//funcion que retorna la resta de 2 terminos... primer termino-segundo termino
-	// para llamarla por ejemplo :restar<double>(l,m);
-
-	T imagen = primer_termino - segundo_termino;
-	if (normalizado) {
-		cimg_forXY(imagen, x,y)
-			{
-				imagen(x, y) = (imagen(x, y) + 255) / 2;
-				/* observar que en la linea de arriba estoy normalizando, los valores de intensidad van de 0 a 255:
-				 * 0-255 = -255 -> (-255+255)/2=0
-				 * 255-0=  255 -> (255+255)/2=255
-				 * 255-255= 0 -> (0+255)/2 = 127
-				 * 0-0= 0+255 -> 255/2 =127
-				 * */
-			}
-		return imagen;
-	}
-	return (primer_termino - segundo_termino);
-}
 
 template<class T>
 T clipp_im(T imagen) {
@@ -237,35 +199,6 @@ T clipp_im(T imagen) {
 	return imagen;
 }
 
-//multiplicacion
-//*****************************************************************************
-CImg<unsigned char> multiplicar(CImg<unsigned char> im1,
-		CImg<unsigned char> im2, bool normalizar) {
-	CImg<unsigned char> imagen(im1.width(), im1.height(), 1, 1);
-
-	cimg_forXY(im1, x, y)
-		{
-			imagen(x, y) = im1(x, y) * im2(x, y);
-		}
-	if (normalizar)
-		return imagen.normalize();
-	else
-		return imagen;
-}
-//*****************************************************************************
-//divicion
-CImg<unsigned char> dividir(CImg<unsigned char> im1, CImg<unsigned char> im2,
-		bool normalizar) {
-	/*
-	 * Division. Se implementa como la multiplicacion de una imagen por la reciproca de la otra
-	 * */
-	CImg<unsigned char> imagen = multiplicar(im1, negativo(im2), true);
-
-	if (normalizar)
-		return imagen.normalize();
-	else
-		return imagen;
-}
 
 CImg<unsigned char> emboss(CImg<unsigned char> imagen, int des_x, int des_y,
 		bool normalizado = true) {
@@ -273,9 +206,9 @@ CImg<unsigned char> emboss(CImg<unsigned char> imagen, int des_x, int des_y,
 	 * LA FUNCION RETORNA LA IMAGEN CON EL FILTRO APLICADO*/
 
 	if (normalizado)
-		return sumar<CImg<unsigned char> > (desplazar<unsigned char> (negativo(
+		return sumar<unsigned char> (desplazar<unsigned char> (negativo(
 				imagen), des_x, des_y), imagen).normalize();
-	return sumar<CImg<unsigned char> > (desplazar<unsigned char> (negativo(
+	return sumar<unsigned char> (desplazar<unsigned char> (negativo(
 			imagen), des_x, des_y), imagen);
 
 }
