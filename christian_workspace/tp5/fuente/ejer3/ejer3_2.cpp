@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 	img.normalize(0,255);
 	//circulo de altura 1 sobre una matriz de ceros:
 	CImg<float> H(img.width(), img.height(), 1, 1);
-	int radio = 10;
+	int radio = 150;
 	circulo_centrado <float>(H.width()/2, H.height()/2, H, radio, 0); //creo la mascara
 	H.normalize(0.0,1.0).display();
 	CImgDisplay disp2;	H.display(disp2);
@@ -41,10 +41,12 @@ int main(int argc, char **argv) {
 	H.shift( H.width()/2, H.height()/2, 0, 0, 2 );
 	//F_real*=H;
 	//F_imag*=H;
-	cimg_forXY(F_real, x, y){
+	F_real=multiplicar<float>(F_real, H, false);
+	F_imag=multiplicar<float>(F_imag, H, false);
+/*	cimg_forXY(F_real, x, y){
 		F_real(x,y)*=H(x,y);
 		F_imag(x,y)*=H(x,y);
-	}
+	}*/
 	F[0]=F_real;
 	F[1]=F_imag;
 
