@@ -8,9 +8,9 @@ using namespace cimg_library;
 using namespace std;
 
 int main( int argc, char **argv ) {
-    const char *filename1 = cimg_option( "-f1", "../../imagenes/letras1.tif", 
+    const char *filename1 = cimg_option( "-f1", "../../imagenes/avion.jpg", 
                                         "ruta archivo imagen" );
-    const char *filename2 = cimg_option( "-f2", "../../imagenes/letras2.tif", 
+    const char *filename2 = cimg_option( "-f2", "../../imagenes/aeropuerto.jpg", 
                                         "ruta archivo imagen" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
