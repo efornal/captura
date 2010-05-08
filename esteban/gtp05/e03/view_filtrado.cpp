@@ -54,7 +54,6 @@ int main( int argc, char **argv ) {
         if ( disp.is_keyARROWUP () ){
             wc+=5;
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
-            filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada.normalize(0,255).display(disp4);
             filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
             filtrada.get_fft_fase().normalize(0,255).display(disp6);
