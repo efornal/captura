@@ -5,6 +5,30 @@ using namespace cimg_library;
 namespace filtro {
 
     /**
+     * retorna un filtro PB Gaussiano con frecuencia de corte en wc
+     */
+    CImg<double> pb_gaussiano( int width=1, int height=1, double sigma=0.01 ) {
+
+        CImg<double> filtro ( width, height, 1, 1, 0 );
+        double distancia = 0; //distancia de cada punto al origen
+        int mediox = width/2, 
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
+            filtro(x,y) =  exp( -(distancia*distancia) / (2*sigma*sigma) );
+        }
+        return filtro;
+    }
+
+    /**
+     * retorna un filtro PB Butterworth con frecuencia de corte en wc
+     */
+    CImg<double> pb_gaussiano( CImg<double> img, double sigma=0.01 ) {
+        return filtro::pb_gaussiano( img.width(), img.height(), sigma );
+    }
+
+    /**
      * retorna un filtro PB Butterworth con frecuencia de corte en wc
      * @orden : orden del filtro
      */
