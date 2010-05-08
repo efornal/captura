@@ -15,6 +15,7 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", 
                                         "ruta archivo imagen" );
     int wc = cimg_option( "-wc", 100, "frecuencia de corte" );
+    int dw = cimg_option( "-dw", 1, "delta de frecuencia" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5, disp6;
 
@@ -44,7 +45,7 @@ int main( int argc, char **argv ) {
         disp.wait();
 
         if ( disp.is_keyARROWDOWN () ){
-            wc-=5;
+            wc -= dw;
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada.normalize(0,255).display(disp4);
             filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
@@ -52,7 +53,7 @@ int main( int argc, char **argv ) {
             printf("wc: %d\n", wc);
         }
         if ( disp.is_keyARROWUP () ){
-            wc+=5;
+            wc += dw;
             filtrada = img.get_filtrada( filtro::pb_ideal( img, wc ) );
             filtrada.normalize(0,255).display(disp4);
             filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
