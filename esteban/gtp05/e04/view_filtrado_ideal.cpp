@@ -1,5 +1,5 @@
 /**
- * ver: /view_filtrado_butter -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
+ * ver: /view_filtrado_ideal -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
 */
 #include <CHImg.h>
 #include <iostream>
