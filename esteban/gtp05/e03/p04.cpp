@@ -1,3 +1,7 @@
+/**
+ * La mascara gaussiana (en tiempo) tiene la propiedad que 
+ * su T.Fourier tambien es una gaussiana
+*/
 #include <CHImg.h>
 #include <iostream>
 #include <masks.h>
