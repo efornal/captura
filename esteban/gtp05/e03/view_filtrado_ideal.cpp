@@ -3,6 +3,8 @@
  * porque con:
  * ./view_filtrado -wc 0 -f ../../imagenes/pattern.tif
  * hay colores (como el rojo) que desaparecen!?
+ *
+ * ver: /view_filtrado_butter -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
 */
 #include <CHImg.h>
 #include <iostream>
@@ -60,7 +62,14 @@ int main( int argc, char **argv ) {
             filtrada.get_fft_fase().normalize(0,255).display(disp6);
             printf("wc: %d\n", wc);
         }
-
+        if ( disp.is_keyARROWLEFT () ) {
+            dw--;
+            printf("dw: %d\n", dw);
+        }
+        if ( disp.is_keyARROWRIGHT () ) {
+            dw++;
+            printf("dw: %d\n", dw);
+        }
     }
     return 0;
 }
