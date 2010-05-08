@@ -111,12 +111,13 @@ namespace filtro {
 
     /**
      * retorna un filtro PA ideal con frecuencia de corte en wc
+     * a Cte sumada al filtro en la banda de paso,  
+     * si a > 0 => agrega brillo medio
      */
-    CImg<double> pa_ideal( int width=1, int height=1, int wc=1 ) {
+    CImg<double> pa_ideal( int width=1, int height=1, int wc=1, double a=0.0) {
 
-        unsigned char color[] = {0,0,0};
+        double color[] = { 0.0+a, 0.0+a, 0.0+a };
         CImg<double> filtro ( width, height, 1, 1, 1 );
-
         filtro.draw_circle( width/2, height/2, wc, color );
 
         return filtro;
@@ -125,8 +126,8 @@ namespace filtro {
     /**
      * retorna un filtro PA ideal con frecuencia de corte en wc
      */
-    CImg<double> pa_ideal( CImg<double> img, int wc=1 ) {
-        return filtro::pa_ideal( img.width(), img.height(), wc );
+    CImg<double> pa_ideal( CImg<double> img, int wc=1, double a=0.0 ) {
+        return filtro::pa_ideal( img.width(), img.height(), wc, a );
     }
 
 }
