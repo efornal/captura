@@ -46,7 +46,7 @@ namespace filtro {
 
         cimg_forXY( filtro, x, y) {
             distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
-            filtro(x,y) =  1.0 / pow(1.0 + (distancia/wc), 2.0*orden );
+            filtro(x,y) =  1.0 / ( 1.0 + pow(distancia/wc, 2.0*orden) );
         }
 
         return filtro;
