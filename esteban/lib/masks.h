@@ -138,6 +138,38 @@ namespace masks {
     }
 
     // =============== filtros PA: acentuados ============
+
+    /**
+     * retorna una mascara gausseana (de la lib de catedra)
+     * con forma de pasa altos
+     *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
+     * dada la formula, con +-x = x^2 , e y+- = y^2
+     */
+    CImg<double> pa_gaussian(int size, double sigma) {
+        int ini,fin;
+        double pi=3.14159;
+        double aux;
+        CImg<double> mask(size,size);
+        int x,y;
+        ini=(int)(-1)*(size-1)/2;
+        fin=(int)(size-1)/2;
+        for (x=ini;x<fin+1;x++){
+            for (y=ini;y<fin+1;y++){
+                aux=((double)(x*x)+(double)y*y)/(2*sigma*sigma);
+                mask(x-ini,y-ini)= 1 - 1/(2*pi*sigma*sigma)*exp(-1*aux);
+            }
+        }
+        CImg<> stats=mask.get_stats();
+        for (x=0;x<size;x++){
+            for (y=0;y<size;y++){
+                if (mask(x,y)<10e-5*stats(0,2)){
+                    mask(x,y)=0;
+                }
+            }
+        }
+        mask/=mask.sum();
+        return mask;
+    }
     
     /**
        retorna filtro pasa altos con suma 1
