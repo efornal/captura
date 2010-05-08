@@ -14,12 +14,13 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", 
                                         "ruta archivo imagen" );
     int wc = cimg_option( "-wc", 100, "frecuencia de corte" );
+    int orden = cimg_option( "-orden", 10, "orden del filtro" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
 
 
     CHImg<double> img ( filename );
-    CHImg<double> filtro = filtro::pb_butter( img, wc );
+    CHImg<double> filtro = filtro::pb_butter( img, wc, orden );
 
     CImgList<double> list1( img.normalize(0,255),
                             img.get_fft_modulo_log().normalize(0,255) );

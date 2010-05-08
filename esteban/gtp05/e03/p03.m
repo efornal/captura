@@ -1,10 +1,11 @@
 wc = 25
 H  = zeros(50,50);
+n  = 10;
 
 for i=1:50
   for j=1:50
     d = sqrt( (i-25)^2 + (j-25)^2 );
-    H(i,j) = 1 / (1+(d/wc));
+    H(i,j) = 1 / (1+(d/wc))^(2*n);
   endfor
 endfor
 
