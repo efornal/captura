@@ -155,4 +155,26 @@ namespace filtro {
         return filtro::pa_ideal( img.width(), img.height(), wc, a );
     }
 
+
+    // ============================================================
+    //                     Homomorfico
+    // ============================================================
+
+    /**
+     * retorna un filtro Homomorfico
+     * Debe filtrarse con get_filtrado_homomorfico(filtro)
+     * por defecto gh=1, gl=0 => pasaaltos normalizado
+     * 1-) genero un PA con wc y orden dados
+     * 2-) normalizo entre los valor gl y gh
+     */
+    CImg<double> homomorfico( CImg<double> img, 
+                              double wc=1.0, 
+                              double gl=0.0,
+                              double gh=1.0,
+                              int orden=1) {
+        CImg<double> filtro = filtro::pa_butter( img, wc, orden );
+        return filtro.normalize(gl,gh);
+    }
+
+
 }

@@ -260,4 +260,13 @@ template<typename T> struct CHImg : public CImg<T> {
         return filtrar( img, filtro );
     }
 
+    // ==================================================== \\
+    // --------------- Filtrado Homomorfico --------------- \\
+
+    CImg<double> get_filtrado_homomorfico( CImg<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrado_homomorfico( img, filtro );
+    }
+
+
 };

@@ -190,3 +190,34 @@ CImg<double> filtrar( CImg<double> img, CImg<double> filtro ) {
     
     return tdf.get_FFT(true)[0];
 }
+
+/**
+ * Aplicado de logaritmo teniendo en cuenta valores negativos 
+ * log = log(1+img(x,y))
+ */
+CImg<double> to_log( CImg<double> img ) {
+    cimg_forXY(img,x,y){
+        img(x,y) = log( 1+img(x,y) );
+    }
+    return img;
+}
+
+/**
+ * Retorna la imagen con filtrado Homomorfico con el filtro pasado
+ * El filtro debe estar diseñado centrado, 
+ * y ser de tipo homomorfico: filtro::homomorfico(...)
+ * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
+ */
+CImg<double> filtrado_homomorfico( CImg<double> img, CImg<double> filtro ) {
+
+    CImgList<double> tdf = to_log(img).get_FFT();
+    
+    filtro.shift( filtro.width()/2, filtro.height()/2, 0, 0, 2 );    
+
+    cimg_forXY( filtro, x, y ) {
+        tdf[0](x,y) *= filtro(x,y);
+        tdf[1](x,y) *= filtro(x,y);
+    }
+
+    return tdf.get_FFT(true)[0].exp();
+}
