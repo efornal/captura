@@ -1,5 +1,5 @@
 /*
- * ejer3_2.cpp
+ * ejer3_3.cpp
  *
  *  Created on: 05/05/2010
  *      Author: christian
@@ -16,7 +16,7 @@ extern "C" {
 #include <CImg.h>
 #include "../lib5/lib5.h"
 #include "../lib5/figuras.h"
-#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
+//#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
 #include "../../../tp3/fuente/lib3/mask.h"
 #include "../lib5/filtros.h"
 
