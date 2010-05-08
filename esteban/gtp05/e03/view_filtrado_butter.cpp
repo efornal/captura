@@ -43,28 +43,29 @@ int main( int argc, char **argv ) {
 
         if ( disp.is_keyARROWDOWN () ){
             wc -= dw;
-            filtrada = img.get_filtrada( filtro::pb_butter( img, wc, orden ) );
-            filtrada.normalize(0,255).display(disp4);
-            filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
-            filtrada.get_fft_fase().normalize(0,255).display(disp6);
             printf("wc: %d\n", wc);
         }
         if ( disp.is_keyARROWUP () ){
             wc += dw;
+            printf("wc: %d\n", wc);
+        }
+
+        if ( disp.is_keyARROWLEFT  () ) { 
+            orden--; 
+            printf("orden: %d\n", orden); }
+        if ( disp.is_keyARROWRIGHT () ) { 
+            orden++; 
+            printf("orden: %d\n", orden); }
+
+        if ( disp.is_keyPAGEUP()   ) { dw--; printf("dw: %d\n", dw); }
+        if ( disp.is_keyPAGEDOWN() ) { dw++; printf("dw: %d\n", dw); }
+
+        if ( disp.is_event () ){ 
             filtrada = img.get_filtrada( filtro::pb_butter( img, wc, orden ) );
             filtrada.normalize(0,255).display(disp4);
             filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
             filtrada.get_fft_fase().normalize(0,255).display(disp6);
-            printf("wc: %d\n", wc);
         }
-
-        if ( disp.is_keyARROWLEFT  () ) { orden--; printf("orden: %d\n", orden); }
-        if ( disp.is_keyARROWRIGHT () ) { orden++; printf("orden: %d\n", orden); }
-
-        if ( disp.is_keySHIFTLEFT() && 
-             disp.is_keyARROWUP()   ) { dw++; printf("dw: %d\n", dw); }
-        if ( disp.is_keySHIFTLEFT() && 
-             disp.is_keyARROWDOWN() ) { dw--; printf("dw: %d\n", dw); }
 
     }
     return 0;
