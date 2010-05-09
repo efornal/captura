@@ -1,6 +1,8 @@
 /**
  * Por el normalizado, en el display del filtro,  no se nota 
  * la diferencia para diferentes valores de gl y gh.
+ *
+ * para la otra imagen: ./p01 -f ../../imagenes/reunion.tif
 */
 #include <CHImg.h>
 #include <iostream>
