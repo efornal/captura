@@ -1,7 +1,7 @@
 /*
  * ejer3_4.cpp
  *
- *  Created on: 05/05/2010
+ *  Created on: 08/05/2010
  *      Author: christian
  */
 #define cimg_use_fftw3 1
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	CImgDisplay disporiginal(img, "imagen original");
 
 	int varianza = 1;
-
+//TODO: esto no anda
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
 	CImg<double> filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 		} else if (disp1.is_keyARROWDOWN()) {
 			varianza--;
 		}
-		filtrada = filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
+		filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
 

@@ -1,7 +1,7 @@
 /*
  * ejer3_1.cpp
  *
- *  Created on: 22/04/2010
+ *  Created on: 08/05/2010
  *      Author: christian
  */
 #define cimg_use_fftw3 1
