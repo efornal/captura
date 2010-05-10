@@ -104,21 +104,25 @@ CImg<T> aplicar_Gaussiano_PB(CImg<T> imagen, CImg<T> &H, float sigma = 1.0) {
 	 * */
 	CImg<T> h = gaussian_mask(imagen.width(), sigma); //filtro gaussiando pasa bajos espacial
 	CImgList<T> H_FFT = h.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
-	cimglist_apply(H_FFT, shift)
-		(imagen.width() / 2, imagen.height() / 2, 0, 0, 2);
-
+/*	cimglist_apply(H_FFT, shift)
+		(imagen.width() / 2, imagen.height() / 2, 0, 0, 2);*/
 	CImg<T> H_real = H_FFT[0];
+	imagen.shift(imagen.width()/2, imagen.height()/2,0,0,2);
+	H_real.shift(H_real.width() / 2, H_real.height() / 2, 0, 0, 2); //centro la func de transferencia
 	H = H_real;
-	CImg<T> H_imag = H_FFT[1];
+	//CImg<T> H_imag = H_FFT[1];
 
 	CImgList<T> IMAGEN_FFT = imagen.get_FFT();
 	CImg<T> IMAGEN_real = IMAGEN_FFT[0];
 	CImg<T> IMAGEN_imag = IMAGEN_FFT[1];
 
 	IMAGEN_real = multiplicar<T> (IMAGEN_real, H_real, false);
-	IMAGEN_imag = multiplicar<T> (IMAGEN_imag, H_imag, false);
-	IMAGEN_FFT[0] = IMAGEN_real;
-	IMAGEN_FFT[1] = IMAGEN_imag;
+	IMAGEN_imag = multiplicar<T> (IMAGEN_imag, H_real, false);
+	cimg_forXY(IMAGEN_FFT[0],X,Y){
+		IMAGEN_FFT[0](X,Y) = IMAGEN_real(X,Y);
+			IMAGEN_FFT[1](X,Y) = IMAGEN_imag(X,Y);
+	}
+
 //fixme: que hago con la parte imaginaria la multiplico o l a hago 0??
 	/*	cimg_forXY(IMAGEN_FFT[1],x,y){
 		IMAGEN_FFT[1](x,y)=0.0;

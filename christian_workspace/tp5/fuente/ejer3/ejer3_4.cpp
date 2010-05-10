@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	img.normalize(0, 255);
 	CImgDisplay disporiginal(img, "imagen original");
 
-	int varianza = 1;
+	double varianza = 0.01;
 //TODO: esto no anda
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
@@ -42,9 +42,9 @@ int main(int argc, char **argv) {
 	while (!disp1.is_closed()) {
 		disp1.wait();
 		if (disp1.is_keyARROWUP()) {
-			varianza++;
+			varianza+=0.01;
 		} else if (disp1.is_keyARROWDOWN()) {
-			varianza--;
+			varianza-=0.01;
 		}
 		filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
 		filtrada.display(disp1);
