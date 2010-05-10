@@ -108,8 +108,8 @@ namespace masks {
 
     /**
      * retorna una mascara gausseana (de la lib de catedra)
-     *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
-     * dada la formula, con +-x = x^2 , e y+- = y^2
+     * formula:
+     *   mask = 1 / (2*pi*s^2) * exp(-(x^2+y^2)/(2*s^2))     s=sigma
      */
     CImg<double> gaussian(int size, double sigma) {
         int ini,fin;
