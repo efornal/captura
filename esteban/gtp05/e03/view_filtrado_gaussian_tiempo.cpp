@@ -6,7 +6,7 @@
  * ./view_filtrado_gaussian_tiempo -sigma 2.5 ...etc
  * pero no cuando varío el delta dx=0.1 con las teclas !?????
  *
- * ver: /view_filtrado_gaussian_tiempo -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
+ * ver: ./view_filtrado_gaussian_tiempo -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
 */
 #include <CHImg.h>
 #include <iostream>
