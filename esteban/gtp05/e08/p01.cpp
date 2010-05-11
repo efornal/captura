@@ -1,6 +1,9 @@
 /**
  * FIXME: esta bien el calculo de la funcion de transf. del filtro
  * Hap (alta_potencia) alculado asi: ?
+ * POSTA: Si, Simplemente diseñando un pasa altos y haciendo
+ * Hap(u,v) = (A-1) + Hpa(u,v) ya obtenemos el filtro alta potencia.
+ *
  * 1-) a partir de un filtro P Altos espacial gaussiano hpa(x,y), obtenemos 
  *     Hpa(u,v) = IFFT{ hpa(x,y) }
  * 2-) luego obtenemos el Hap (alta potencia) mediante:
