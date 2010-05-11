@@ -1,4 +1,11 @@
 /**
+ * FIXME: no funciona!
+ * porque si funciona cuando lo paso por parametro:
+ * ./view_filtrado_gaussian_tiempo -sigma 1.0
+ * ./view_filtrado_gaussian_tiempo -sigma 1.9
+ * ./view_filtrado_gaussian_tiempo -sigma 2.5 ...etc
+ * pero no cuando varío el delta dx=0.1 con las teclas !?????
+ *
  * ver: /view_filtrado_butter -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
 */
 #include <CHImg.h>
@@ -12,7 +19,7 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", 
                                         "ruta archivo imagen" );
     double sigma    = cimg_option( "-sigma", 0.001, "varianza" );
-    double dw       = cimg_option( "-dw", 0.001, "delta de varianza" );
+    double dw       = cimg_option( "-dw", 0.1, "delta de varianza" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5, disp6;
 
@@ -43,10 +50,23 @@ int main( int argc, char **argv ) {
 
         if ( disp.is_keyARROWDOWN () ){
             sigma -= dw;
+            mask = masks::gaussian( img.width(), sigma );
+            filtro = mask.get_fft_modulo();
+            filtrada = img.get_filtrada( filtro );
+            filtrada.normalize(0,255).display(disp4);
+            filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
+            filtrada.get_fft_fase().normalize(0,255).display(disp6);
+
             printf("sigma: %f\n", sigma);
         }
         if ( disp.is_keyARROWUP () ){
             sigma += dw;
+            mask = masks::gaussian( img.width(), sigma );
+            filtro = mask.get_fft_modulo();
+            filtrada = img.get_filtrada( filtro );
+            filtrada.normalize(0,255).display(disp4);
+            filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
+            filtrada.get_fft_fase().normalize(0,255).display(disp6);
             printf("sigma: %f\n", sigma);
         }
 
@@ -57,15 +77,6 @@ int main( int argc, char **argv ) {
         if ( disp.is_keyARROWRIGHT () ) { 
             dw+=0.001; 
             printf("dw: %f\n", dw); 
-        }
-
-        if ( disp.is_event () ){ 
-            mask = masks::gaussian( img.width(), sigma );
-            filtro = mask.get_fft_modulo();
-            filtrada = img.get_filtrada( filtro );
-            filtrada.normalize(0,255).display(disp4);
-            filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
-            filtrada.get_fft_fase().normalize(0,255).display(disp6);
         }
 
     }
