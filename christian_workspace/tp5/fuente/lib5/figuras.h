@@ -48,3 +48,12 @@ void circulo_centrado(int x0, int y0, CImg<T> &imagen, int radio = 20,
 	imagen.draw_circle(x0, y0, abs(radio), blanco, 1);
 	imagen.rotate(angulo, x0, y0, 1.0, 2, 1);
 }
+
+template<class T>
+void circulo_centrado_inverso(int x0, int y0, CImg<T> &imagen, int radio = 20,
+		float angulo = 0) {
+	unsigned char negro[] = { 0.0,0.0,0.0 }; //Define color blanco
+	imagen.fill(255.0);
+	imagen.draw_circle(x0, y0, abs(radio), negro, 1);
+	imagen.rotate(angulo, x0, y0, 1.0, 2, 1);
+}
