@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	img.normalize(0, 255);
 	CImgDisplay disporiginal(img, "imagen original");
 
-	int varianza = 50;
+	float varianza = 1.0;
 
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 			varianza--;
 		}
 		filtrada = aplicar_Gaussiano_PB_def_frec<double> (img, H, varianza);
-		filtrada.display(disp1);//fixme: deberia mostrarla con log o no?
+		filtrada.display(disp1);//fixme: esta bien como da esto?
 		disp1.set_title("imagen filtrada");
 
 		H.display(disp2);

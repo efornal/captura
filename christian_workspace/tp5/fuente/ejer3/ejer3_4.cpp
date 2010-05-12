@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	CImgDisplay disporiginal(img, "imagen original");
 
 	double varianza = 0.01;
-//TODO: esto no anda
+//fixme: porque esto no da igual al filtro que se aplica en frecuencia en el ejercicio 5?
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
 	CImg<double> filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
