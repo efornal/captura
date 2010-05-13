@@ -31,12 +31,13 @@ int main( int argc, char **argv ) {
     CHImg<double> img ( filename );
 
     CHImg<double> mask = masks::pa_gaussian( img.width(), sigma );
-    CHImg<double> Hpa = mask.get_fft_modulo();
-    CHImg<double> Hap(Hpa);
+    CImgList<double> Hpa = mask.get_FFT();
+    CImgList<double> Hap(Hpa[0],Hpa[1]);
 
     // obtengo filtro alta potencia
-    cimg_forXY(Hpa,x,y){
-        Hap(x,y) = (a-1.0) + Hpa(x,y);
+    cimg_forXY(Hpa[0],x,y){
+        Hap[0](x,y) = (a-1.0) + Hpa[0](x,y);
+        Hap[1](x,y) = (a-1.0) + Hpa[1](x,y);
     }
 
     CImgList<double> list1( img.get_normalize(0,255),
@@ -45,13 +46,12 @@ int main( int argc, char **argv ) {
     list1.display(disp);
     disp.set_title("imagen original - modulo log - fase");
 
-    CImgList<double> list2( Hap.get_normalize(0,255),
-                            Hap.get_fft_modulo_log().normalize(0,255),
-                            Hap.get_fft_fase().normalize(0,255) );
-    list2.display(disp2);
-    disp2.set_title("filtro - modulo log - fase");
+    // mal, debe plotear el modulo no la parte real
+    // CImgList<double> list2( Hap[0].get_normalize(0,255) );
+    // list2.display(disp2);
+    // disp2.set_title("filtro - modulo log - fase");
 
-    CHImg<double> filtrada = img.get_filtrada( Hap );
+    CHImg<double> filtrada = img.get_filtrada_complejo( Hap );
     
     CImgList<double> list5( filtrada.get_normalize(0,255),
                             filtrada.get_fft_modulo_log().normalize(0,255),

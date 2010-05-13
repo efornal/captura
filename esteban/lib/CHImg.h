@@ -259,6 +259,10 @@ template<typename T> struct CHImg : public CImg<T> {
         CImg<double> img = *this;
         return filtrar( img, filtro );
     }
+    CImg<double> get_filtrada_complejo( CImgList<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrar_complejo( img, filtro );
+    }
 
     // ==================================================== \\
     // --------------- Filtrado Homomorfico --------------- \\

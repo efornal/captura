@@ -192,6 +192,26 @@ CImg<double> filtrar( CImg<double> img, CImg<double> filtro ) {
 }
 
 /**
+ * Retorna la imagen filtrada con el filtro pasado complejo
+ * El filtro debe estar diseñado centrado y 
+ * FIXME: deberia estar el filtro shifteado???
+ */
+CImg<double> filtrar_complejo( CImg<double> img, CImgList<double> filtro ) {
+
+    CImgList<double> tdf = img.get_FFT();
+
+    //filtro[0].shift( filtro[0].width()/2, filtro[0].height()/2, 0, 0, 2 ); //correcto?
+    //filtro[1].shift( filtro[1].width()/2, filtro[1].height()/2, 0, 0, 2 ); //correcto?
+
+    cimg_forXY( filtro[0], x, y ) {
+        tdf[0](x,y) *= filtro[0](x,y);
+        tdf[1](x,y) *= filtro[1](x,y);
+    }
+    
+    return tdf.get_FFT(true)[0];
+}
+
+/**
  * Aplicado de logaritmo teniendo en cuenta valores negativos 
  * log = log(1+img(x,y))
  */
