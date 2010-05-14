@@ -6,6 +6,9 @@ extern "C"{
 }
 #endif
 
+#ifndef pdi_restauracion
+  #include "restauracion.h"
+#endif
 #ifndef pdi_espectro
   #include "espectro.h"
 #endif
@@ -272,5 +275,27 @@ template<typename T> struct CHImg : public CImg<T> {
         return filtrado_homomorfico( img, filtro );
     }
 
+    // ==================================================== \\
+    // --------------- Generacionde ruido  --------------- \\
+
+    void ruido_gaussiano( double sigma ) {
+        gen_ruido_gaussiano( *this, sigma );
+    }
+
+    void ruido_uniforme( double sigma ) {
+        gen_ruido_uniforme( *this, sigma );
+    }
+
+    void ruido_sal_y_pimienta( double sigma ) {
+        gen_ruido_sal_y_pimienta( *this, sigma );
+    }
+
+    void ruido_sal( double sigma ) {
+        gen_ruido_sal( *this, sigma );
+    }
+
+    void ruido_pimienta( double sigma ) {
+        gen_ruido_pimienta( *this, sigma );
+    }
 
 };

@@ -1,18 +1,3 @@
-/**
- * noice: Add random noise to the values of the instance image.
- *
- * Parameters:
- *   - sigma      Amplitude of the random additive noise. 
- *                If sigma<0, it stands for a percentage of the global value range.
- *
- *   - noise_type Type of additive noise 
- *                0 = gaussian, 
- *                1 = uniform, 
- *                2 = Salt and Pepper, 
- *                3 = Poisson 
- *                4 = Rician
- */
-
 #include <CHImg.h>
 #include <iostream>
 
@@ -20,35 +5,54 @@ using namespace cimg_library;
 using namespace std;
 
 int main( int argc, char **argv ) {
-    const char *filename = cimg_option( "-f", 
-                                        "../../imagenes/del_libro/vertical_rectangle_gris.png",                                         "ruta archivo imagen" );
-    double sigma = cimg_option("-sigma", 0.1 , "amplitud del ruido" );
-    CImgDisplay disp, disp2, disp3, disp4, disp5;
+    const char *filename = cimg_option( "-f",
+                                        "../../imagenes/del-libro/original_pattern.tif",                                         "ruta archivo imagen" );
+    double sigma = cimg_option("-sigma", 4.0 , "amplitud del ruido" );
+    CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7;
     
     //TODO agregar otros tipos
     CHImg<double> img ( filename ),
-        gaussiano (img),
-        uniforme (img),
-        sal_y_pimienta(img);
+        gaussiano (filename),
+        uniforme (filename),
+        sal (filename),
+        pimienta (filename),
+        sal_y_pimienta(filename);
 
-    gaussiano.noise( sigma, 0 );
-    uniforme.noise( sigma, 1 );
-    sal_y_pimienta.noise( sigma, 2 );
+    gaussiano.ruido_gaussiano( sigma );
+    uniforme.ruido_uniforme( sigma );
+    sal.ruido_sal( sigma );
+    pimienta.ruido_pimienta( sigma );
+    sal_y_pimienta.ruido_sal_y_pimienta( sigma );
 
     CImgList<double> list1( img,
                             gaussiano,
-                            uniforme,
-                            sal_y_pimienta );
-    list1.display(disp);
-    disp.set_title("original - gaussiano - uniforme - sal-pimienta");
+                            uniforme);
 
-    gaussiano.get_histogram(255).display_graph(disp2,3);
-    uniforme.get_histogram(150,255).display_graph(disp3,3);
-    sal_y_pimienta.get_histogram(255).display_graph(disp4,3);
+    CImgList<double> list2( sal,
+                            pimienta,
+                            sal_y_pimienta );
+
+    list1.display(disp);
+    disp.set_title("original - gaussiano - uniforme");
+
+    list2.display(disp2);
+    disp2.set_title("sal - pimienta - sal y pimienta");
+
+
+    gaussiano.get_histogram(256).display_graph(disp3,3);
+    uniforme.get_histogram(256).display_graph(disp4,3);
+    sal.get_histogram(256).display_graph(disp5,3);
+    pimienta.get_histogram(256).display_graph(disp6,3);
+    sal_y_pimienta.get_histogram(256).display_graph(disp7,3);
+
+    disp3.set_title("gaussiano");
+    disp3.set_title("uniforme");
+    disp3.set_title("sal");
+    disp3.set_title("pimienta");
+    disp3.set_title("sal y pimienta");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
     }
-
     return 0;
 }
