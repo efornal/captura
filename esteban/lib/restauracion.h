@@ -101,21 +101,3 @@ CImg<double> filtrar_geometrica( CImg<double> img, int size=3) {
 
     return filtrada;
 }
-
-/* CImg<double> filtrar_geometrica( CImg<double> img, int size=3) { */
-/*     CImg<double> mask (size,size,1,1,0); */
-/*     CImg<double> filtrada (img); */
-/*     double prod; */
-
-/*     cimg_forXY(img,x,y) { */
-/*         prod = 1; */
-/*         mask = img.get_crop( x-1, y-1, x+1, y+1, true );             */
-
-/*         cimg_forXY(mask,s,t) { */
-/*             prod *= mask(s,t); */
-/*         } */
-/*         filtrada(x,y) = pow( prod, (1/(size*size)) ); */
-/*     } */
-
-/*     return filtrada; */
-/* } */
