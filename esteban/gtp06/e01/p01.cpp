@@ -46,10 +46,10 @@ int main( int argc, char **argv ) {
     sal_y_pimienta.get_histogram(256).display_graph(disp7,3);
 
     disp3.set_title("gaussiano");
-    disp3.set_title("uniforme");
-    disp3.set_title("sal");
-    disp3.set_title("pimienta");
-    disp3.set_title("sal y pimienta");
+    disp4.set_title("uniforme");
+    disp5.set_title("sal");
+    disp6.set_title("pimienta");
+    disp7.set_title("sal y pimienta");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
