@@ -1,6 +1,8 @@
 /**
- * FIXME: porque en el histograma el gris 50 de la imagen
+ * FIXME: histograma
+ * 1-) porque en el histograma el gris 50 de la imagen
  * no aparece en la posicio 50 del histograma ??
+ * 2-) cual es el efecto en el histograma de porciones de gris CTE??
 */
 #include <CHImg.h>
 #include <iostream>
