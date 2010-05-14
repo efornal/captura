@@ -298,4 +298,11 @@ template<typename T> struct CHImg : public CImg<T> {
         gen_ruido_pimienta( *this, sigma );
     }
 
+    // ==================================================== \\
+    // ------ filtrado espacial tema:restauracion  -------- \\
+
+    CImg<double> get_filtrar_geometrica( int size=3 ) {
+        return filtrar_geometrica( *this, size );
+    }
+
 };
