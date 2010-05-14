@@ -70,9 +70,7 @@ void gen_ruido_sal( CImg<double> &img, double sigma ) {
  */
 void gen_ruido_pimienta( CImg<double> &img, double sigma ) {
     CImg<double> ruido ( img.width(), img.height(),1,1,0);
-    img.print("img");
     ruido.noise( sigma, 2);
-    ruido.print("ruido");
     cimg_forXY(img,x,y){
         if ( ruido(x,y) ) img(x,y) = 0;
     }
