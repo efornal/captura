@@ -39,11 +39,11 @@ int main( int argc, char **argv ) {
     disp2.set_title("sal - pimienta - sal y pimienta");
 
 
-    gaussiano.get_histogram(256).display_graph(disp3,3);
-    uniforme.get_histogram(256).display_graph(disp4,3);
-    sal.get_histogram(256).display_graph(disp5,3);
-    pimienta.get_histogram(256).display_graph(disp6,3);
-    sal_y_pimienta.get_histogram(256).display_graph(disp7,3);
+    gaussiano.get_histogram(256,0,255).display_graph(disp3,3);
+    uniforme.get_histogram(256,0,255).display_graph(disp4,3);
+    sal.get_histogram(256,0,255).display_graph(disp5,3);
+    pimienta.get_histogram(256,0,255).display_graph(disp6,3);
+    sal_y_pimienta.get_histogram(256,0,255).display_graph(disp7,3);
 
     disp3.set_title("gaussiano");
     disp4.set_title("uniforme");
