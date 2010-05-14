@@ -3,6 +3,10 @@
  * 1-) porque en el histograma el gris 50 de la imagen
  * no aparece en la posicio 50 del histograma ??
  * 2-) cual es el efecto en el histograma de porciones de gris CTE??
+ *
+ * POSTA: el histograma debe graficarse con indicando los valores:
+ * get_histogram( niveles, 0, niveles-1 )
+ * ya que de lo contrario no incluye el cero (no se ve bien el histograma)
 */
 #include <CHImg.h>
 #include <iostream>
@@ -45,11 +49,11 @@ int main( int argc, char **argv ) {
     disp2.set_title("sal - pimienta - sal y pimienta");
 
 
-    gaussiano.get_histogram(niveles).display_graph(disp3,3);
-    uniforme.get_histogram(niveles).display_graph(disp4,3);
-    sal.get_histogram(niveles).display_graph(disp5,3);
-    pimienta.get_histogram(niveles).display_graph(disp6,3);
-    sal_y_pimienta.get_histogram(niveles).display_graph(disp7,3);
+    gaussiano.get_histogram(niveles,0,niveles-1).display_graph(disp3,3);
+    uniforme.get_histogram(niveles,0,niveles-1).display_graph(disp4,3);
+    sal.get_histogram(niveles,0,niveles-1).display_graph(disp5,3);
+    pimienta.get_histogram(niveles,0,niveles-1).display_graph(disp6,3);
+    sal_y_pimienta.get_histogram(niveles,0,niveles-1).display_graph(disp7,3);
 
     disp3.set_title("gaussiano");
     disp4.set_title("uniforme");
