@@ -16,13 +16,6 @@ extern "C" {
 #include <CImg.h>
 
 #include "../lib5/filtros.h"
-/*
-#include "../lib5/lib5.h"
-#include "../lib5/figuras.h"
-#include "../../../tp3/fuente/lib3/mask.h" //ya incluye operadores aritmeticos!
-*/
-
-
 
 using namespace std;
 using namespace cimg_library;
@@ -44,7 +37,7 @@ int main(int argc, char **argv) {
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	H.display(disp2);
-	disp2.set_title("Filtro que se aplica");
+	disp2.set_title("H(u,v) es es filtroq ue se aplica - esto es frec");
 	while (!disp2.is_closed()) {
 		disp2.wait();
 		circulo_centrado(H.width() / 2, H.height() / 2, H, radio
@@ -54,7 +47,7 @@ int main(int argc, char **argv) {
 		disp1.set_title("imagen filtrada");
 
 		H.display(disp2);
-		disp2.set_title("Filtro que se aplica");
+		disp2.set_title("H(u,v) es es filtroq ue se aplica - esto es frec");
 
 		cout << "Frec. corte filtro ideal: " << radio+disp2.wheel() << endl;
 	}
