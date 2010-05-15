@@ -174,3 +174,46 @@ CImg<double> filtrado_punto_medio( CImg<double> img, int size=3 ) {
     return filtrada;
 }
 
+/**
+ * retorna un filtro espacial de orden, alfa recortado
+ * @size Tamanio de la mascara
+ * formula:
+ *                 1
+ *   f'(x,y) =    ---  SUM{ gr(x,y) }     0 <= d <= mn-1
+ *                mn-d
+ *
+ *                       si d=0    => media aritmetica
+ *                       si d=mn-1 => mediana
+ *
+ * Ej: dada la mask[1 5 2 .. 3] nxn(filasXcolumnas) con coef a0..anxn, 
+ * arma la lista:
+ *              lis = [a0,a1,...ak]    donde k = m*n 
+ * luego lo ordena:
+ *             liso = [1 2 3,...ak] 
+ * luego calcula gr(x,y) = SUM{ liso(d), liso(d+1),.. liso(k) }
+ * finalmente calcula f' como dice arriba
+ */
+
+CImg<double> filtrado_alfa_recortado( CImg<double> img, int d=0, int size=3 ) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    int mid = size/2, cont = 0;
+    double suma = 0.0;
+    CImg <double> lista( size*size, 1, 1, 1, 0 );
+
+    cimg_forXY(img,x,y){
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        cont = 0, suma = 0.0;
+        cimg_forXY(mask,s,t){
+            lista(cont++,0) = mask(s,t);
+        }
+        lista.sort(true); // bool increasing=true (creciente)
+        for ( int i=d/2; i<(size*size-d/2); i++ ){
+            suma += lista(i);
+        }
+        filtrada(x,y) = ( 1.0 / (size*size-d) ) * suma;
+    }
+
+    return filtrada;
+}
+

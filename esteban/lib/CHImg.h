@@ -372,5 +372,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return filtrado_punto_medio( *this, size );
     }
 
+    CImg<double> get_filtrar_alfa_recortado( double d=0, int size=3 ) {
+        return filtrado_alfa_recortado( *this, d, size );
+    }
+
 
 };
