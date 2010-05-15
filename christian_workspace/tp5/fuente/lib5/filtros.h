@@ -9,6 +9,10 @@
 
 #include <CImg.h>
 #include "../../../tp4/fuente/lib4/CPDSI_functions.h"
+
+#include "../../../tp2/fuente/lib2/op_aritmeticos.h"
+#include "figuras.h"
+
 using namespace std;
 using namespace cimg_library;
 
