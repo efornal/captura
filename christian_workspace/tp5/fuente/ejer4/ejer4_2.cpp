@@ -15,9 +15,9 @@ extern "C" {
 #include <iostream>
 #include <CImg.h>
 #include "../lib5/lib5.h"
-#include "../lib5/figuras.h"
+//#include "../lib5/figuras.h"
 //#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
-#include "../../../tp3/fuente/lib3/mask.h"
+//#include "../../../tp3/fuente/lib3/mask.h"
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -38,19 +38,19 @@ int main(int argc, char **argv) {
 
 	CImg<float> filtrada = aplicar_PA_ideal<float> (img, radio);
 	filtrada.display(disp1);
-	disp1.set_title("imagen filtrada");
+	disp1.set_title("imagen filtrada con PA ideal");
 	H.display(disp2);
-	disp2.set_title("Filtro que se aplica");
+	disp2.set_title("Filtro que se aplica PA ideal");
 	while (!disp2.is_closed()) {
 		disp2.wait();
 		circulo_centrado_inverso(H.width() / 2, H.height() / 2, H, radio
 				+ disp2.wheel(), 0); //vario radio.
 		filtrada = aplicar_PA_ideal<float> (img, radio + disp2.wheel());
 		filtrada.display(disp1);
-		disp1.set_title("imagen filtrada");
+		disp1.set_title("imagen filtrada con PA ideal");
 
 		H.display(disp2);
-		disp2.set_title("Filtro que se aplica");
+		disp2.set_title("Filtro que se aplica PA ideal");
 
 		cout << "Frec. corte filtro ideal: " << radio+disp2.wheel() << endl;
 	}
