@@ -14,9 +14,6 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib5/lib5.h"
-#include "../lib5/figuras.h"
-#include "../../../tp3/fuente/lib3/mask.h"
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -36,9 +33,9 @@ int main(int argc, char **argv) {
 	CImgDisplay disp1, disp2;
 	CImg<double> filtrada = aplicar_Gaussiano_PB_def_frec<double> (img, H, varianza);
 	filtrada.display(disp1);
-	disp1.set_title("imagen filtrada");
+	disp1.set_title("imagen filtrada con filtro gaussiano en frecuencia");
 	H.display(disp2);
-	disp2.set_title("Filtro que se aplica");
+	disp2.set_title("Filtro Gaussiano aplicado");
 	while (!disp1.is_closed()) {
 		disp1.wait();
 		if (disp1.is_keyARROWUP()) {
@@ -47,11 +44,12 @@ int main(int argc, char **argv) {
 			varianza--;
 		}
 		filtrada = aplicar_Gaussiano_PB_def_frec<double> (img, H, varianza);
-		filtrada.display(disp1);//fixme: esta bien como da esto?
-		disp1.set_title("imagen filtrada");
+
+		filtrada.display(disp1);
+		disp1.set_title("imagen filtrada con filtro gaussiano en frecuencia");
 
 		H.display(disp2);
-		disp2.set_title("Filtro que se aplica");
+		disp2.set_title("Filtro Gaussiano aplicado");
 		cout << "Varianza: " << varianza << endl;
 	}
 	return 0;
