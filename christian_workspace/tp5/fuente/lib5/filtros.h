@@ -112,8 +112,8 @@ CImg<T> get_PA_gauss(int dimx, int dimy, float varianza = 1.0) {
 	cimg_forXY(H,x,y)
 		{
 			distancia = sqrt(pow(x - mediox, 2.0) + pow(y - medioy, 2.0));
-			H(x, y) = 1.0-exp((-1.0 * pow(distancia, 2.0)) / (2.0
-					* pow(varianza, 2)));
+			H(x, y) = 1.0 - exp((-1.0 * pow(distancia, 2.0)) / (2.0 * pow(
+					varianza, 2)));
 		}
 	return H;
 }
@@ -212,26 +212,26 @@ CImg<T> aplicar_PA_Butter(CImg<T> imagen, CImg<T> &H, float frec_corte = 10.0,
 	 * devuelve por referencia H para poder plotear el filtro...
 	 */
 	H = get_PA_Butter<T> (imagen.width(), imagen.height(), frec_corte, orden);
-	CImg <T> Hf = H.get_shift(H.width() / 2, H.height() / 2, 0, 0, 2); //vuelvo a la original para ver el filtro centrado
-	return filtrar <T> (imagen, Hf);
+	CImg<T> Hf = H.get_shift(H.width() / 2, H.height() / 2, 0, 0, 2); //vuelvo a la original para ver el filtro centrado
+	return filtrar<T> (imagen, Hf);
 }
 
 template<class T>
-CImg<T> aplicar_PA_Gaussiano(CImg<T> imagen, CImg<T> &H,
-		float varianza = 1.0) {
+CImg<T> aplicar_PA_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 	/*aplica un filtro pasa Altos Gaussiano con varianza=sigma (DEFINIDO EN FRECUENCIA)
 	 * Devuelve la imagen filtrada para ser mostrada.
 	 * devuelve por referencia H para poder plotear el filtro
 	 * solo andaa para datos del tipo DOUBLE!!
 	 * */
-	H=get_PA_gauss<T>(imagen.width(), imagen.height(), varianza);
-	CImg <T> Hf=H.get_shift(H.width()/2.0, H.height()/2.0, 0,0,2.0);
-	return filtrar<T>(imagen, Hf);
+	H = get_PA_gauss<T> (imagen.width(), imagen.height(), varianza);
+	CImg<T> Hf = H.get_shift(H.width() / 2.0, H.height() / 2.0, 0, 0, 2.0);
+	return filtrar<T> (imagen, Hf);
 }
 
 //FILTROS DEFINIDOS EN TIEMPO Y CONVERTIDOS A FRECUENCIA
 template<class T>
-CImg<T> aplicar_Gaussiano_PA_desdetiempo(CImg<T> imagen, CImg<T> &H, float sigma = 1.0) {
+CImg<T> aplicar_Gaussiano_PA_desdetiempo(CImg<T> imagen, CImg<T> &H,
+		float sigma = 1.0) {
 	/*aplica un filtro pasa Altos Gaussiano con varianza=sigma
 	 * Devuelve la imagen filtrada para ser mostrada.
 	 * devuelve por referencia H para poder plotear el filtro
@@ -265,64 +265,49 @@ CImg<T> aplicar_Gaussiano_PA_desdetiempo(CImg<T> imagen, CImg<T> &H, float sigma
 	return IMAGEN_FFT.get_FFT(true)[0]; //devuelvo la parte real
 }
 
-/*
- * 	ESTAS FUNCIONES DEVUELVEN UN FILTRO DEL ESTILO DADO...
- * */
-
 //##########################################################################################
 
-/*
- //filtrado homomorfico:
- template<class T>
- CImg<T> homomorfico(CImg<T> img, double wc = 1.0, double gl = 0.0, double gh =
- 1.0, float orden = 1.0) {
- *
- * retorna un filtro Homomorfico
- * Debe filtrarse con get_filtrado_homomorfico(filtro)
- * por defecto gh=1, gl=0 => pasaaltos normalizado
- * 1-) genero un PA con wc y orden dados
- * 2-) normalizo entre los valor gl y gh
 
- CImg<double> filtro = filtro::pa_butter(img, wc, orden);
- return filtro.normalize(gl, gh);
- }
+//filtrado homomorfico: GRACIAS CHACO... :)
+template<class T>
+CImg<T> get_homomorfico(CImg<T> img, double wc = 1.0, double gl = 0.0,
+		double gh = 1.0, float orden = 1.0) {
+	/* retorna un filtro Homomorfico
+	 * Debe filtrarse con get_filtrado_homomorfico(filtro)
+	 * por defecto gh=1, gl=0 => pasaaltos normalizado
+	 * 1-) genero un PA con wc y orden dados
+	 * 2-) normalizo entre los valor gl y gh
+	 */
+	CImg<T> filtro = get_PA_Butter<T> (img.width(), img.height(), wc,
+			orden);
+	return filtro.normalize(gl, gh);
+}
+template<class T>
+CImg<T> to_log(CImg<T> &img) {
+	/**
+	 * Aplicado de logaritmo teniendo en cuenta valores negativos
+	 * log = log(1+img(x,y))
+	 */
+	cimg_forXY(img,x,y)
+		{
+			img(x, y) = log(1 + img(x, y));
+		}
+	return img;
+}
+template <class T>
+CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
+	/* Retorna la imagen con filtrado Homomorfico con el filtro pasado
+	 * El filtro debe estar diseñado centrado,
+	 * y ser de tipo homomorfico: get_homomorfico(...)
+	 * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
+	 * */
+	CImgList<T> tdf = to_log <double> (img).get_FFT();
+	filtro.shift(filtro.width() / 2, filtro.height() / 2, 0, 0, 2);
+	cimg_forXY( filtro, x, y )
+		{
+			tdf[0](x, y) *= filtro(x, y);
+			tdf[1](x, y) *= filtro(x, y);
+		}
+	return tdf.get_FFT(true)[0].exp();
+}
 
- CImg<double> filtrado_homomorfico(CImg<double> img, CImg<double> filtro) {
- *
- * Retorna la imagen con filtrado Homomorfico con el filtro pasado
- * El filtro debe estar diseñado centrado,
- * y ser de tipo homomorfico: filtro::homomorfico(...)
- * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
-
- CImgList<double> tdf = to_log(img).get_FFT();
-
- filtro.shift(filtro.width() / 2, filtro.height() / 2, 0, 0, 2);
-
- cimg_forXY( filtro, x, y )
- {
- tdf[0](x, y) *= filtro(x, y);
- tdf[1](x, y) *= filtro(x, y);
- }
-
- return tdf.get_FFT(true)[0].exp();
- }*/
-
-/*
- CImg<double> pa_butter( int width=1, int height=1, int wc=1, int orden=1 ) {
- *
- * retorna un filtro PA Butterworth con frecuencia de corte en wc
- * @orden : orden del filtro
-
- CImg<double> filtro ( width, height, 1, 1, 0 );
- double distancia = 0; //distancia de cada punto al origen
- int mediox = width/2,
- medioy = height/2;
-
- cimg_forXY( filtro, x, y) {
- distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
- filtro(x,y) =  1.0 / ( 1.0 + pow(wc/distancia, 2.0*orden) );
- }
-
- return filtro;
- }
- */
