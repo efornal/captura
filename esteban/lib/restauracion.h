@@ -153,3 +153,24 @@ CImg<double> filtrado_mediana( CImg<double> img, int size=3 ) {
 
     return filtrada;
 }
+
+
+/**
+ * retorna un filtro espacial de orden, punto medio
+ * @size Tamanio de la mascara
+ * formula:
+ *   f'(x,y) =  1/2 * [ MAX{g(x,y)} + MIN{g(x,y)} ]
+ */
+CImg<double> filtrado_punto_medio( CImg<double> img, int size=3 ) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        filtrada(x,y) = (1.0/2.0) * ( mask.min() + mask.max() );
+    }
+
+    return filtrada;
+}
+

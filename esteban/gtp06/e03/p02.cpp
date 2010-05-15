@@ -23,7 +23,7 @@ int main( int argc, char **argv ) {
     ruidosa.ruido_gaussiano( sigma ).display(disp3);
 
     ruidosa.get_filtrar_mediana(n).display(disp4);
-    //ruidosa.get_filtrar_punto_medio( q, n ).display(disp5);
+    ruidosa.get_filtrar_punto_medio( n ).display(disp5);
 
     disp.set_title("originial");
     disp2.set_title("original con sal y pimienta");
