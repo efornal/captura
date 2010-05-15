@@ -32,6 +32,26 @@ CImg<T> filtrar(CImg<T> imagen, CImg<T> H) {
 	F[1] = F_imag;
 	return F.get_FFT(true)[0]; //devuelvo la parte real
 }
+
+template<class T>
+CImg<T> filtrar_complejo(CImg<T> img, CImgList<T> filtro) {
+	/**by chaco...
+	 * Retorna la imagen filtrada con el filtro pasado complejo
+	 * El filtro debe estar diseñado centrado y
+	 * FIXME: deberia estar el filtro shifteado???
+	 */
+	CImgList<T> tdf = img.get_FFT();
+
+	filtro[0].shift(filtro[0].width() / 2, filtro[0].height() / 2, 0, 0, 2); //correcto?
+	filtro[1].shift(filtro[1].width() / 2, filtro[1].height() / 2, 0, 0, 2); //correcto?
+
+	cimg_forXY( img, x, y )
+		{
+			tdf[0](x, y) *= filtro[0](x, y);
+			tdf[1](x, y) *= filtro[1](x, y);
+		}
+	return tdf.get_FFT(true)[0];
+}
 //######################################################################################
 //######################################################################################
 template<class T>
@@ -278,8 +298,7 @@ CImg<T> get_homomorfico(CImg<T> img, double wc = 1.0, double gl = 0.0,
 	 * 1-) genero un PA con wc y orden dados
 	 * 2-) normalizo entre los valor gl y gh
 	 */
-	CImg<T> filtro = get_PA_Butter<T> (img.width(), img.height(), wc,
-			orden);
+	CImg<T> filtro = get_PA_Butter<T> (img.width(), img.height(), wc, orden);
 	return filtro.normalize(gl, gh);
 }
 template<class T>
@@ -294,14 +313,14 @@ CImg<T> to_log(CImg<T> &img) {
 		}
 	return img;
 }
-template <class T>
+template<class T>
 CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
 	/* Retorna la imagen con filtrado Homomorfico con el filtro pasado
 	 * El filtro debe estar diseñado centrado,
 	 * y ser de tipo homomorfico: get_homomorfico(...)
 	 * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
 	 * */
-	CImgList<T> tdf = to_log <double> (img).get_FFT();
+	CImgList<T> tdf = to_log<double> (img).get_FFT();
 	filtro.shift(filtro.width() / 2, filtro.height() / 2, 0, 0, 2);
 	cimg_forXY( filtro, x, y )
 		{
@@ -311,3 +330,21 @@ CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
 	return tdf.get_FFT(true)[0].exp();
 }
 
+/*################## FILTRADO ALTA POTENCIA #############################*/
+template<class T>
+CImg<T> aplicar_PA_alta_potencia(CImg<T> imagen, float varianza = 1.0, float A =
+		2.0) {
+	/*aplica un filtro de alta potencia usando una mascara gaussiana
+	 * (A-1)+gaussiano(varianza)... USAR TIPO DE DATOS float para que no explote
+	 * */
+	CImg<T> h_pa = gaussian_mask(imagen.width(), varianza); //obtengo el filtro pasa altos gaussiano espacial
+	CImgList<T> H_PA = h_pa.get_FFT(); //obtengo el filtro en frecuencia
+	CImgList<T> H_AP(H_PA[0], H_PA[1]); // filtro de alta pontencia frecuencial... falta meterlo lod el A-1
+	cimg_forXY(H_PA[0], x, y)
+		{
+			H_AP[0](x, y) = (A - 1.0) + H_PA[0](x, y); //parte real
+			H_AP[1](x, y) = (A - 1.0) + H_PA[1](x, y); //parte imaginaria
+		}
+	//ya tengo el filtro de alta potencia
+	return filtrar_complejo<T> (imagen, H_AP);
+}
