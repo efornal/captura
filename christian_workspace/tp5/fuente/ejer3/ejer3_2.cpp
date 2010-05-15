@@ -35,19 +35,19 @@ int main(int argc, char **argv) {
 
 	CImg<float> filtrada = aplicar_PB_ideal<float> (img, radio);
 	filtrada.display(disp1);
-	disp1.set_title("imagen filtrada");
+	disp1.set_title("imagen filtrada con filtro ideal");
 	H.display(disp2);
-	disp2.set_title("H(u,v) es es filtroq ue se aplica - esto es frec");
+	disp2.set_title("H(u,v) es es filtro que se aplica - esto es frec");
 	while (!disp2.is_closed()) {
 		disp2.wait();
 		circulo_centrado(H.width() / 2, H.height() / 2, H, radio
 				+ disp2.wheel(), 0); //vario radio.
 		filtrada = aplicar_PB_ideal<float> (img, radio + disp2.wheel());
 		filtrada.display(disp1);
-		disp1.set_title("imagen filtrada");
+		disp1.set_title("imagen filtrada con filtro ideal");
 
 		H.display(disp2);
-		disp2.set_title("H(u,v) es es filtroq ue se aplica - esto es frec");
+		disp2.set_title("H(u,v) es es filtro que se aplica - esto es frec");
 
 		cout << "Frec. corte filtro ideal: " << radio+disp2.wheel() << endl;
 	}
