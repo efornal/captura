@@ -14,9 +14,11 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
+/*
 #include "../lib5/lib5.h"
 #include "../lib5/figuras.h"
 #include "../../../tp3/fuente/lib3/mask.h"
+*/
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -30,7 +32,7 @@ int main(int argc, char **argv) {
 	img.normalize(0, 255);
 	CImgDisplay disporiginal(img, "imagen original");
 
-	double varianza = 0.01;
+	double varianza = 0.1;
 //fixme: porque esto no da igual al filtro que se aplica en frecuencia en el ejercicio 5?
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
@@ -40,7 +42,6 @@ int main(int argc, char **argv) {
 	H.display(disp2);
 	disp2.set_title("Filtro que se aplica");
 	while (!disp1.is_closed()) {
-		disp1.wait();
 		if (disp1.is_keyARROWUP()) {
 			varianza+=0.01;
 		} else if (disp1.is_keyARROWDOWN()) {
