@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	CImg<float> H(img.width(), img.height(), 1, 1);
 
 	CImgDisplay disp1, disp2;
-	CImg<float> filtrada = aplicar_Butter_PA<float> (img, H, frec_corte, orden);
+	CImg<float> filtrada = aplicar_PA_Butter<float> (img, H, frec_corte, orden);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	H.display(disp2);
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 		} else if (disp1.is_keyARROWDOWN()) {
 			orden--;
 		}
-		filtrada = aplicar_Butter_PA<float> (img, H, frec_corte, orden);
+		filtrada = aplicar_PA_Butter<float> (img, H, frec_corte, orden);
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
 

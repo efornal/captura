@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
-	CImg<double> filtrada = aplicar_Gaussiano_PA_def_frec<double> (img, H, varianza);
+	CImg<double> filtrada = aplicar_PA_Gaussiano<double> (img, H, varianza);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	H.display(disp2);
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 		} else if (disp1.is_keyARROWDOWN()) {
 			varianza--;
 		}
-		filtrada = aplicar_Gaussiano_PA_def_frec<double> (img, H, varianza);
+		filtrada = aplicar_PA_Gaussiano<double> (img, H, varianza);
 
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
