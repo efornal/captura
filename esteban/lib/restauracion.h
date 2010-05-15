@@ -75,3 +75,61 @@ void gen_ruido_pimienta( CImg<double> &img, double sigma ) {
         if ( ruido(x,y) ) img(x,y) = 0;
     }
 }
+
+//====================================================
+//                filtros espaciales 
+//====================================================
+
+/**
+ * retorna un filtro espacial de media geometrica
+ * @size Tamanio de la mascara
+ * formula:
+ *   f'(x,y) = [ prod{ g(x,y) } ] ^ (1/mn)
+ */
+CImg<double> filtrar_geometrica( CImg<double> img, int size=3) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    double prod;
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        prod = 1.0;
+        
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        cimg_forXY(mask,s,t) {
+            prod *= mask(s,t);
+        }
+        filtrada(x,y) = pow( prod, (1.0/(size*size)) );
+    }
+
+    return filtrada;
+}
+
+/**
+ * retorna un filtro espacial de media contra-armonica
+ * @q Orden del filtro
+ * @size Tamanio de la mascara
+ * formula:
+ *              sum{ g(x,y)^q+1 }
+ *   f'(x,y) =  -----------------
+ *               sum{ g(x,y)^q }
+ */
+CImg<double> filtrar_contra_armonica( CImg<double> img, int q=0, int size=3 ) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    double suma_qn, suma_qd; // suma q numerador / denominador
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        suma_qn = 0.0;
+        suma_qd = 0.0;
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        cimg_forXY(mask,s,t) {
+            suma_qn += pow( mask(s,t), q+1 );
+            suma_qd += pow( mask(s,t), q );
+        }
+        filtrada(x,y) = suma_qn / suma_qd;
+    }
+
+    return filtrada;
+}

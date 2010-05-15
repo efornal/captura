@@ -278,24 +278,70 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- Generacionde ruido  --------------- \\
 
-    void ruido_gaussiano( double sigma ) {
+    CImg<double> ruido_gaussiano( double sigma ) {
         gen_ruido_gaussiano( *this, sigma );
+        return *this;
     }
 
-    void ruido_uniforme( double sigma ) {
+    CImg<double> get_ruido_gaussiano( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_gaussiano( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_uniforme( double sigma ) {
         gen_ruido_uniforme( *this, sigma );
+        return *this;
     }
 
-    void ruido_sal_y_pimienta( double sigma ) {
+    CImg<double> get_ruido_uniforme( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_uniforme( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_sal_y_pimienta( double sigma ) {
         gen_ruido_sal_y_pimienta( *this, sigma );
+        return *this;
     }
 
-    void ruido_sal( double sigma ) {
+    CImg<double> get_ruido_sal_y_pimienta( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_sal_y_pimienta( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_sal( double sigma ) {
         gen_ruido_sal( *this, sigma );
+        return *this;
     }
 
-    void ruido_pimienta( double sigma ) {
+    CImg<double> get_ruido_sal( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_sal( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_pimienta( double sigma ) {
         gen_ruido_pimienta( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_pimienta( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_pimienta( img, sigma );
+        return img;
+    }
+
+    // ==================================================== \\
+    // ------ filtrado espacial tema:restauracion  -------- \\
+
+    CImg<double> get_filtrar_geometrica( int size=3 ) {
+        return filtrar_geometrica( *this, size );
+    }
+
+    CImg<double> get_filtrar_contra_armonica( int q=0, int size=3 ) {
+        return filtrar_contra_armonica( *this, size );
     }
 
 };
