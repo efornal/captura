@@ -289,8 +289,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return img;
     }
 
-    void ruido_uniforme( double sigma ) {
+    CImg<double> ruido_uniforme( double sigma ) {
         gen_ruido_uniforme( *this, sigma );
+        return *this;
     }
 
     CImg<double> get_ruido_uniforme( double sigma ) {
@@ -299,8 +300,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return *this;
     }
 
-    void ruido_sal_y_pimienta( double sigma ) {
+    CImg<double> ruido_sal_y_pimienta( double sigma ) {
         gen_ruido_sal_y_pimienta( *this, sigma );
+        return *this;
     }
 
     CImg<double> get_ruido_sal_y_pimienta( double sigma ) {
@@ -309,8 +311,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return *this;
     }
 
-    void ruido_sal( double sigma ) {
+    CImg<double> ruido_sal( double sigma ) {
         gen_ruido_sal( *this, sigma );
+        return *this;
     }
 
     CImg<double> get_ruido_sal( double sigma ) {
@@ -319,8 +322,9 @@ template<typename T> struct CHImg : public CImg<T> {
         return *this;
     }
 
-    void ruido_pimienta( double sigma ) {
+    CImg<double> ruido_pimienta( double sigma ) {
         gen_ruido_pimienta( *this, sigma );
+        return *this;
     }
 
     CImg<double> get_ruido_pimienta( double sigma ) {
