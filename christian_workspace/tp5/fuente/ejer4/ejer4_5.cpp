@@ -15,8 +15,8 @@ extern "C" {
 #include <iostream>
 #include <CImg.h>
 #include "../lib5/lib5.h"
-#include "../lib5/figuras.h"
-#include "../../../tp3/fuente/lib3/mask.h"
+//#include "../lib5/figuras.h"
+//#include "../../../tp3/fuente/lib3/mask.h"
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -47,7 +47,8 @@ int main(int argc, char **argv) {
 			varianza--;
 		}
 		filtrada = aplicar_Gaussiano_PA_def_frec<double> (img, H, varianza);
-		filtrada.display(disp1);//fixme: no noto diferencia cuando aplico el filtro!!!??
+
+		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
 
 		H.display(disp2);
