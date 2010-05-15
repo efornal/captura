@@ -337,11 +337,21 @@ template<typename T> struct CHImg : public CImg<T> {
     // ------ filtrado espacial tema:restauracion  -------- \\
 
     CImg<double> get_filtrar_geometrica( int size=3 ) {
-        return filtrar_geometrica( *this, size );
+        return filtrado_geometrica( *this, size );
+    }
+
+    CImg<double> filtrar_geometrica( int size=3 ) {
+        *this = filtrado_geometrica( *this, size );
+        return *this;
     }
 
     CImg<double> get_filtrar_contra_armonica( int q=0, int size=3 ) {
-        return filtrar_contra_armonica( *this, size );
+        return filtrado_contra_armonica( *this, size );
+    }
+
+    CImg<double> filtrar_contra_armonica( int q=0, int size=3 ) {
+        *this = filtrado_contra_armonica( *this, size );
+        return *this;
     }
 
     CImg<double> filtrar_mediana( int size=3 ) {

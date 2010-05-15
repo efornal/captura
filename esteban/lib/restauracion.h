@@ -86,7 +86,7 @@ void gen_ruido_pimienta( CImg<double> &img, double sigma ) {
  * formula:
  *   f'(x,y) = [ prod{ g(x,y) } ] ^ (1/mn)
  */
-CImg<double> filtrar_geometrica( CImg<double> img, int size=3) {
+CImg<double> filtrado_geometrica( CImg<double> img, int size=3) {
     CImg<double> mask (size,size,1,1,0);
     CImg<double> filtrada (img);
     double prod;
@@ -114,7 +114,7 @@ CImg<double> filtrar_geometrica( CImg<double> img, int size=3) {
  *   f'(x,y) =  -----------------
  *               sum{ g(x,y)^q }
  */
-CImg<double> filtrar_contra_armonica( CImg<double> img, int q=0, int size=3 ) {
+CImg<double> filtrado_contra_armonica( CImg<double> img, int q=0, int size=3 ) {
     CImg<double> mask (size,size,1,1,0);
     CImg<double> filtrada (img);
     double suma_qn, suma_qd; // suma q numerador / denominador

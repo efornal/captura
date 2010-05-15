@@ -36,8 +36,8 @@ int main( int argc, char **argv ) {
     img.channel(0);
     img.display(disp);
 
-    img.ruido_sal_y_pimienta( sigma ).display(disp3);
-    img.ruido_gaussiano( sigma ).display(disp2);
+    img.ruido_sal_y_pimienta( sigma ).display(disp2);
+    img.ruido_gaussiano( sigma ).display(disp3);
 
 
     img.get_filtrar_geometrica( n ).display(disp4);
@@ -45,8 +45,8 @@ int main( int argc, char **argv ) {
     img.get_filtrar_contra_armonica( q, n ).display(disp5);
     
     disp.set_title("originial");
-    disp2.set_title("original con ruido gaussiano");
-    disp3.set_title("original con ruido gaussiano + sal y pimienta");
+    disp2.set_title("original con ruido sal y pimienta");
+    disp3.set_title("original con ruido sal y pimienta + ruido gaussiano");
     disp4.set_title("filtrado geometrico");
     disp5.set_title("filtrado contra armonica");
 
