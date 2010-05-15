@@ -22,6 +22,7 @@ using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
+	//fixme: esto no funciona! y falta hacer el de alta enfasis!
 	const char
 			*filename =
 					cimg_option( "-f", "../../imagenes/camaleon.tif", "ruta archivo imagen" );

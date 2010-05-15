@@ -334,6 +334,7 @@ CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
 template<class T>
 CImg<T> aplicar_PA_alta_potencia(CImg<T> imagen, float varianza = 1.0, float A =
 		2.0) {
+	//fixme: esto no funciona!ver
 	/*aplica un filtro de alta potencia usando una mascara gaussiana
 	 * (A-1)+gaussiano(varianza)... USAR TIPO DE DATOS float para que no explote
 	 * */
