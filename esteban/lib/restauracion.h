@@ -133,3 +133,23 @@ CImg<double> filtrar_contra_armonica( CImg<double> img, int q=0, int size=3 ) {
 
     return filtrada;
 }
+
+
+/**
+ * retorna un filtro espacial de orden, mediana
+ * @size Tamanio de la mascara
+ * formula:
+ *   f'(x,y) =  mediana { g(x,y) }
+ */
+CImg<double> filtrado_mediana( CImg<double> img, int size=3 ) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        filtrada(x,y) = mask.median();
+    }
+
+    return filtrada;
+}

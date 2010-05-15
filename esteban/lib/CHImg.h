@@ -344,4 +344,14 @@ template<typename T> struct CHImg : public CImg<T> {
         return filtrar_contra_armonica( *this, size );
     }
 
+    CImg<double> filtrar_mediana( int size=3 ) {
+        *this =  filtrado_mediana( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_mediana( int size=3 ) {
+        return filtrado_mediana( *this, size );
+    }
+
+
 };
