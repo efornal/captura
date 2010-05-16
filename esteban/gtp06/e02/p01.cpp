@@ -19,6 +19,7 @@ int main( int argc, char **argv ) {
     CImgDisplay disp, disp2, disp3, disp4;
     
     CHImg<double> img ( filename ); //imagen gris
+    img.channel(0);
     img.display(disp);
 
     img.ruido_gaussiano( sigma ).display(disp2);
