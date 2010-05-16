@@ -349,3 +349,24 @@ CImg<T> aplicar_PA_alta_potencia(CImg<T> imagen, float varianza = 1.0, float A =
 	//ya tengo el filtro de alta potencia
 	return filtrar_complejo<T> (imagen, H_AP);
 }
+/*################## FILTRADO Enfasis de alta frecuencia #############################*/
+
+template<class T>
+CImg<T> aplicar_PA_enfasis_AF(CImg<T> imagen, float varianza = 1.0, float a =
+		0.0, float b=1.0) {
+	/*aplica un filtro de alta potencia:
+	 * 			Heaf=a+b*HPA
+	 *  con varianza 1.0 del fitlro gaussiano pasa altos
+	 * a=0.0 por defecto y b=1.0*/
+	CImg<T> h_pa = gaussian_mask(imagen.width(), varianza); //obtengo el filtro pasa altos gaussiano espacial
+	//fixme: debo normalizarlo entre 0 y 1? aca?
+	CImgList<T> H_PA = h_pa.get_FFT(); //obtengo el filtro en frecuencia
+	CImgList<T> H_EAF(H_PA[0], H_PA[1]); // filtro de alta pontencia frecuencial... falta meterlo lod el A-1
+	cimg_forXY(H_PA[0], x, y)
+		{
+			H_EAF[0](x, y) = a+b*H_PA[0](x, y); //parte real
+			H_EAF[1](x, y) = a+b*H_PA[1](x, y); //parte imaginaria
+		}
+	//ya tengo el filtro de alta potencia
+	return filtrar_complejo<T> (imagen, H_EAF);
+}
