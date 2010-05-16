@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 //fixme: porque esto no da igual al filtro que se aplica en frecuencia en el ejercicio 5?
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
-	CImg<double> filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
+	CImg<double> filtrada = aplicar_PB_Gaussiano<double> (img, H, varianza);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	H.display(disp2);
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 		} else if (disp1.is_keyARROWDOWN()) {
 			varianza-=0.01;
 		}
-		filtrada = aplicar_Gaussiano_PB<double> (img, H, varianza);
+		filtrada = aplicar_PB_Gaussiano<double> (img, H, varianza);
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
 
