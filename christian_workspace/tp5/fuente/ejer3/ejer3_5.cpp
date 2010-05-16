@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
 	CImg<double> H(img.width(), img.height(), 1, 1);
 	CImgDisplay disp1, disp2;
-	CImg<double> filtrada = aplicar_Gaussiano_PB_desdetioempo<double> (img, H, varianza);
+	CImg<double> filtrada = aplicar_PB_Gaussiano<double> (img, H, varianza);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada con filtro gaussiano en frecuencia");
 	H.display(disp2);
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 		} else if (disp1.is_keyARROWDOWN()) {
 			varianza--;
 		}
-		filtrada = aplicar_Gaussiano_PB_desdetioempo<double> (img, H, varianza);
+		filtrada = aplicar_PB_Gaussiano<double> (img, H, varianza);
 
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada con filtro gaussiano en frecuencia");

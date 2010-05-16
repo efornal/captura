@@ -176,7 +176,7 @@ CImg<T> aplicar_PB_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 
 //FILTROS DEFINIDOS EN TIEMPO Y CONVERTIDOS A FRECUENCIA
 template<class T>
-CImg<T> aplicar_Gaussiano_PB_desdetioempo(CImg<T> imagen, CImg<T> &H,
+CImg<T> aplicar_Gaussiano_PB_desdetiempo(CImg<T> imagen, CImg<T> &H,
 		float sigma = 1.0) {
 	//fixme: esta funcion no anda!
 	/*aplica un filtro pasa Bajos Gaussiano con varianza=sigma desde tiempo convierte a frecuencia... so
