@@ -1,17 +1,24 @@
-#include <color.h>
-
 #define cimg_use_fftw3 1
+
 #ifdef cimg_use_fftw3
 extern "C"{
     #include "fftw3.h"
 }
 #endif
 
+#ifndef pdi_restauracion
+  #include "restauracion.h"
+#endif
+#ifndef pdi_espectro
+  #include "espectro.h"
+#endif
+#ifndef pdi_color
+  #include "color.h"
+#endif
 
 #include <CImg.h>
 
 using namespace cimg_library;
-
 
 template<typename T> struct CHImg : public CImg<T> {
 
@@ -216,27 +223,158 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // --------------- espectro frecuencia  ---------------- \\
 
-    CImg<double> get_fft_modulo( bool centrada=false ) {
+    CImg<double> get_a_solo_fase( ) {
         CImg<double> img = *this;
-        CImg<double> modulo( img.width(), img.height(), 1, 1, 0 );
-        CImgList<double> tdf;
-        
-        tdf = img.get_FFT( false );  // lista: parte real e imag
-
-        for (int i=0; i<img.width(); i++){
-            for (int j=0; j<img.height(); j++) {
-                modulo(i,j) = sqrt( pow( tdf[0](i,j), 2.0 ) +
-                                    pow( tdf[1](i,j), 2.0 ) ) +
-                    0.000001;
-            }
-        }
-
-        if ( centrada ) { 
-            //parametros de shift: x, y , z, v, border_condition
-            modulo.shift( modulo.width()/2, modulo.height()/2, 0, 0, 2 );
-        }
-
-        return modulo;
+        return a_solo_fase( img );
     }
+
+    CImg<double> get_a_solo_modulo( ) {
+        CImg<double> img = *this;
+        return a_solo_modulo( img );
+    }
+
+    CImg<double> get_a_solo_modulo_log( ) {
+        CImg<double> img = *this;
+        return a_solo_modulo_log( img );
+    }
+
+    CImg<double> get_fft_fase( ) {
+        CImg<double> img = *this;
+        return fft_fase( img );
+    }
+
+    CImg<double> get_fft_modulo( bool centrada=true ) {
+        CImg<double> img = *this;
+        return fft_modulo( img, centrada );
+    }
+
+    CImg<double> get_fft_modulo_log( bool centrada=true ) {
+        CImg<double> img = *this;
+        return fft_modulo_log( img, centrada );
+    }
+
+    CImg<double> get_a_fase_definida( CImg<double> fase ) {
+        CImg<double> img = *this;
+        return a_fase_definida( img, fase );
+    }
+
+    CImg<double> get_filtrada( CImg<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrar( img, filtro );
+    }
+    CImg<double> get_filtrada_complejo( CImgList<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrar_complejo( img, filtro );
+    }
+
+    // ==================================================== \\
+    // --------------- Filtrado Homomorfico --------------- \\
+
+    CImg<double> get_filtrado_homomorfico( CImg<double> filtro ) {
+        CImg<double> img = *this;
+        return filtrado_homomorfico( img, filtro );
+    }
+
+    // ==================================================== \\
+    // --------------- Generacionde ruido  --------------- \\
+
+    CImg<double> ruido_gaussiano( double sigma ) {
+        gen_ruido_gaussiano( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_gaussiano( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_gaussiano( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_uniforme( double sigma ) {
+        gen_ruido_uniforme( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_uniforme( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_uniforme( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_sal_y_pimienta( double sigma ) {
+        gen_ruido_sal_y_pimienta( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_sal_y_pimienta( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_sal_y_pimienta( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_sal( double sigma ) {
+        gen_ruido_sal( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_sal( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_sal( img, sigma );
+        return img;
+    }
+
+    CImg<double> ruido_pimienta( double sigma ) {
+        gen_ruido_pimienta( *this, sigma );
+        return *this;
+    }
+
+    CImg<double> get_ruido_pimienta( double sigma ) {
+        CImg<double> img = *this;
+        gen_ruido_pimienta( img, sigma );
+        return img;
+    }
+
+    // ==================================================== \\
+    // ------ filtrado espacial tema:restauracion  -------- \\
+
+    CImg<double> get_filtrar_geometrica( int size=3 ) {
+        return filtrado_geometrica( *this, size );
+    }
+
+    CImg<double> filtrar_geometrica( int size=3 ) {
+        *this = filtrado_geometrica( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_contra_armonica( int q=0, int size=3 ) {
+        return filtrado_contra_armonica( *this, size );
+    }
+
+    CImg<double> filtrar_contra_armonica( int q=0, int size=3 ) {
+        *this = filtrado_contra_armonica( *this, size );
+        return *this;
+    }
+
+    CImg<double> filtrar_mediana( int size=3 ) {
+        *this =  filtrado_mediana( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_mediana( int size=3 ) {
+        return filtrado_mediana( *this, size );
+    }
+
+    CImg<double> filtrar_punto_medio( int size=3 ) {
+        *this =  filtrado_punto_medio( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_punto_medio( int size=3 ) {
+        return filtrado_punto_medio( *this, size );
+    }
+
+    CImg<double> get_filtrar_alfa_recortado( double d=0, int size=3 ) {
+        return filtrado_alfa_recortado( *this, d, size );
+    }
+
 
 };

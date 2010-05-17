@@ -7,14 +7,14 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/mask.h"
+#include "../lib3/mask.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	//filtrado por mascara difusa : f(x,y)- PB( f(x,y) )
-	//FIXME: que tipo de filtro pasa bajos se debe usar en mascara difusa? el que nos sea conveniente..
+
 	CImg<float> imagenc("../../imagenes/camaleon.tif");
 	CImg<float> imagen1("../../imagenes/huang1.jpg");
 	CImg<float> imagenh("../../imagenes/hand.tif");
@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
 					generar_mascara3x3_no_simetrica<float> ()),
 					fil_masc_difusa <float> (imagenh, generar_mascara3x3_no_simetrica<
 							float> ()));
+	//fixme: las imagenes salen grisaseas.. que habria que sumarle un offset?
 	lista1.display(disp2);
 	disp2.set_title("filtro de mascara difusa - f(x,y)- PB(f(x,y))");
 	while (!disp1.is_closed()) {

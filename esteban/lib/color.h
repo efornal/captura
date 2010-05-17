@@ -1,3 +1,5 @@
+#define pdi_color 1
+
 #include <CImg.h>
 #include <string>
 #include <vector>

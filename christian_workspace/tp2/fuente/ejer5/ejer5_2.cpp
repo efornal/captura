@@ -12,8 +12,8 @@
  * */
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib.h"
-#include "../lib/operadores_logicos.h"
+#include "../lib2/lut.h"
+#include "../lib2/operadores_logicos.h"
 
 using namespace std;
 using namespace cimg_library;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib.h"
+#include "../lib2/lut.h"
+//#include "../lib2/op_aritmeticos.h"
 
 using namespace std;
 using namespace cimg_library;
@@ -31,10 +32,10 @@ int main() {
 	negativo(imagenblanca).display(display1);
 	display1.set_title("+negativo (im1)");
 	sleep(3);
-	sumar(imagenblanca, negativo(imagenblanca), true).display(display1);
+	sumar <unsigned char> (imagenblanca, negativo(imagenblanca), true).display(display1);
 	display1.set_title("= (suma normalizada)");
 	sleep(3);
-	sumar(imagenblanca, negativo(imagenblanca), false).display(display1);
+	sumar <unsigned char> (imagenblanca, negativo(imagenblanca), false).display(display1);
 	display1.set_title("= (suma no normalizada)");
 	while (!display1.is_closed()) {
 	}
@@ -42,33 +43,33 @@ int main() {
 	im1.load("../../imagenes/letras1.tif"); //cargo imagenes
 	im2.load("../../imagenes/letras2.tif");
 
-	CImgList<float> lista1(im1, im2, sumar<CImg<float> > (im1, im2, true)); //armo una lista con las imagenes y la suma de las mismas
+	CImgList<float> lista1(im1, im2, sumar <float> (im1, im2, true)); //armo una lista con las imagenes y la suma de las mismas
 	cout << "lista 1 (normalizada la suma): " << lista1.print() << endl;
 	CImgDisplay disp1(lista1,
 			"suma de imagenes letras1 y letras 2 - normalizado"); //muestreo en un display
 
 
-	CImgList<float> lista2(im1, im2, sumar<CImg<float> > (im1, im2, false));
+	CImgList <float> lista2(im1, im2, sumar<float> (im1, im2, false));
 	CImgDisplay disp2(lista2,
 			"suma de imagenes letras1 y letras 2 - NO normalizado"); //muestreo en un display
 	cout << "lista 2: (NO normalizada la suma)" << lista2.print() << endl;
 
-	CImgList<float> lista3(im1, negativo(im1), sumar<CImg<float> > (im1,
+	CImgList<float> lista3(im1, negativo(im1), sumar<float> (im1,
 			negativo(im1), true));
 	CImgDisplay disp3(lista3,
 			"suma de imagenes letras 1 y su negativo - normalizado"); //muestreo en un display
 	cout << "lista 3: (Normalizada la suma) " << lista3.print() << endl;
 
-	CImgList<float> lista4(im1, negativo(im1), sumar<CImg<float> > (im1,
+	CImgList<float> lista4(im1, negativo(im1), sumar<float>(im1,
 			negativo(im1), false));
 	CImgDisplay disp4(lista4,
 			"suma de imagenes letras1 y su negativo - NO normalizado"); //muestreo en un display
 	cout << "lista 4: (no normalizada la suma" << lista4.print() << endl;
 
-	CImgList<float> lista5(im1, im1, sumar<CImg<float> > (im1, im1, false));
+	CImgList<float> lista5(im1, im1, sumar<float> (im1, im1, false));
 	CImgDisplay disp5(lista5, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 
-	CImgList<float> lista6(im1, im1, sumar<CImg<float> > (im1, im1, false));
+	CImgList<float> lista6(im1, im1, sumar<float> (im1, im1, false));
 	CImgDisplay disp6(lista6, "suma de imagenes con si misma - NO normalizado"); //muestreo en un display
 
 	while (!disp1.is_closed()) {

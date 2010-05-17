@@ -94,18 +94,82 @@ namespace masks {
        *  0  a  0
        * FIXME : no funciona para valores diferentes de 3x3 !
        *  
-     */
-     CImg<double> gaussiana( int x=3, int y=3, double var=1 ) {
-         CImg<double> mask( x, y, 1, 1, 1); 
-         double pi = 4.0*atan(1.0); 
-         double c = 1.0/sqrt(2.0*pi);
-         double den = 2.0 * pow(var,2);
-         cimg_forXY(mask, x, y){
-             mask(x,y) =  exp( -(pow(x-1,2) + pow(y-1,2)) / den );
-         }
+       */
+    CImg<double> gaussiana( int x=3, int y=3, double var=1 ) {
+        CImg<double> mask( x, y, 1, 1, 1); 
+        double pi = 4.0*atan(1.0); 
+        double c = 1.0/sqrt(2.0*pi);
+        double den = 2.0 * pow(var,2);
+        cimg_forXY(mask, x, y){
+            mask(x,y) =  exp( -(pow(x-1,2) + pow(y-1,2)) / den );
+        }
         return ( mask *= c );
     }
+
+    /**
+     * retorna una mascara gausseana (de la lib de catedra)
+     * formula:
+     *   mask = 1 / (2*pi*s^2) * exp(-(x^2+y^2)/(2*s^2))     s=sigma
+     */
+    CImg<double> gaussian(int size, double sigma) {
+        int ini,fin;
+        double pi=3.14159;
+        double aux;
+        CImg<double> mask(size,size);
+        int x,y;
+        ini=(int)(-1)*(size-1)/2;
+        fin=(int)(size-1)/2;
+        for (x=ini;x<fin+1;x++){
+            for (y=ini;y<fin+1;y++){
+                aux=((double)(x*x)+(double)y*y)/(2*sigma*sigma);
+                mask(x-ini,y-ini)=1/(2*pi*sigma*sigma)*exp(-1*aux);
+            }
+        }
+        CImg<> stats=mask.get_stats();
+        for (x=0;x<size;x++){
+            for (y=0;y<size;y++){
+                if (mask(x,y)<10e-5*stats(0,2)){
+                    mask(x,y)=0;
+                }
+            }
+        }
+        mask/=mask.sum();
+        return mask;
+    }
+
     // =============== filtros PA: acentuados ============
+
+    /**
+     * retorna una mascara gausseana (de la lib de catedra)
+     * con forma de pasa altos
+     *  formula: 1/sqrt(2pi) * e^-(x^2 + y^2)/2var^2
+     * dada la formula, con +-x = x^2 , e y+- = y^2
+     */
+    CImg<double> pa_gaussian(int size, double sigma) {
+        int ini,fin;
+        double pi=3.14159;
+        double aux;
+        CImg<double> mask(size,size);
+        int x,y;
+        ini=(int)(-1)*(size-1)/2;
+        fin=(int)(size-1)/2;
+        for (x=ini;x<fin+1;x++){
+            for (y=ini;y<fin+1;y++){
+                aux=((double)(x*x)+(double)y*y)/(2*sigma*sigma);
+                mask(x-ini,y-ini)= 1 - 1/(2*pi*sigma*sigma)*exp(-1*aux);
+            }
+        }
+        CImg<> stats=mask.get_stats();
+        for (x=0;x<size;x++){
+            for (y=0;y<size;y++){
+                if (mask(x,y)<10e-5*stats(0,2)){
+                    mask(x,y)=0;
+                }
+            }
+        }
+        mask/=mask.sum();
+        return mask;
+    }
     
     /**
        retorna filtro pasa altos con suma 1

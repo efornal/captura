@@ -14,8 +14,10 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib5.h"
-#include "../../../tp4/fuente/lib/CPDSI_functions.h"
+#include "../lib5/lib5.h"
+#include "../lib5/figuras.h"
+#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
+
 
 using namespace std;
 using namespace cimg_library;
@@ -88,6 +90,12 @@ int main(int argc, char **argv) {
 			angulo++;
 
 		}
+		if (disp0.is_keyY()){
+			dimy++;
+		}
+		if (disp0.is_keyH()){
+			dimy--;
+		}
 		if (c) { //circulo
 			circulo_centrado(disp0.mouse_x(), disp0.mouse_y(), imagen0, radio
 					+ disp0.wheel(), angulo);
@@ -97,8 +105,7 @@ int main(int argc, char **argv) {
 		} else if (v) { //linea vertical
 			linea_vertical(imagen0, disp0.mouse_x(), angulo);
 		} else if (r) { //rectangulo
-			cuadrado_centrado(imagen0, dimx + disp0.wheel(), dimy
-					+ disp0.wheel(), disp0.mouse_x(), disp0.mouse_y(), angulo);
+			cuadrado_centrado(imagen0, dimx + disp0.wheel(), dimy, disp0.mouse_x(), disp0.mouse_y(), angulo);
 			cout << "Cuadrado: " << dimx + disp0.wheel() << endl;
 		}
 		lista0.clear();

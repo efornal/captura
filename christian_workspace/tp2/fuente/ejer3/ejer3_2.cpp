@@ -7,7 +7,8 @@
 
 #include <iostream>
 #include <CImg.h>
-#include "../lib/lib.h"
+#include "../lib2/lut.h"
+//#include "../lib2/op_aritmeticos.h"
 
 using namespace std;
 using namespace cimg_library;
@@ -57,7 +58,7 @@ int main(int argc, char **argv) {
 	disp3.set_title("imagen sucia 10");
 	CImg<double> reconstruida = imagen_sucia[0];
 	for (int i = 1; i < cantidad_cuadros; i++) {
-		reconstruida = sumar<CImg<double> > (reconstruida, imagen_sucia[i], false); //false para que no divida por 2
+		reconstruida = sumar<double> (reconstruida, imagen_sucia[i], false); //false para que no divida por 2
 	}
 	reconstruida.display(disp2);
 	disp2.set_title("reconstruida con 60 cuadros");

@@ -9,7 +9,7 @@
 //http://usuarios.multimania.es/explorar/halfto/halfto.htm
 #include <CImg.h>
 #include <iostream>
-#include "med_ton.h"
+#include "../lib1/med_ton.h"
 
 using namespace cimg_library;
 using namespace std;

@@ -13,38 +13,45 @@ int main( int argc, char **argv ) {
                                         "ruta archivo imagen" );
 
     CImg<double> img ( filename ), 
-        img_r( img.width(), img.height(), 1, 3, 0 ),
-        img_g( img.width(), img.height(), 1, 3, 0 ),
-        img_b( img.width(), img.height(), 1, 3, 0 );
-    CImgDisplay disp, disp2, disp3, disp4;
+        original( "../../imagenes/chairs.jpg" ),
+        img_r( img.width(), img.height(), 1, 1, 0 ),
+        img_g( img.width(), img.height(), 1, 1, 0 ),
+        img_b( img.width(), img.height(), 1, 1, 0 ),
+        view_r( img.width(), img.height(), 1, 3, 0 ),
+        view_g( img.width(), img.height(), 1, 3, 0 ),
+        view_b( img.width(), img.height(), 1, 3, 0 );
+    CImgDisplay disp, disp2, disp3, disp4, disp5;
 
     img.get_resize(600,600).display(disp);
-    disp.set_title("original");
+    disp.set_title("original oscura");
 
     // separacion de canales
     cimg_forXY(img,x,y){
         img_r(x,y,0,0) = img(x,y,0,0);
-        img_g(x,y,0,1) = img(x,y,0,1);
-        img_b(x,y,0,2) = img(x,y,0,2);
+        img_g(x,y,0,0) = img(x,y,0,1);
+        img_b(x,y,0,0) = img(x,y,0,2);
     }
-/*
-    // lista canales rgb
-    CImgList<double> rgb ( img_r.get_resize(200,200),
-                           img_g.get_resize(200,200),
-                           img_b.get_resize(200,200) );
+
+    // Lista canales rgb TODO: no anda!!
+    CImgList<double> rgb ( view_r.get_resize(200,200),
+                               view_g.get_resize(200,200),
+                               view_b.get_resize(200,200) );
     rgb.display(disp2);
-    disp2.set_title("rojo - verde - azul (original)");
-*/
+    disp2.set_title("rojo - verde - azul (original oscura)");
+
     //equalizado x canal
-    img_r.equalize(0,255);
-    img_g.equalize(0,255);
-    img_b.equalize(0,255);
+    img_r.equalize(255);
+    img_g.equalize(255);
+    img_b.equalize(255);
 
     // rejunte canales
     cimg_forXY(img,x,y){
         img(x,y,0,0) = img_r(x,y,0,0);
-        img(x,y,0,1) = img_g(x,y,0,1);
-        img(x,y,0,2) = img_b(x,y,0,2);
+        img(x,y,0,1) = img_g(x,y,0,0);
+        img(x,y,0,2) = img_b(x,y,0,0);
+        view_r(x,y,0,0) = img(x,y,0,0);
+        view_g(x,y,0,1) = img(x,y,0,1);
+        view_b(x,y,0,2) = img(x,y,0,2);
     }
 
     //imagen equalizada
@@ -52,12 +59,15 @@ int main( int argc, char **argv ) {
     disp3.set_title("equalize R-G-B separados");
 
     // lista canales rgb equalizados
-/*    CImgList<double> rgb_eq ( img_r.get_resize(200,200),
-                              img_g.get_resize(200,200),
-                              img_b.get_resize(200,200) );
+    CImgList<double> rgb_eq ( view_r.get_resize(200,200),
+                              view_g.get_resize(200,200),
+                              view_b.get_resize(200,200) );
     rgb_eq.display(disp4);
     disp4.set_title("rojo - verde - azul (equalizada)");
-*/
+
+    original.get_resize(600,600).display(disp5);
+    disp5.set_title("original sin oscurecer");
+
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
     }

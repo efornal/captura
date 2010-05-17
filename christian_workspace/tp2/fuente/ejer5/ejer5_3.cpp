@@ -6,8 +6,8 @@
  */
 #include <iostream>
 #include <CImg.h>
-#include "../lib/operadores_relacionales.h"
-#include "../lib/lib.h"
+#include "../lib2/operadores_relacionales.h"
+#include "../lib2/lut.h"
 
 using namespace std;
 using namespace cimg_library;
