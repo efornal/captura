@@ -44,7 +44,9 @@ int main(int argc, char **argv) {
 	CImgDisplay disp(lista,
 			"original,gauss, uniform, saltpeeper, rician, poisson");
 
-	img.normalize(0, 255).get_histogram(255).display_graph(dispo, 3);
+	img.normalize(0,255).get_histogram(256).display_graph(dispo, 3);
+	//fixme: porque no me muestra en 0 en el histograma original? no deberia mostralro en 128?
+	//fixme: deberia ser 255 o 256 el get_histogram?
 	dispo.set_title("histograma original");
 
 	img_gaussian.get_histogram(256).display_graph(disp1_h, 3);
