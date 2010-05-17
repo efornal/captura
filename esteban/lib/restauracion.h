@@ -190,7 +190,8 @@ CImg<double> filtrado_punto_medio( CImg<double> img, int size=3 ) {
  *              lis = [a0,a1,...ak]    donde k = m*n 
  * luego lo ordena:
  *             liso = [1 2 3,...ak] 
- * luego calcula gr(x,y) = SUM{ liso(d), liso(d+1),.. liso(k) }
+ * luego calcula gr(x,y) = SUM{ liso(d), liso(d+1),.. liso(k-d) }
+ *  sumatoria desde d/2 hasta nm-d/2.
  * finalmente calcula f' como dice arriba
  */
 
