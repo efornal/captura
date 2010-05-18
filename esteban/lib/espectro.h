@@ -176,6 +176,12 @@ CImg<double> a_fase_definida( CImg<double> img, CImg<double> fase ) {
 /**
  * Retorna la imagen filtrada con el filtro pasado
  * El filtro debe estar diseñado centrado
+ * FIXME:  tdf[1](x,y) *= filtro(x,y); no estaria haciendo fase no lineal???
+ * rpta:
+ * (a+bi)(c+di) = ac+adi+bci+bdi^2 = (ac-bd)+(ad+bc)i      (i^2=-1 )
+ * Sea img=(a+bi) y el filtro=(c+0i)
+ * si fase = 0 => (a+bi)(c+0i) = (ac-b0)+(a0+bc)i = ac + bci
+ * por tanto, no esta mal distribuir la parte real del filtro.
  */
 CImg<double> filtrar( CImg<double> img, CImg<double> filtro ) {
 
@@ -195,6 +201,11 @@ CImg<double> filtrar( CImg<double> img, CImg<double> filtro ) {
  * Retorna la imagen filtrada con el filtro pasado complejo
  * El filtro debe estar diseñado centrado y 
  * FIXME: deberia estar el filtro shifteado???
+ * multiplicacion de complejos: deberia distribuir ??? 
+ * (a+bi)(c+di) = ac+adi+bci+bdi^2 = (ac-bd)+(ad+bc)i      (i^2=-1 )
+ * Sea img=(a+bi) y el filtro=(c+0i)
+ * => Real=(ac-bd)  Imag=(ad+bc)i 
+ * TODO: corregir  Real=(ac-bd)  Imag=(ad+bc)i 
  */
 CImg<double> filtrar_complejo( CImg<double> img, CImgList<double> filtro ) {
 

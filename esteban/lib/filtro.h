@@ -157,6 +157,26 @@ namespace filtro {
 
 
     // ============================================================
+    //                     Rechaza Banda
+    // ============================================================
+
+    /**
+     * retorna un filtro RB (rechaza banda) ideal
+     */
+    CImg<double> rb_ideal( int width=1, int height=1, int wc=1, int ancho=1 ) {
+
+        double rechazo[] = { 0.0, 0.0, 0.0};
+        double paso[]    = { 1.0, 1.0, 1.0};
+        float angulo = 0.0;
+        CImg<double> filtro ( width, height, 1, 1, 1 );
+
+        filtro.draw_circle( width/2, height/2, wc+ancho/2, rechazo );
+        filtro.draw_circle( width/2, height/2, wc-ancho/2, paso );
+
+        return filtro;
+    }
+
+    // ============================================================
     //                     Homomorfico
     // ============================================================
 
