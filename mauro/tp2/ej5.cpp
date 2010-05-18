@@ -54,6 +54,14 @@ void gen_gradiente_horizontal( CImg<T> & imagen, T min, T max ){
   }
 }
 
+void NOT( CImg<bool> & imagen ) {
+  unsigned x=0, y=0;
+  cimg_forXY( imagen, x, y ) {
+    imagen(x,y) = !imagen(x,y);
+  }
+}
+
+
 int main(int argc, char *argv[]) {
 
   if ( !argv[1] || !argv[2] ){
@@ -107,6 +115,30 @@ int main(int argc, char *argv[]) {
       imagen1_bw.display( d_imagen1 );
       imagen2_bw.display( d_imagen2 );
       gradiente_bw.display( d_gradiente );
+    }
+    if ( d_imagen1.is_keyN() ) {
+      NOT(imagen1_bw);
+      imagen1_bw.display( d_imagen1 );
+    }
+    if ( d_imagen2.is_keyN() ) {
+      NOT(imagen2_bw);
+      imagen2_bw.display( d_imagen2 );
+    }
+    if ( d_imagen1.is_keyO() ) {
+      imagen1_bw |= imagen2_bw.resize(imagen1.width(),imagen1.height());
+      imagen1_bw.display( d_imagen1 );
+    }
+    if ( d_imagen2.is_keyO() ) {
+      imagen2_bw |= imagen1_bw.resize(imagen2.width(),imagen2.height());
+      imagen2_bw.display( d_imagen2 );
+    }
+    if ( d_imagen1.is_keyA() ) {
+      imagen1_bw &= imagen2_bw.resize(imagen1.width(),imagen1.height());
+      imagen1_bw.display( d_imagen1 );
+    }
+    if ( d_imagen2.is_keyA() ) {
+      imagen2_bw &= imagen1_bw.resize(imagen2.width(),imagen2.height());
+      imagen2_bw.display( d_imagen2 );
     }
   }
 
