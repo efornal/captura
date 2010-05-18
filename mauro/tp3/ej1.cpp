@@ -32,26 +32,6 @@ int main(int argc, char *argv[]) {
   
   while ( !d_imgs.is_closed() && !d_hist.is_closed() ) {
     d_imgs.wait_all();
-    // if ( d_planos.is_keyARROWDOWN() ) {
-    //   plano_actual = max( plano_actual-1, 0 );
-    //   planos(plano_actual).display(d_planos);
-    // }
-    // if ( d_planos.is_keyARROWUP() ) {
-    //   plano_actual = min( plano_actual+1, 7 );
-    //   planos(plano_actual).display(d_planos);
-    // }
-    // if ( d_imagen.is_keyARROWDOWN() ) {
-    //   n_planos_recon = max( n_planos_recon-1, 1 );
-    //   recon = reconstruir( planos.get_images(8-n_planos_recon, 7) ).normalize(0,255);
-    //   cout<<"n planos: "<<n_planos_recon<<"; mse: "<<imagen.MSE(recon)<<endl;
-    //   recon.display(d_imagen);
-    // }
-    // if ( d_imagen.is_keyARROWUP() ) {
-    //   n_planos_recon = min( n_planos_recon+1, 8 );
-    //   recon = reconstruir( planos.get_images(8-n_planos_recon, 7) ).normalize(0,255);
-    //   cout<<"n planos: "<<n_planos_recon<<"; mse: "<<imagen.MSE(recon)<<endl;
-    //   recon.display(d_imagen);
-    // }
   }
   return 0;
 }
