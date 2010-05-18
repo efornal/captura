@@ -25,7 +25,7 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	const char *filename = cimg_option( "-f", "../../imagenes/avion.jpg",
 
-	                                        "ruta archivo imagen" );
+			"ruta archivo imagen" );
 	CImg<unsigned char> img(filename); //imagen original
 
 	//obtener imagen de solo magnitud considerando fase cero:
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	//obtener imagen de solo fase considerando magnitud1:
 	CImg<double> imagen_solo_fase = get_imagen_solo_fase<double> (img);
 	CImgDisplay disp0(img, "imagen original");
-	CImgDisplay disp1(imagen_solo_magnitud.log().normalize(0,255), "imagen solo magnitud"); //normalizo para que se vea algo...
+	CImgDisplay disp1(imagen_solo_magnitud.log(), "imagen solo magnitud"); //normalizo para que se vea algo...
 	CImgDisplay disp2(imagen_solo_fase, "image solo fase");
 	while (!disp2.is_closed()) {
 		disp2.wait();

@@ -82,6 +82,5 @@ int main(int argc, char **argv) {
 		magnitudFFT.display(disp2);
 		disp2.set_title("magnitud de la transforamda");
 	}
-	//fixme: commo interpretas las magnitudes en las imagenes!! ???
 	return 0;
 }

@@ -32,7 +32,6 @@ int main(int argc, char **argv) {
 	CImg<unsigned char> mod_0_centrada(300, 300, 1, 1);
 	CImg<unsigned char> mod_0_nocentrada(300, 300, 1, 1);
 	CImg<double> fase0(300, 300, 1, 1);
-	//FIXME: ver cuadrado y fases de las lineas.. estara bien?
 	float radio = 50.0;
 	int posx = imagen0.width() / 2;
 	int posy = imagen0.height() / 2;

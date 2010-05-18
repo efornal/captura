@@ -16,7 +16,7 @@ extern "C" {
 #include "../lib5/lib5.h"
 #include "../lib5/figuras.h"
 #include "../../../tp4/fuente/lib4/CPDSI_functions.h"
-
+#include <complex>
 using namespace std;
 using namespace cimg_library;
 
@@ -39,18 +39,16 @@ int main(int argc, char **argv) {
 			get_magnitud<double> (img_aeropuerto);
 
 	//construir imagen con fase de img y magnitud de img_aeropuerto.
-	CImgList<double> img_recons1 = img.get_FFT(); // fixme: no se como crearla vacia!!!
+	CImgList<double> img_recons1 = img.get_FFT(); // todo: habria que crearla vacia...
 
 	cimg_forXY(img_fase, x, y)
 		{
-			img_recons1[0](x, y) = img_magnitud_aeropuerto(x, y);
-			img_recons1[1](x, y) = img_fase(x, y);
+			img_recons1[0](x, y) = img_magnitud_aeropuerto(x, y)*cos(img_fase_aeropuerto(x,y));
+			img_recons1[1](x, y) = img_magnitud(x, y)*img_fase(x, y);
 		}
-	/*cimglist_apply(img_recons1, shift)
-	 (img.width() / 2, img.height() / 2, 0, 0, 2);
-	 */
+
 	CImg <double> imagenaa=img_recons1.get_FFT(true)[0];
-	imagenaa.log().normalize(0,255).display();
+	CImgDisplay dis(imagenaa, "");
 
 	while (!displis1.is_closed()) {
 		displis1.wait();

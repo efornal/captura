@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 	 CImgDisplay disp6(img_rotada_cortada_magnitud,
 	 "magnitud de la imagen rotada");
 	 */
-	/*fixme: conclusion!??? */
+	/*fixme: sera por la rasterizacion que aparece asi la transf de fourier?.. */
 	while (!disp2.is_closed()) {
 		disp2.wait();
 	}
