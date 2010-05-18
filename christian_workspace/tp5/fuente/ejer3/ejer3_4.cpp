@@ -40,13 +40,14 @@ int main(int argc, char **argv) {
 	//fixme: porque esto no da igual al filtro que se aplica en frecuencia en el ejercicio 5?
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
-	H.display(disp2);
+	H.shift(H.width()/2.0, H.height()/2.0, 0, 0, 2).display(disp2);
 	disp2.set_title("Filtro que se aplica");
 	while (!disp1.is_closed()) {
+		disp1.wait();
 		if (disp1.is_keyARROWUP()) {
-			varianza+=1.0;
+			varianza+=0.01;
 		} else if (disp1.is_keyARROWDOWN()) {
-			varianza-=1.0;
+			varianza-=0.01;
 		}
 		filtrada = aplicar_Gaussiano_PB_desdetiempo<double> (img, H, varianza);
 		filtrada.display(disp1);

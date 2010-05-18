@@ -163,6 +163,15 @@ CImg<T> aplicar_PB_Butter(CImg<T> imagen, CImg<T> &H, float frec_corte = 10.0,
 }
 
 template<class T>
+CImg<T> H_to_h(CImg<T> H, bool centrada = true) {
+	if (centrada) {
+		return H.get_FFT(true)[0].shift(H.width() / 2.0, H.height() / 2.0, 0,
+				0, 2);
+	} else
+		return H.get_FFT(true)[0];
+}
+
+template<class T>
 CImg<T> aplicar_PB_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 	/*aplica un filtro pasa Bajos Gaussiano con varianza=sigma (DEFINIDO EN FRECUENCIA)
 	 * Devuelve la imagen filtrada para ser mostrada.
@@ -186,11 +195,12 @@ CImg<T> aplicar_Gaussiano_PB_desdetiempo(CImg<T> imagen, CImg<T> &H,
 	 * */
 
 	CImg<T> h = gaussian_mask(imagen.width(), sigma); //filtro gaussiando pasa bajos espacial
+	h.resize(imagen.width(), imagen.height(), 1, 1); //fixme es asi??
 	CImgList<T> H_FFT = h.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
 
 	CImg<T> H_real = H_FFT[0];
 	H = H_real;
-	H_real.shift(h.height() / 2.0, H.width() / 2.0, 0, 0, 2);
+	H.shift(h.height() / 2.0, H.width() / 2.0, 0, 0, 2);
 	imagen.shift(imagen.width() / 2, imagen.height() / 2, 0, 0, 2);
 
 	CImgList<T> IMAGEN_FFT = imagen.get_FFT();
@@ -353,7 +363,7 @@ CImg<T> aplicar_PA_alta_potencia(CImg<T> imagen, float varianza = 1.0, float A =
 
 template<class T>
 CImg<T> aplicar_PA_enfasis_AF(CImg<T> imagen, float varianza = 1.0, float a =
-		0.0, float b=1.0) {
+		0.0, float b = 1.0) {
 	/*aplica un filtro de alta potencia:
 	 * 			Heaf=a+b*HPA
 	 *  con varianza 1.0 del fitlro gaussiano pasa altos
@@ -364,8 +374,8 @@ CImg<T> aplicar_PA_enfasis_AF(CImg<T> imagen, float varianza = 1.0, float a =
 	CImgList<T> H_EAF(H_PA[0], H_PA[1]); // filtro de alta pontencia frecuencial... falta meterlo lod el A-1
 	cimg_forXY(H_PA[0], x, y)
 		{
-			H_EAF[0](x, y) = a+b*H_PA[0](x, y); //parte real
-			H_EAF[1](x, y) = a+b*H_PA[1](x, y); //parte imaginaria
+			H_EAF[0](x, y) = a + b * H_PA[0](x, y); //parte real
+			H_EAF[1](x, y) = a + b * H_PA[1](x, y); //parte imaginaria
 		}
 	//ya tengo el filtro de alta potencia
 	return filtrar_complejo<T> (imagen, H_EAF);

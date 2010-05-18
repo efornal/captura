@@ -31,8 +31,9 @@ int main(int argc, char **argv) {
 	float orden = 1.0;
 	CImg<double> H(img.width(), img.height(), 1, 1);
 
-	CImgDisplay disp1, disp2;
+	CImgDisplay disp1, disp2, disp3;
 	CImg<double> filtrada = aplicar_PB_Butter<double> (img, H, frec_corte, orden);
+	H_to_h(H, true).display(disp3);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada");
 	H.display(disp2);
@@ -48,6 +49,8 @@ int main(int argc, char **argv) {
 			orden-=0.5;
 		}
 		filtrada = aplicar_PB_Butter<double> (img, H, frec_corte, orden);
+		H_to_h(H, true).display(disp3);
+		disp3.set_title("h - resp al impulso");
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada");
 

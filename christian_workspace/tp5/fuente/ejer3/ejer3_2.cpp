@@ -31,13 +31,14 @@ int main(int argc, char **argv) {
 	CImg<float> H(img.width(), img.height(), 1, 1);
 	//circulo de altura 1 sobre una matriz de ceros:
 	circulo_centrado(H.width() / 2, H.height() / 2, H, radio, 0);
-	CImgDisplay disp1, disp2;
+	CImgDisplay disp1, disp2, disp3;
 
 	CImg<float> filtrada = aplicar_PB_ideal<float> (img, radio);
 	filtrada.display(disp1);
 	disp1.set_title("imagen filtrada con filtro ideal");
 	H.display(disp2);
 	disp2.set_title("H(u,v) es es filtro que se aplica - esto es frec");
+	H_to_h(H, true).display(disp3);
 	while (!disp2.is_closed()) {
 		disp2.wait();
 		circulo_centrado(H.width() / 2, H.height() / 2, H, radio
@@ -45,7 +46,8 @@ int main(int argc, char **argv) {
 		filtrada = aplicar_PB_ideal<float> (img, radio + disp2.wheel());
 		filtrada.display(disp1);
 		disp1.set_title("imagen filtrada con filtro ideal");
-
+		H_to_h(H, true).display(disp3);
+		disp3.set_title("h - resp al impulso del filtro");
 		H.display(disp2);
 		disp2.set_title("H(u,v) es es filtro que se aplica - esto es frec");
 
