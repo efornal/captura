@@ -232,6 +232,13 @@ namespace filtro {
         return filtro;
     }
 
+    /**
+     * retorna un filtro RB (pasa banda) ideal
+     */
+    CImg<double> pb_ideal( int width=1, int height=1, int wc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_ideal( width, height, wc, ancho  ) );
+        return ( 1 - Hrb );
+    }
     // ============================================================
     //                     Homomorfico
     // ============================================================
