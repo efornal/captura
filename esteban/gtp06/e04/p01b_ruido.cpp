@@ -21,7 +21,7 @@ int main( int argc, char **argv ) {
     CImgDisplay disp, disp2, disp3, disp4, disp5;
     
     CHImg<double> img ( filename ),
-        filtro ( filtro::ab_butter( img.width(), img.width(), wc, ancho) );
+        filtro ( filtro::ab_butter( img.width(), img.width(), wc, ancho, orden) );
 
     img.channel(0);
     img.display(disp);
