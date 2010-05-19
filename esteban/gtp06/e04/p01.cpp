@@ -14,11 +14,13 @@ int main( int argc, char **argv ) {
                                          "ruta archivo imagen" );
     int wc = cimg_option( "-wc", 114, "frecuencia de corte" );
     int ancho = cimg_option( "-ancho", 2, "ancho de la banda" );
+    int orden = cimg_option( "-orden", 2, "orden del filtro de butter" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
     
     CHImg<double> img ( filename ),
-        filtro ( filtro::rb_ideal( img.width(), img.width(), wc, ancho) );
+        //filtro ( filtro::rb_ideal( img.width(), img.width(), wc, ancho) );
+        filtro ( filtro::rb_butter( img.width(), img.width(), wc, ancho, orden) );
 
     img.channel(0);
     img.display(disp);

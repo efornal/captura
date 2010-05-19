@@ -176,6 +176,34 @@ namespace filtro {
         return filtro;
     }
 
+    /**
+     * retorna un filtro RB (rechaza banda) butterworth
+     * formula:
+     *                      1
+     *   H(u,v) = ----------------------
+     *            1 + [ D*W / D^2-wc^2 ]
+     *
+     * D  = distancia de cada punto al origen
+     * wc = frecuencia de corte
+     * W  = ancho del filtro
+     * aux =  [ D*W / D^2-wc^2 ]
+     */
+    CImg<double> rb_butter( int width=1, int height=1, int wc=1, int ancho=1, int orden=1 ) {
+
+        CImg<double> filtro ( width, height, 1, 1, 0 );
+        double distancia = 0.0, aux = 0.0;
+        int mediox = width/2, 
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
+            aux = (ancho*distancia) / ( pow(distancia,2) - pow(wc,2) );
+            filtro(x,y) =  1.0 / ( 1.0 + pow( aux, 2.0*orden) );
+        }
+
+        return filtro;
+    }
+
     // ============================================================
     //                     Homomorfico
     // ============================================================
