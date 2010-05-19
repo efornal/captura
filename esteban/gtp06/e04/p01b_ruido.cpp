@@ -1,4 +1,6 @@
 /**
+ * FIXME: porque se ve la imagen con restos del patron de ruido??
+ * aunque aumente el ancho sigue quedando!?? porque?
  * punto (70,90)
  * => radio = sqrt{70^2 + 90^2} = 114.0 = wc
 */
@@ -19,7 +21,7 @@ int main( int argc, char **argv ) {
     CImgDisplay disp, disp2, disp3, disp4, disp5;
     
     CHImg<double> img ( filename ),
-        filtro ( filtro::ab_ideal( img.width(), img.width(), wc, ancho) );
+        filtro ( filtro::ab_butter( img.width(), img.width(), wc, ancho) );
 
     img.channel(0);
     img.display(disp);
