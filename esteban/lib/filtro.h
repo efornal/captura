@@ -253,6 +253,14 @@ namespace filtro {
         return ( 1 - Hrb );
     }
 
+    /**
+     * retorna un filtro AB (pasa banda - acepta banda para no confundir) gaussiano
+     */
+    CImg<double> ab_gaussiano( int width=1, int height=1, int wc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_gaussiano( width, height, wc, ancho  ) );
+        return ( 1 - Hrb );
+    }
+
     // ============================================================
     //                     Homomorfico
     // ============================================================
