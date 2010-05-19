@@ -1,4 +1,6 @@
 /**
+ * FIXME: porque se ve la imagen con restos del patron de ruido??
+ * aunque aumente el ancho sigue quedando!?? porque?
  * punto (70,90)
  * => radio = sqrt{70^2 + 90^2} = 114.0 = wc
 */
