@@ -176,6 +176,91 @@ namespace filtro {
         return filtro;
     }
 
+    /**
+     * retorna un filtro RB (rechaza banda) butterworth
+     * formula:
+     *                      1
+     *   H(u,v) = ----------------------
+     *            1 + [ D*W / D^2-wc^2 ]
+     *
+     * D  = distancia de cada punto al origen
+     * wc = frecuencia de corte
+     * W  = ancho del filtro
+     * aux =  [ D*W / D^2-wc^2 ]
+     */
+    CImg<double> rb_butter( int width=1, int height=1, int wc=1, int ancho=1, int orden=1 ) {
+
+        CImg<double> filtro ( width, height, 1, 1, 0 );
+        double distancia = 0.0, aux = 0.0;
+        int mediox = width/2, 
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
+            aux = (ancho*distancia) / ( pow(distancia,2) - pow(wc,2) );
+            filtro(x,y) =  1.0 / ( 1.0 + pow( aux, 2.0*orden) );
+        }
+
+        return filtro;
+    }
+
+    /**
+     * retorna un filtro RB (rechaza banda) gaussiano
+     * formula:
+     *                  (-1/2) * [ D^2-wc^2 / DW  ]
+     *   H(u,v) = 1 - e
+     *            
+     *
+     * D  = distancia de cada punto al origen
+     * wc = frecuencia de corte
+     * W  = ancho del filtro
+     * aux =   [ D^2-wc^2 / DW  ]
+     */
+    CImg<double> rb_gaussiano( int width=1, int height=1, int wc=1, int ancho=1 ) {
+
+        CImg<double> filtro ( width, height, 1, 1, 0 );
+        double distancia = 0.0, aux = 0.0;
+        int mediox = width/2, 
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia = sqrt ( pow(x-mediox,2.0) + pow(y-medioy,2.0) );
+            aux = ( pow(distancia,2) - pow(wc,2) ) / ( distancia*ancho );
+            filtro(x,y) =  1.0 - exp( (-1.0/2.0)*pow(aux,2) );
+        }
+
+        return filtro;
+    }
+
+    // ============================================================
+    //                     Pasa Banda
+    // ============================================================
+
+    /**
+     * retorna un filtro AB (pasa banda - acepta banda para no confundir) ideal
+     */
+    CImg<double> ab_ideal( int width=1, int height=1, int wc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_ideal( width, height, wc, ancho  ) );
+        return ( 1 - Hrb );
+    }
+
+    /**
+     * retorna un filtro AB (acepta banda) butterworth
+     */
+    CImg<double> ab_butter( int width=1, int height=1, 
+                            int wc=1, int ancho=1, int orden=1 ) {
+        CImg<double> Hrb ( rb_butter( width, height, wc, ancho, orden  ) );
+        return ( 1 - Hrb );
+    }
+
+    /**
+     * retorna un filtro AB (pasa banda - acepta banda para no confundir) gaussiano
+     */
+    CImg<double> ab_gaussiano( int width=1, int height=1, int wc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_gaussiano( width, height, wc, ancho  ) );
+        return ( 1 - Hrb );
+    }
+
     // ============================================================
     //                     Homomorfico
     // ============================================================
