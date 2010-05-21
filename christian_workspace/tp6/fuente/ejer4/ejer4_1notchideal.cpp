@@ -32,10 +32,10 @@ int main(int argc, char **argv) {
 					cimg_option( "-f2", "../../imagenes/img.tif", "ruta archivo imagen limpia" );
 	const int
 				x0 =
-						cimg_option( "-x0", 50, "coord x donde aparece el notch" );
+						cimg_option( "-x0", 58, "coord x donde aparece el notch" );
 	const int
 				y0 =
-						cimg_option( "-y0", 50, "coord y donde aparece el notch" );
+						cimg_option( "-y0", 38, "coord y donde aparece el notch" );
 
 	CImg<double> img_degradada(filename); //imagen degradada
 	CImg<double> img_limpia(filename1); //imagen degradada
@@ -50,8 +50,6 @@ int main(int argc, char **argv) {
 	CImgList<float> fft_imgdegra = img_degradada.get_FFT();
 	CImg<double> img_degradada_magnitud = get_magnitud(img_degradada, true);
 	CImg<double> img_degradada_fase = get_fase(img_degradada);
-	CImgDisplay identif;
-	fft_imgdegra[0].display();
 
 	CImgDisplay disp(img_degradada, "imagen degradada");
 	CImgDisplay dispf(fft_imgdegra[0], "real(fft(img_deg))->ACA ANULAR FREC!");
@@ -60,7 +58,7 @@ int main(int argc, char **argv) {
 	//img_degradada_magnitud.display(); //descomentar para ver coordenadas de ruido
 	CImgDisplay magnitudlog(img_degradada_magnitud.get_log(),
 			"log(magn(fft(imagen degradada)))");
-
+	img_degradada_magnitud.get_log().display();
 	//imagen de solo ruido:
 	CImg<double> R(img_degradada);
 	R.fill(255.0);
