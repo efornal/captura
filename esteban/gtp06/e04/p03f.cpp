@@ -1,14 +1,6 @@
 /**
- * FIXME: porque se ve la imagen con restos del patron de ruido??
- * aunque aumente el ancho sigue quedando!?? porque?
  * punto (70,90)
  * => radio = sqrt{70^2 + 90^2} = 114.0 = wc
- * 
- * ./p03c -f ../../imagenes/noisy_moon.jpg -wc 84 -ancho 20
- * ./p03c -f ../../imagenes/HeadCT_degradada.tif -wc 20 -ancho 50
- * fixme verificar, hay varias componente y seria mejor usar un notch
- * con varios notch para cada componente q quitar, de otro modo hay q ensanchar
- * mucho el filtro y se eliminan otras componentes.
 */
 #include <CHImg.h>
 #include <filtro.h>
@@ -20,39 +12,39 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f",
                                         "../../imagenes/img_degradada.tif",
                                          "ruta archivo imagen" );
-    int wc = cimg_option( "-wc", 114, "frecuencia de corte" );
+    int uc = cimg_option( "-uc", 70, "frecuencia de corte" );
+    int vc = cimg_option( "-vc", 90, "frecuencia de corte" );
     int ancho = cimg_option( "-ancho", 2, "ancho de la banda" );
     int orden = cimg_option( "-orden", 2, "orden del filtro de butter" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
     
     CHImg<double> img ( filename ),
-        filtro ( filtro::rb_ideal( img.width(), img.width(), wc, ancho) );
+        filtro ( filtro::rb_gaussiano_notch( img.width(), img.width(), 
+                                          uc, vc, ancho) );
 
     img.channel(0);
     img.display(disp);
+    disp.set_title("originial");
 
     CImgList<double> lista( img.get_fft_modulo().normalize(0,255),
                             img.get_fft_modulo_log().normalize(0,255),
                             img.get_fft_fase().normalize(0,255) );
     lista.display(disp2);
-
-    disp.set_title("originial");
-    disp2.set_title("modulo - modulo log - fase");
+    disp2.set_title("original: modulo - modulo log - fase");
 
     filtro.get_normalize(0,255).display(disp3);
-    disp3.set_title("filtro rechaza banda");
+    disp3.set_title("filtro rechaza banda notch");
 
     CHImg<double> filtrada = img.get_filtrada( filtro );
     filtrada.get_normalize(0,255).display(disp4);
-
     disp4.set_title("filtrada");
 
     CImgList<double> lista2( filtrada.get_fft_modulo().normalize(0,255),
                              filtrada.get_fft_modulo_log().normalize(0,255),
                              filtrada.get_fft_fase().normalize(0,255) );
     lista2.display(disp5);
-    disp4.set_title("espectro de filtrada: modulo - modulo log - fase");
+    disp5.set_title("espectro de filtrada: modulo - modulo log - fase");
 
     img.get_fft_modulo(false).normalize(0,255).display("acá localizar el punto");        
 
