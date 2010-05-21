@@ -253,6 +253,7 @@ void rb_ideal(CImg<T> &H, int wc = 1, int espesor = 1) {
 	H.fill(1.0);
 	H.draw_circle(width / 2, height / 2, wc + espesor / 2, rechazo);
 	H.draw_circle(width / 2, height / 2, wc - espesor / 2, paso);
+
 }
 
 template<class T>
