@@ -27,7 +27,7 @@ using namespace cimg_library;
  *                4 = Rician
  */
 template<class T>
-void gen_ruido_gaussiano(CImg<T> &img, double sigma=1.0) {
+void gen_ruido_gaussiano(CImg<T> &img, double sigma = 1.0) {
 	/**
 	 * Genera ruido gausiano en la imagen dada
 	 */
@@ -35,7 +35,7 @@ void gen_ruido_gaussiano(CImg<T> &img, double sigma=1.0) {
 }
 
 template<class T>
-void gen_ruido_uniforme(CImg<T> &img, double sigma=1.0) {
+void gen_ruido_uniforme(CImg<T> &img, double sigma = 1.0) {
 	/**
 	 * Genera ruido uniforme en la imagen dada
 	 */
@@ -43,7 +43,7 @@ void gen_ruido_uniforme(CImg<T> &img, double sigma=1.0) {
 }
 
 template<class T>
-void gen_ruido_sal_y_pimienta(CImg<T> &img, double sigma=1.0) {
+void gen_ruido_sal_y_pimienta(CImg<T> &img, double sigma = 1.0) {
 	/**
 	 * Genera ruido sal y pimienta en la imagen dada
 	 */
@@ -51,7 +51,7 @@ void gen_ruido_sal_y_pimienta(CImg<T> &img, double sigma=1.0) {
 }
 
 template<class T>
-void gen_ruido_sal(CImg<T> &img, double sigma=1.0) {
+void gen_ruido_sal(CImg<T> &img, double sigma = 1.0) {
 	/**
 	 * Genera ruido sal (unicamente) en la imagen dada
 	 */
@@ -65,7 +65,7 @@ void gen_ruido_sal(CImg<T> &img, double sigma=1.0) {
 }
 
 template<class T>
-void gen_ruido_pimienta(CImg<T> &img, double sigma=1.0) {
+void gen_ruido_pimienta(CImg<T> &img, double sigma = 1.0) {
 	/**
 	 * Genera ruido pimienta (unicamente) en la imagen dada
 	 */
@@ -231,3 +231,19 @@ CImg<T> filtrado_alfa_recortado(CImg<T> img, int d = 0, int size = 3) {
 	return filtrada;
 }
 
+template<class T>
+CImg<T> detectar_maximos(CImg<T> magnitud_fft) {
+	/* dada la magnitud de la transofrmada de fouierer de una imagen, devuelve otra iamgen con los
+	 * puntos en los que se detectaron maximos*/
+	CImg<T> puntos(magnitud_fft);
+	puntos.normalize(0, 255);
+	puntos.fill(0);
+	double val = 0.16 * magnitud_fft.max();
+	cimg_forXY(magnitud_fft, x, y)
+		{
+			if (magnitud_fft(x, y) > val) {
+				puntos(x, y) = 255.0;
+			}
+		}
+	return puntos;
+}
