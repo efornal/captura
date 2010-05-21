@@ -35,8 +35,8 @@ CImg<T> desplazar(CImg<T> imagen, int des_x, int des_y) {
 			im(x + des_x, y + des_y) = imagen(x, y);
 	return im;
 }
-
-CImg<unsigned char> lut(CImg<unsigned char> original, int a = 1, int c = 0,
+template <class T>
+CImg<T> lut(CImg<T> original, float a = 1, float c = 0.0,
 		bool clip = 1) {
 	/*	entrada_r imagen de entrada sobre la cual se aplica la transformacion
 	 a: factor de ganancia
@@ -44,8 +44,8 @@ CImg<unsigned char> lut(CImg<unsigned char> original, int a = 1, int c = 0,
 	 clip=1 implica que corte en 0 y 255 los valores - por defecto clipea
 	 retorna una imagen  modificada linealmente*/
 
-	CImg<unsigned char> modificada(original.width(), original.height(), 1, 1);
-	int valor;
+	CImg<T> modificada(original.width(), original.height(), 1, 1);
+	T valor;
 	cimg_forXY( modificada, x, y )
 		{
 			valor = a * original(x, y) + c;
@@ -71,11 +71,11 @@ CImg<unsigned char> obtener_grafica_mapeo(int a, int c) {
 	CImg<unsigned char> mapeado = lut(mapeo, a, c, false);
 	return mapeo_disp.draw_graph(mapeado, blanco, 1, 1, 1, 255, 0);
 }
-
-CImg<unsigned char> negativo(CImg<unsigned char> img1) { //retorna el negativo de una imagen
+template <class T>
+CImg<T> negativo(CImg<T> img1) { //retorna el negativo de una imagen
 	//ojo solo anda para imagenes en tonos de grises
-	int a = -1;
-	unsigned char c = 255; // maximo de la "escala"
+	double a = -1;
+	double c = 255; // maximo de la "escala"
 	return lut(img1, a, c, 1);
 }
 
