@@ -53,9 +53,9 @@ int main(int argc, char **argv) {
 	while (!disp.is_closed()) {
 		disp.wait();
 		if (disp.is_keyARROWUP()) {
-			tam_mascara++;
+			//tam_mascara++; //fixme: si dejo esto cuando apreto la flecha para arriba explota..
 		} else if (disp.is_keyARROWDOWN()) {
-			tam_mascara--;
+			//tam_mascara--;
 		} else if (disp.is_keyARROWLEFT()) {
 			sigma--;
 			img_ruidosa.clear();
@@ -86,7 +86,9 @@ int main(int argc, char **argv) {
 
 		cout << "Tam Mascara: " << tam_mascara << "   d: " << d
 				<< "   varianza: " << sigma << endl;
-		//POSTA: con un d apropiado el alfa recortado se ve mejor no se borronea tanto como el otro
+		/*POSTA: con un "d" apropiado el alfa recortado se ve mejor no se borronea tanto como el
+		 otro y los bordes quedan bastante bien. Alfa recortado es mucho mejor que el media geometrica
+		 y el contra armonica del ejercicio 2...*/
 	}
 	return 0;
 }
