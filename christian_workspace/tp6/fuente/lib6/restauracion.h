@@ -315,7 +315,7 @@ void rb_gaussiano(CImg<T> &H, int wc = 1, int ancho = 1) {
 }
 
 template<class T>
-void rb_ideal_notch(CImg<T>&H, int uc = 1, int vc = 1, int ancho = 1) {
+void rb_ideal_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
 	/**
 	 * retorna un filtro RB (rechaza banda) ideal notch
 	 * formula:
@@ -330,11 +330,12 @@ void rb_ideal_notch(CImg<T>&H, int uc = 1, int vc = 1, int ancho = 1) {
 	 *      mas que frecuencia de corte es frecuencia (u0,v0) eliminada
 	 * W  = ancho del filtro (radio del notch, del origen u0,v0)
 	 */
-	int width = H.width();
-	int height = H.height();
+	double distancia_pos = 0.0, distancia_neg = 0.0, aux_pos = 0.0, aux_neg = 0.0;
+	int width=H.width();
+	int height=H.height();
 	H.normalize(0, 1);
 	H.fill(1.0);
-	double distancia_pos = 0.0, distancia_neg = 0.0;
+
 	int mediox = width / 2, medioy = height / 2;
 
 	cimg_forXY( H, x, y)
@@ -346,6 +347,47 @@ void rb_ideal_notch(CImg<T>&H, int uc = 1, int vc = 1, int ancho = 1) {
 			if (distancia_pos <= ancho || distancia_neg <= ancho) {
 				H(x, y) = 0;
 			}
+		}
+}
+
+template<class T>
+void rb_butter_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1,
+		int orden = 1) {
+	H.normalize(0, 1);
+	int width=H.width();
+		int height=H.height();
+	H.fill(0);
+	double distancia_pos = 0.0, distancia_neg = 0.0, aux = 0.0;
+	int mediox = width / 2, medioy = height / 2;
+
+	cimg_forXY( H, x, y)
+		{
+			distancia_pos = sqrt(pow(x - mediox - uc, 2.0) + pow(y - medioy
+					- vc, 2.0));
+			distancia_neg = sqrt(pow(x - mediox + uc, 2.0) + pow(y - medioy
+					+ vc, 2.0));
+			aux = (ancho * ancho) / (distancia_pos * distancia_neg);
+			H(x, y) = 1.0 / (1.0 + pow(aux, orden));
+		}
+}
+
+template<class T>
+void rb_gaussiano_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
+	H.normalize(0,1);
+	H.fill(0);
+	int width=H.width();
+		int height=H.height();
+	double distancia_pos = 0.0, distancia_neg = 0.0, aux = 0.0;
+	int mediox = width / 2, medioy = height / 2;
+
+	cimg_forXY( H, x, y)
+		{
+			distancia_pos = sqrt(pow(x - mediox - uc, 2.0) + pow(y - medioy
+					- vc, 2.0));
+			distancia_neg = sqrt(pow(x - mediox + uc, 2.0) + pow(y - medioy
+					+ vc, 2.0));
+			aux = (distancia_pos * distancia_neg) / (ancho * ancho);
+			H(x, y) = 1.0 - exp((-1.0 / 2.0) * aux);
 		}
 }
 
@@ -382,10 +424,30 @@ void ab_gaussiano(CImg<T> &H, int wc = 1, int ancho = 1) {
 }
 
 template<class T>
-void ab_ideal_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
-	/**
+void ab_ideal_notch(CImg<T> &H_blanca, int uc = 1, int vc = 1, int ancho = 1) {
+	/**H debe ser una imagen blanca
 	 * retorna un filtro AB (pasa banda - acepta banda para no confundir) ideal notch
 	 */
-	rb_ideal_notch(H, uc, vc, ancho);
-	H = 1.0 - H;
+	rb_ideal_notch(H_blanca, uc, vc, ancho);
+	H_blanca = 1.0 - H_blanca;
+}
+
+template<class T>
+void ab_butter_notch(CImg<T> &H_blanca, int uc = 1, int vc = 1, int ancho = 1,
+		float orden = 1.0) {
+	/**
+	 * retorna un filtro AB (pasa banda - acepta banda para no confundir) butter notch
+	 */
+	rb_butter_notch(H_blanca, uc, vc, ancho, orden);
+	H_blanca = 1.0 - H_blanca;
+}
+
+template<class T>
+void ab_gaussiano_notch(CImg<T> &H_blanca, int uc = 1, int vc = 1, int ancho =
+		1) {
+	/**
+	 * retorna un filtro AB (pasa banda - acepta banda para no confundir) gaussiano notch
+	 */
+	rb_gaussiano_notch(H_blanca, uc, vc, ancho);
+	H_blanca = 1.0 - H_blanca;
 }
