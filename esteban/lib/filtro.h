@@ -281,6 +281,23 @@ namespace filtro {
         return filtro;
     }
 
+    CImg<double> rb_gaussiano_notch( int width=1, int height=1,
+                                     int uc=1, int vc=1, int ancho=1 ) {
+        CImg<double> filtro ( width, height, 1, 1, 0 );
+        double distancia_pos = 0.0, distancia_neg = 0.0, aux = 0.0;
+        int mediox = width/2,
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia_pos = sqrt ( pow(x-mediox-uc,2.0) + pow(y-medioy-vc,2.0) );
+            distancia_neg = sqrt ( pow(x-mediox+uc,2.0) + pow(y-medioy+vc,2.0) );
+            aux = ( distancia_pos * distancia_neg ) /  (ancho*ancho);
+            filtro(x,y) =  1.0 - exp( (-1.0/2.0) * aux);
+        }
+
+        return filtro;
+    }
+
     // ============================================================
     //                     Pasa Banda
     // ============================================================
@@ -325,6 +342,15 @@ namespace filtro {
     CImg<double> ab_butter_notch( int width=1, int height=1, 
                                   int uc=1, int vc=1, int ancho=1, int orden=1 ) {
         CImg<double> Hrb ( rb_butter_notch( width, height, uc, vc, ancho, orden  ) );
+        return ( 1 - Hrb );
+    }
+
+    /**
+     * retorna un filtro AB (pasa banda - acepta banda para no confundir) gaussiano notch
+     */
+    CImg<double> ab_gaussiano_notch( int width=1, int height=1, 
+                                  int uc=1, int vc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_gaussiano_notch( width, height, uc, vc, ancho  ) );
         return ( 1 - Hrb );
     }
 
