@@ -230,20 +230,161 @@ CImg<T> filtrado_alfa_recortado(CImg<T> img, int d = 0, int size = 3) {
 
 	return filtrada;
 }
+//####################################################################################
+//####################################################################################
+
+//filtros para aplicar en el dominio frecuencial:
+// ============================================================
+//                     Rechaza Banda
+// ============================================================
 
 template<class T>
-CImg<T> detectar_maximos(CImg<T> magnitud_fft) {
-	/* dada la magnitud de la transofrmada de fouierer de una imagen, devuelve otra iamgen con los
-	 * puntos en los que se detectaron maximos*/
-	CImg<T> puntos(magnitud_fft);
-	puntos.normalize(0, 255);
-	puntos.fill(0);
-	double val = 0.16 * magnitud_fft.max();
-	cimg_forXY(magnitud_fft, x, y)
+void rb_ideal(CImg<T> &H, int wc = 1, int espesor = 1) {
+	/**
+	 * retorna por referencia un filtro RB (rechaza banda) ideal
+	 * @espesor: espesor de la linea del filtro -> mayor espesor + rechaza.
+	 * @wc: frecuencia de corte o radio del circulo de rechazo.
+	 */
+	H.normalize(0, 1);
+	int width = H.width();
+	int height = H.height();
+	double rechazo[] = { 0.0, 0.0, 0.0 };
+	double paso[] = { 1.0, 1.0, 1.0 };
+	H.fill(1.0);
+	H.draw_circle(width / 2, height / 2, wc + espesor / 2, rechazo);
+	H.draw_circle(width / 2, height / 2, wc - espesor / 2, paso);
+}
+
+template<class T>
+void rb_butter(CImg<T> &H, int wc = 1, int ancho = 1, int orden = 1) {
+	/**
+	 * retorna un filtro RB (rechaza banda) butterworth
+	 * formula:
+	 *                      1
+	 *   H(u,v) = ----------------------
+	 *            1 + [ D*W / D^2-wc^2 ]
+	 *
+	 * D  = distancia de cada punto al origen
+	 * wc = frecuencia de corte
+	 * W  = @ancho= espesor del filtro
+	 * aux =  [ D*W / D^2-wc^2 ]
+	 */
+	int width = H.width();
+	int height = H.height();
+	H.normalize(0, 1);
+	H.fill(0.0);
+	double distancia = 0.0, aux = 0.0;
+	int mediox = width / 2, medioy = height / 2;
+
+	cimg_forXY( H, x, y)
 		{
-			if (magnitud_fft(x, y) > val) {
-				puntos(x, y) = 255.0;
+			distancia = sqrt(pow(x - mediox, 2.0) + pow(y - medioy, 2.0));
+			aux = (ancho * distancia) / (pow(distancia, 2) - pow(wc, 2));
+			H(x, y) = 1.0 / (1.0 + pow(aux, 2.0 * orden));
+		}
+}
+
+template<class T>
+void rb_gaussiano(CImg<T> &H, int wc = 1, int ancho = 1) {
+	/**
+	 * retorna un filtro RB (rechaza banda) gaussiano
+	 * formula:
+	 *                  (-1/2) * [ D^2-wc^2 / DW  ]
+	 *   H(u,v) = 1 - e
+	 *
+	 *
+	 * D  = distancia de cada punto al origen
+	 * wc = frecuencia de corte
+	 * W  = ancho del filtro
+	 * aux =   [ D^2-wc^2 / DW  ]
+	 */
+	int width = H.width();
+	int height = H.height();
+	H.normalize(0, 1);
+	H.fill(0.0);
+	double distancia = 0.0, aux = 0.0;
+	int mediox = width / 2, medioy = height / 2;
+
+	cimg_forXY( H, x, y)
+		{
+			distancia = sqrt(pow(x - mediox, 2.0) + pow(y - medioy, 2.0));
+			aux = (pow(distancia, 2) - pow(wc, 2)) / (distancia * ancho);
+			H(x, y) = 1.0 - exp((-1.0 / 2.0) * pow(aux, 2));
+		}
+}
+
+template<class T>
+void rb_ideal_notch(CImg<T>&H, int uc = 1, int vc = 1, int ancho = 1) {
+	/**
+	 * retorna un filtro RB (rechaza banda) ideal notch
+	 * formula:
+	 *            | 0   si D1(u,v) <= D0  || D2(u,v) <= D0
+	 *   H(u,v) = |
+	 *            | 1   otro caso
+	 *
+	 * D1 = distancia de cada punto al centro positivo del notch (u0,v0)
+	 * D2 = distancia de cada punto al centro negativo del notch (-u0,-v0)
+	 * uc = frecuencia de corte
+	 * vc = frecuencia de corte
+	 *      mas que frecuencia de corte es frecuencia (u0,v0) eliminada
+	 * W  = ancho del filtro (radio del notch, del origen u0,v0)
+	 */
+	int width = H.width();
+	int height = H.height();
+	H.normalize(0, 1);
+	H.fill(1.0);
+	double distancia_pos = 0.0, distancia_neg = 0.0;
+	int mediox = width / 2, medioy = height / 2;
+
+	cimg_forXY( H, x, y)
+		{
+			distancia_pos = sqrt(pow(x - mediox - uc, 2.0) + pow(y - medioy
+					- vc, 2.0));
+			distancia_neg = sqrt(pow(x - mediox + uc, 2.0) + pow(y - medioy
+					+ vc, 2.0));
+			if (distancia_pos <= ancho || distancia_neg <= ancho) {
+				H(x, y) = 0;
 			}
 		}
-	return puntos;
+}
+
+// ============================================================
+//                     Pasa Banda
+// ============================================================
+
+template<class T>
+void ab_ideal(CImg<T> &H, int wc = 1, int ancho = 1) {
+	/**
+	 * retorna un filtro AB (pasa banda - acepta banda para no confundir cpn pasa bajos (PB)) ideal
+	 */
+	H.normalize(0, 1);
+	rb_ideal(H, wc, ancho);
+	H = 1.0 - H;
+}
+
+template<class T>
+void ab_butter(CImg<T> &H, int wc = 1, int ancho = 1, int orden = 1) {
+	/**
+	 * retorna un filtro AB (acepta banda) butterworth
+	 */
+	rb_butter(H, wc, ancho, orden);
+	H = 1.0 - H;
+}
+
+template<class T>
+void ab_gaussiano(CImg<T> &H, int wc = 1, int ancho = 1) {
+	/**
+	 * retorna un filtro AB (pasa banda - acepta banda para no confundir) gaussiano
+	 */
+	rb_gaussiano(H, wc, ancho);
+	H = 1.0 - H;
+}
+
+template<class T>
+void ab_ideal_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
+	/**
+	 * retorna un filtro AB (pasa banda - acepta banda para no confundir) ideal notch
+	 */
+	rb_ideal_notch(H, uc, vc, ancho);
+	H = 1.0 - H;
 }
