@@ -330,9 +330,9 @@ void rb_ideal_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
 	 *      mas que frecuencia de corte es frecuencia (u0,v0) eliminada
 	 * W  = ancho del filtro (radio del notch, del origen u0,v0)
 	 */
-	double distancia_pos = 0.0, distancia_neg = 0.0, aux_pos = 0.0, aux_neg = 0.0;
-	int width=H.width();
-	int height=H.height();
+	double distancia_pos = 0.0, distancia_neg = 0.0;
+	int width = H.width();
+	int height = H.height();
 	H.normalize(0, 1);
 	H.fill(1.0);
 
@@ -354,8 +354,8 @@ template<class T>
 void rb_butter_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1,
 		int orden = 1) {
 	H.normalize(0, 1);
-	int width=H.width();
-		int height=H.height();
+	int width = H.width();
+	int height = H.height();
 	H.fill(0);
 	double distancia_pos = 0.0, distancia_neg = 0.0, aux = 0.0;
 	int mediox = width / 2, medioy = height / 2;
@@ -373,10 +373,10 @@ void rb_butter_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1,
 
 template<class T>
 void rb_gaussiano_notch(CImg<T> &H, int uc = 1, int vc = 1, int ancho = 1) {
-	H.normalize(0,1);
+	H.normalize(0, 1);
 	H.fill(0);
-	int width=H.width();
-		int height=H.height();
+	int width = H.width();
+	int height = H.height();
 	double distancia_pos = 0.0, distancia_neg = 0.0, aux = 0.0;
 	int mediox = width / 2, medioy = height / 2;
 

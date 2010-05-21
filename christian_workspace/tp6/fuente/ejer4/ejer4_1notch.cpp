@@ -30,6 +30,12 @@ int main(int argc, char **argv) {
 	const char
 			*filename1 =
 					cimg_option( "-f2", "../../imagenes/img.tif", "ruta archivo imagen limpia" );
+	const int
+				x0 =
+						cimg_option( "-x0", 50, "coord x donde aparece el notch" );
+	const int
+				y0 =
+						cimg_option( "-y0", 50, "coord y donde aparece el notch" );
 
 	CImg<double> img_degradada(filename); //imagen degradada
 	CImg<double> img_limpia(filename1); //imagen degradada
@@ -39,12 +45,13 @@ int main(int argc, char **argv) {
 	 *
 	 * */
 
-	int x0 = 50, y0 = 50; //punto donde se aplica el filtro notch
 	float espesor = 20.0;
 
 	CImgList<float> fft_imgdegra = img_degradada.get_FFT();
 	CImg<double> img_degradada_magnitud = get_magnitud(img_degradada, true);
 	CImg<double> img_degradada_fase = get_fase(img_degradada);
+	CImgDisplay identif;
+	fft_imgdegra[0].display();
 
 	CImgDisplay disp(img_degradada, "imagen degradada");
 	CImgDisplay dispf(fft_imgdegra[0], "real(fft(img_deg))->ACA ANULAR FREC!");
