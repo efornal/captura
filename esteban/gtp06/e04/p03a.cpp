@@ -3,6 +3,12 @@
  * aunque aumente el ancho sigue quedando!?? porque?
  * punto (70,90)
  * => radio = sqrt{70^2 + 90^2} = 114.0 = wc
+ * 
+ * ./p03c -f ../../imagenes/noisy_moon.jpg -wc 84 -ancho 20
+ * ./p03c -f ../../imagenes/HeadCT_degradada.tif -wc 20 -ancho 50
+ * fixme verificar, hay varias componente y seria mejor usar un notch
+ * con varios notch para cada componente q quitar, de otro modo hay q ensanchar
+ * mucho el filtro y se eliminan otras componentes.
 */
 #include <CHImg.h>
 #include <filtro.h>
