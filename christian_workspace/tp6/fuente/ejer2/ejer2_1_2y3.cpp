@@ -70,6 +70,8 @@ int main(int argc, char **argv) {
 			ambos.set_title("filtrado contrarmonica y geometrico");
 		} else if (disp.is_keyARROWLEFT()) {
 			sigma--;
+			img_ruidosa.clear();
+			img_ruidosa.assign(img);
 			gen_ruido_gaussiano(img_ruidosa, sigma);
 			gen_ruido_sal_y_pimienta(img_ruidosa, sigma);
 			filtrado_geometrica(img_ruidosa, tam_mascara).normalize(0, 255).display(
@@ -84,6 +86,8 @@ int main(int argc, char **argv) {
 			ambos.set_title("filtrado contrarmonica y geometrico");
 		} else if (disp.is_keyARROWRIGHT()) {
 			sigma++;
+			img_ruidosa.clear();
+			img_ruidosa.assign(img);
 			gen_ruido_gaussiano(img_ruidosa, sigma);
 			gen_ruido_sal_y_pimienta(img_ruidosa, sigma);
 			filtrado_geometrica(img_ruidosa, tam_mascara).normalize(0, 255).display(
