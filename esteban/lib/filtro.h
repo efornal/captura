@@ -232,6 +232,56 @@ namespace filtro {
         return filtro;
     }
 
+    /**
+     * retorna un filtro RB (rechaza banda) ideal notch
+     * formula:
+     *            | 0   si D1(u,v) <= D0  || D2(u,v) <= D0      
+     *   H(u,v) = | 
+     *            | 1   otro caso
+     *
+     * D1 = distancia de cada punto al centro positivo del notch (u0,v0)
+     * D2 = distancia de cada punto al centro negativo del notch (-u0,-v0)
+     * uc = frecuencia de corte
+     * vc = frecuencia de corte 
+     *      mas que frecuencia de corte es frecuencia (u0,v0) eliminada
+     * W  = ancho del filtro (radio del notch, del origen u0,v0) 
+     */
+    CImg<double> rb_ideal_notch( int width=1, int height=1,
+                                 int uc=1, int vc=1, int ancho=1 ) {
+        CImg<double> filtro ( width, height, 1, 1, 1 ); // ojo todo 1 
+        double distancia_pos = 0.0, distancia_neg = 0.0, aux_pos = 0.0, aux_neg = 0.0;
+        int mediox = width/2,
+            medioy = height/2;
+
+        cimg_forXY( filtro, x, y) {
+            distancia_pos = sqrt ( pow(x-mediox-uc,2.0) + pow(y-medioy-vc,2.0) );
+            distancia_neg = sqrt ( pow(x-mediox+uc,2.0) + pow(y-medioy+vc,2.0) );
+            if ( distancia_pos <= ancho || distancia_neg <= ancho ) {
+                filtro(x,y) = 0;
+            }
+        }
+
+        return filtro;
+    }
+
+    /* CImg<double> rb_butter_notch( int width=1, int height=1,  */
+    /*                               int uc=1, int vc=1, int ancho=1 ) { */
+    /*     CImg<double> filtro ( width, height, 1, 1, 0 ); */
+    /*     double distancia = 0.0, aux_pos = 0.0, aux_neg = 0.0; */
+    /*     int mediox = width/2,  */
+    /*         medioy = height/2; */
+
+    /*     cimg_forXY( filtro, x, y) { */
+    /*         distancia_pos = sqrt ( pow(x-mediox-uc,2.0) + pow(y-medioy-vc,2.0) ); */
+    /*         distancia_neg = sqrt ( pow(x-mediox+uc,2.0) + pow(y-medioy+vc,2.0) ); */
+    /*         aux_pos = (ancho*distancia) / ( pow(distancia,2) - pow(wc,2) ); */
+    /*         aux_neg = (ancho*distancia) / ( pow(distancia,2) - pow(wc,2) ); */
+    /*         filtro(x,y) =  1.0 / ( 1.0 + pow( aux, 2.0*orden) ); */
+    /*     } */
+
+    /*     return filtro; */
+    /* } */
+
     // ============================================================
     //                     Pasa Banda
     // ============================================================
@@ -258,6 +308,15 @@ namespace filtro {
      */
     CImg<double> ab_gaussiano( int width=1, int height=1, int wc=1, int ancho=1 ) {
         CImg<double> Hrb ( rb_gaussiano( width, height, wc, ancho  ) );
+        return ( 1 - Hrb );
+    }
+
+    /**
+     * retorna un filtro AB (pasa banda - acepta banda para no confundir) ideal notch
+     */
+    CImg<double> ab_ideal_notch( int width=1, int height=1, 
+                                 int uc=1, int vc=1, int ancho=1 ) {
+        CImg<double> Hrb ( rb_ideal_notch( width, height, uc, vc, ancho  ) );
         return ( 1 - Hrb );
     }
 
