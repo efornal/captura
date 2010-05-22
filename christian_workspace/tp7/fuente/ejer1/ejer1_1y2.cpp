@@ -28,7 +28,8 @@ int main(int argc, char **argv) {
 	img.resize_halfXY();
 	CImgDisplay dispori(img, "imagen original");
 	CImgDisplay disp(aplicar_roberts(img), "bd Roberts");
-	CImgDisplay disp1(aplicar_LoG(img), "bd LoG");
+	CImgDisplay disp1(aplicar_LoG(img), "bd LoG"); //fixme: porque sale con el fondo blanco?
+	//fixme: con log laplaciando y demas no aplico lo del gradiente.. deberia hacer el gradiente??
 	CImgDisplay disp2(aplicar_laplaciano(img), "bd Lap(sin-diag)");
 	CImgDisplay
 			disp3(aplicar_laplaciano_condiagonales(img), "bd Lap(con-diag)");
