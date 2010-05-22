@@ -254,4 +254,44 @@ namespace masks {
         return mask;
     }
 
+    //==================================================
+    //                 SEGMENTACION
+    //==================================================
+    /**
+     * mascara generica:
+     *                  | z1  z2  z3 |
+     *                  | z4  z5  z6 |
+     *                  | z7  z8  z9 |
+     */
+
+    /**
+       retorna una mascara de Roberts Gx
+       * Gx = z9 - z5
+       *  -1  0   
+       *   0  1   
+     */
+    CImg<double> roberts_gx() {
+        CImg<double> mask( 2, 2, 1, 1, 0);
+        mask(0,0) = -1;
+        mask(1,1) =  1;
+        return mask;
+    }
+
+    /**
+       retorna una mascara de Roberts Gy
+       * Gx = z8 - z6
+       *  0  -1   
+       *  1   0    
+     */
+    CImg<double> roberts_gy() {
+        CImg<double> mask( 2, 2, 1, 1, 0);
+        mask(1,0) = -1;
+        mask(0,1) =  1;
+        return mask;
+    }
+
+
+
+
+
 }
