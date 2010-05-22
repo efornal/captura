@@ -38,6 +38,19 @@ int main( int argc, char **argv ) {
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();
+
+        if (  disp.is_keyARROWDOWN() ) {
+            umbral--;
+            gx.normalize(0,255).get_threshold( umbral ).normalize(0,255).display( disp5 );
+            gy.normalize(0,255).get_threshold( umbral ).normalize(0,255).display( disp6 );
+            (gx + gy).normalize(0,255).get_threshold( umbral ).display( disp7 );
+        } else if (  disp.is_keyARROWUP() ) {
+            umbral++;
+            gx.normalize(0,255).get_threshold( umbral ).normalize(0,255).display( disp5 );
+            gy.normalize(0,255).get_threshold( umbral ).normalize(0,255).display( disp6 );
+            (gx + gy).normalize(0,255).get_threshold( umbral ).display( disp7 );
+        }
+
     }
     return 0;
 }
