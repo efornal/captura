@@ -200,7 +200,7 @@ CImg<T> get_sobel_y_diagonal() {
 template<class T>
 CImg<T> get_LoG() {
 	//genera una mascara de sobel en la direccion y -45 grados
-	CImg<T> hy(3, 3, 1, 1, 0);
+	CImg<T> hy(5, 5, 1, 1, 0);
 	hy(0, 0) = 0.0;
 	hy(0, 1) = 0.0;
 	hy(0, 2) = 1.0;
@@ -338,7 +338,7 @@ CImg<T> aplicar_LoG(CImg<T> imagen, bool binaria = true) {
 	/*aplica una mascara de laplaciano (TIENE en cuentas diagonales
 	 *  a la imagen y devuelve el resultado
 	 * */
-	CImg<T> resul = imagen.channel(0).get_convolve(get_LoG<T> ());
+	CImg<T> resul = imagen.channel(0).get_convolve( get_LoG <T> ());
 	resul.abs();
 	if (binaria) {
 		cimg_forXY(resul,x,y)
