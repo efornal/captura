@@ -10,7 +10,7 @@ int main( int argc, char **argv ) {
                                          "ruta archivo imagen" );
     int umbral = cimg_option( "-u", 127, "umbral" );
 
-    CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7;
+    CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7, disp8;
     
     CImg<double> img ( filename ), gx, gy, gxy, gyx;
     img.channel(0);
@@ -31,12 +31,20 @@ int main( int argc, char **argv ) {
     (gx+gy+gxy+gyx).normalize(0,255).display(disp4);
     disp4.set_title("deteccion de bordes: prewite gx + gy + gxy + gyx");
 
-    CImgList<double> list2 ( masks::prewite_gx().resize(100,100),
+    CImgList<double> list2 ( gx.get_normalize(0,255).get_threshold( umbral ),
+                             gy.get_normalize(0,255).get_threshold( umbral ),
+                             gxy.get_normalize(0,255).get_threshold( umbral ),
+                             gyx.get_normalize(0,255).get_threshold( umbral ) );
+
+    list2.display(disp7);
+    disp7.set_title("prewite umbral: gx - gy - gxy - gyx");
+
+    CImgList<double> list3 ( masks::prewite_gx().resize(100,100),
                              masks::prewite_gy().resize(100,100),
                              masks::prewite_gxy().resize(100,100),
                              masks::prewite_gyx().resize(100,100) );
-    list2.display(disp5);
-    disp5.set_title("masks prewite: gx - gy - gxy - gyx");
+    list3.display(disp8);
+    disp8.set_title("masks prewite: gx - gy - gxy - gyx");
 
     
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {

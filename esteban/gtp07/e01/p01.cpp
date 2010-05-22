@@ -10,7 +10,7 @@ int main( int argc, char **argv ) {
                                          "ruta archivo imagen" );
     int umbral = cimg_option( "-u", 127, "umbral" );
 
-    CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7;
+    CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7, disp8;
     
     CImg<double> img ( filename ), gx, gy;
     img.channel(0);
@@ -35,6 +35,11 @@ int main( int argc, char **argv ) {
 
     (gx + gy).normalize(0,255).get_threshold( umbral ).display( disp7 );
     disp7.set_title("deteccion de bordes: roberts gx + gy - aplicación de umbral");
+
+    CImgList<double> list3 ( masks::roberts_gx().resize(100,100),
+                             masks::roberts_gy().resize(100,100) );
+    list3.display(disp8);
+    disp8.set_title("masks roberts: gx - gy");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();
