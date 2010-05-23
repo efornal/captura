@@ -265,10 +265,10 @@ namespace masks {
      */
 
     /**
-       retorna una mascara de Roberts Gx
-       * Gx = z9 - z5
-       *  -1  0   
-       *   0  1   
+     * retorna una mascara de Roberts Gx
+     *  Gx = z9 - z5
+     *   -1  0   
+     *    0  1   
      */
     CImg<double> roberts_gx() {
         CImg<double> mask( 2, 2, 1, 1, 0);
@@ -278,10 +278,10 @@ namespace masks {
     }
 
     /**
-       retorna una mascara de Roberts Gy
-       * Gx = z8 - z6
-       *  0  -1   
-       *  1   0    
+     * retorna una mascara de Roberts Gy
+     *  Gx = z8 - z6
+     *   0  -1   
+     *   1   0    
      */
     CImg<double> roberts_gy() {
         CImg<double> mask( 2, 2, 1, 1, 0);
@@ -291,11 +291,11 @@ namespace masks {
     }
 
     /**
-       retorna una mascara de Prewite Horizontal
-       * Gx = (z7 + z8 + z9) - (z1 + z2 + z3)
-       *  -1  -1  -1   
-       *   0   0   0   bordes ---
-       *   1   1   1
+     * retorna una mascara de Prewite Horizontal
+     *  Gx = (z7 + z8 + z9) - (z1 + z2 + z3)
+     *   -1  -1  -1   
+     *    0   0   0   bordes ---
+     *    1   1   1
      */
     CImg<double> prewite_gx() {
         CImg<double> mask( 3, 3, 1, 1, 0);
@@ -307,11 +307,11 @@ namespace masks {
     }
 
     /**
-       retorna una mascara de Prewite Vertical
-       * Gx = (z3 + z6 + z9) - (z1 + z4 + z7)
-       *  -1   0   1   
-       *  -1   0   1   bordes |
-       *  -1   0   1
+     * retorna una mascara de Prewite Vertical
+     *  Gx = (z3 + z6 + z9) - (z1 + z4 + z7)
+     *   -1   0   1   
+     *   -1   0   1   bordes |
+     *   -1   0   1
      */
     CImg<double> prewite_gy() {
         CImg<double> mask( 3, 3, 1, 1, 0);
@@ -323,10 +323,10 @@ namespace masks {
     }
 
     /**
-       retorna una mascara de Prewite Diagonal x->y
-       *   0   1   1   
-       *  -1   0   1   bordes \
-       *  -1  -1   0
+     * retorna una mascara de Prewite Diagonal x->y
+     *   0   1   1   
+     *  -1   0   1   bordes                     \
+     *  -1  -1   0
      */
     CImg<double> prewite_gxy() {
         CImg<double> mask( 3, 3, 1, 1, 0);
@@ -340,10 +340,10 @@ namespace masks {
     }
 
     /**
-       retorna una mascara de Prewite Diagonal y->x
-       *  -1  -1   0   
-       *  -1   0   1   bordes /
-       *   0   1   1
+     * retorna una mascara de Prewite Diagonal y->x
+     *   -1  -1   0   
+     *   -1   0   1   bordes /
+     *    0   1   1
      */
     CImg<double> prewite_gyx() {
         CImg<double> mask( 3, 3, 1, 1, 0);
@@ -356,5 +356,73 @@ namespace masks {
         return mask;
     }
 
+    /**
+     * retorna una mascara de Sobel Horizontal
+     * Gx = (z7 + 2z8 + z9) - (z1 + 2z2 + z3)
+     *  -1  -2  -1
+     *   0   0   0   bordes --
+     *   1   2   1
+     */
+    CImg<double> sobel_gx() {
+        CImg<double> mask( 3, 3, 1, 1, 0);
+        mask(0,0) = -1;
+        mask(1,0) = -2;
+        mask(2,0) = -1;
+        mask(0,2) =  1;
+        mask(1,2) =  2;
+        mask(2,2) =  1;
+        return mask;
+    }
 
+    /**
+     * retorna una mascara de Sobel Vertical
+     * Gy = (z3 + 2z6 + z9) - (z1 + 2z4 + z7)
+     *  -1   0   1
+     *  -2   0   2   bordes |
+     *  -1   0   1
+     */
+    CImg<double> sobel_gy() {
+        CImg<double> mask( 3, 3, 1, 1, 0);
+        mask(0,0) = -1;
+        mask(0,1) = -2;
+        mask(0,2) = -1;
+        mask(2,0) =  1;
+        mask(2,1) =  2;
+        mask(2,2) =  1;
+        return mask;
+    }
+
+    /**
+     * retorna una mascara de Sobel Diagonal x->y
+     *   0   1   2
+     *  -1   0   1   bordes \
+     *  -2  -1   0
+     */
+    CImg<double> sobel_gxy() {
+        CImg<double> mask( 3, 3, 1, 1, 0);
+        mask(0,1) = -1;
+        mask(0,2) = -2;
+        mask(1,2) = -1;
+        mask(1,0) =  1;
+        mask(2,0) =  2;
+        mask(2,1) =  1;
+        return mask;
+    }
+
+    /**
+     * retorna una mascara de Sobel Diagonal y->x
+     *  -2  -1   0
+     *  -1   0   1   bordes /
+     *   0   1   2
+     */
+    CImg<double> sobel_gyx() {
+        CImg<double> mask( 3, 3, 1, 1, 0);
+        mask(0,0) = -2;
+        mask(0,1) = -1;
+        mask(1,0) = -1;
+        mask(2,1) =  1;
+        mask(2,2) =  2;
+        mask(1,2) =  1;
+        return mask;
+    }
 }
