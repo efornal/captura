@@ -291,13 +291,13 @@ namespace masks {
     }
 
     /**
-     * retorna una mascara de Prewite Horizontal
+     * retorna una mascara de Prewitt Horizontal
      *  Gx = (z7 + z8 + z9) - (z1 + z2 + z3)
      *   -1  -1  -1   
      *    0   0   0   bordes ---
      *    1   1   1
      */
-    CImg<double> prewite_gx() {
+    CImg<double> prewitt_gx() {
         CImg<double> mask( 3, 3, 1, 1, 0);
         cimg_forX(mask,x){
             mask(x,0) = -1;
@@ -307,13 +307,13 @@ namespace masks {
     }
 
     /**
-     * retorna una mascara de Prewite Vertical
+     * retorna una mascara de Prewitt Vertical
      *  Gx = (z3 + z6 + z9) - (z1 + z4 + z7)
      *   -1   0   1   
      *   -1   0   1   bordes |
      *   -1   0   1
      */
-    CImg<double> prewite_gy() {
+    CImg<double> prewitt_gy() {
         CImg<double> mask( 3, 3, 1, 1, 0);
         cimg_forY(mask,y){
             mask(0,y) = -1;
@@ -323,12 +323,12 @@ namespace masks {
     }
 
     /**
-     * retorna una mascara de Prewite Diagonal x->y
+     * retorna una mascara de Prewitt Diagonal x->y
      *   0   1   1   
      *  -1   0   1   bordes                     \
      *  -1  -1   0
      */
-    CImg<double> prewite_gxy() {
+    CImg<double> prewitt_gxy() {
         CImg<double> mask( 3, 3, 1, 1, 0);
         mask(0,1) = -1;
         mask(0,2) = -1;
@@ -340,12 +340,12 @@ namespace masks {
     }
 
     /**
-     * retorna una mascara de Prewite Diagonal y->x
+     * retorna una mascara de Prewitt Diagonal y->x
      *   -1  -1   0   
      *   -1   0   1   bordes /
      *    0   1   1
      */
-    CImg<double> prewite_gyx() {
+    CImg<double> prewitt_gyx() {
         CImg<double> mask( 3, 3, 1, 1, 0);
         mask(0,0) = -1;
         mask(0,1) = -1;

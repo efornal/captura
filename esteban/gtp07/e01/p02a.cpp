@@ -1,3 +1,6 @@
+/**
+ * Respuesta nula en zonas de gris constante
+*/
 #include <CHImg.h>
 #include <masks.h>
 
@@ -16,20 +19,20 @@ int main( int argc, char **argv ) {
     img.channel(0);
     img.display(disp);
 
-    gx = img.get_convolve( masks::prewite_gx() );
+    gx = img.get_convolve( masks::prewitt_gx() );
 
-    gy = img.get_convolve( masks::prewite_gy() );
+    gy = img.get_convolve( masks::prewitt_gy() );
 
-    gxy = img.get_convolve( masks::prewite_gxy() );
+    gxy = img.get_convolve( masks::prewitt_gxy() );
 
-    gyx = img.get_convolve( masks::prewite_gyx() );
+    gyx = img.get_convolve( masks::prewitt_gyx() );
 
     CImgList<double> list ( gx, gy, gxy ,gyx );
     list.display(disp3);
-    disp3.set_title("deteccion de bordes: prewite gx - gy - gxy - gyx");
+    disp3.set_title("deteccion de bordes: prewitt gx - gy - gxy - gyx");
 
     (gx+gy+gxy+gyx).normalize(0,255).display(disp4);
-    disp4.set_title("deteccion de bordes: prewite gx + gy + gxy + gyx");
+    disp4.set_title("deteccion de bordes: prewitt gx + gy + gxy + gyx");
 
     CImgList<double> list2 ( gx.get_normalize(0,255).get_threshold( umbral ),
                              gy.get_normalize(0,255).get_threshold( umbral ),
@@ -37,14 +40,14 @@ int main( int argc, char **argv ) {
                              gyx.get_normalize(0,255).get_threshold( umbral ) );
 
     list2.display(disp7);
-    disp7.set_title("prewite umbral: gx - gy - gxy - gyx");
+    disp7.set_title("prewitt umbral: gx - gy - gxy - gyx");
 
-    CImgList<double> list3 ( masks::prewite_gx().resize(100,100),
-                             masks::prewite_gy().resize(100,100),
-                             masks::prewite_gxy().resize(100,100),
-                             masks::prewite_gyx().resize(100,100) );
+    CImgList<double> list3 ( masks::prewitt_gx().resize(100,100),
+                             masks::prewitt_gy().resize(100,100),
+                             masks::prewitt_gxy().resize(100,100),
+                             masks::prewitt_gyx().resize(100,100) );
     list3.display(disp8);
-    disp8.set_title("masks prewite: gx - gy - gxy - gyx");
+    disp8.set_title("masks prewitt: gx - gy - gxy - gyx");
 
     
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {

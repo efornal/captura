@@ -1,3 +1,10 @@
+/**
+ * Respuesta nula en zonas de gris constante
+ *
+ * Enfatiza los pixeles mas cercanos al centro, consigiendo una mejor
+ * respuesta en presencia de ruido gaussiano.
+ * FIXME: por tanto, ¿Enfatiza los bordes?
+*/
 #include <CHImg.h>
 #include <masks.h>
 
