@@ -1,3 +1,6 @@
+#ifndef pdi_masks
+#define pdi_masks 1
+
 #include <CImg.h>
 #include <math.h>
 
@@ -493,3 +496,4 @@ namespace masks {
     }
 
 }
+#endif

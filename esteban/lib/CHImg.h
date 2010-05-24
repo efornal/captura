@@ -6,6 +6,9 @@ extern "C"{
 }
 #endif
 
+#ifndef pdi_segmentacion
+  #include "segmentacion.h"
+#endif
 #ifndef pdi_restauracion
   #include "restauracion.h"
 #endif
@@ -374,6 +377,20 @@ template<typename T> struct CHImg : public CImg<T> {
 
     CImg<double> get_filtrar_alfa_recortado( double d=0, int size=3 ) {
         return filtrado_alfa_recortado( *this, d, size );
+    }
+
+    // ====================================================== \\
+    // - filtrado espacial con convolucion tema:segmentacion - \\
+
+    CImg<double> get_filtrar_prewitt() {
+        CImg<double> img(*this);
+        filtrado_prewitt( img );
+        return img;
+    }
+
+    CImg<double> filtrar_prewitt() {
+        filtrado_prewitt( *this );
+        return *this;
     }
 
 
