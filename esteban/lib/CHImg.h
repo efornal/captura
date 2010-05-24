@@ -382,6 +382,17 @@ template<typename T> struct CHImg : public CImg<T> {
     // ====================================================== \\
     // - filtrado espacial con convolucion tema:segmentacion - \\
 
+    CImg<double> get_filtrar_roberts() {
+        CImg<double> img(*this);
+        filtrado_roberts( img );
+        return img;
+    }
+
+    CImg<double> filtrar_roberts() {
+        filtrado_roberts( *this );
+        return *this;
+    }
+
     CImg<double> get_filtrar_prewitt() {
         CImg<double> img(*this);
         filtrado_prewitt( img );

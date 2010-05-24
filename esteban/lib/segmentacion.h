@@ -17,6 +17,11 @@ using namespace std;
 using namespace cimg_library;
 
 
+CImg<double> filtrado_roberts( CImg<double> &img ) {
+    return img.convolve( masks::roberts_gx() ) +
+        img.convolve( masks::roberts_gy() );
+}
+
 CImg<double> filtrado_prewitt( CImg<double> &img ) {
     return img.convolve( masks::prewitt_gx() ) +
         img.convolve( masks::prewitt_gy() ) +
