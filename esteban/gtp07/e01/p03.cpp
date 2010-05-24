@@ -1,3 +1,13 @@
+/**
+ * FIXME: confirmar:
+ *
+ *           |  det. bordes | inmunidad ruido |
+ *  roberts  |    bueno     |      bajo       |
+ *  prewitt  |    medio     |      medio      |
+ *  sobel    |    medio     |      medio      |
+ *  LoG      |  muy bueno   |      bueno
+ * -bajo-medio-bueno-muy bueno
+*/
 #include <CHImg.h>
 #include <masks.h>
 
@@ -30,21 +40,28 @@ int main( int argc, char **argv ) {
                             img_gs2.get_filtrar_roberts(), 
                             img_gs3.get_filtrar_roberts() );
     list1.display(disp3);
-    disp3.set_title("roberts: det.bordes con ruido - orig - sigma1 - sigma2 - sigma3");
+    disp3.set_title("roberts: det.bordes+ruido - orig - sigma1 - sigma2 - sigma3");
 
     CImgList<double> list2 ( img.get_filtrar_prewitt(), 
                             img_gs1.get_filtrar_prewitt(), 
                             img_gs2.get_filtrar_prewitt(), 
                             img_gs3.get_filtrar_prewitt() );
     list2.display(disp4);
-    disp4.set_title("prewitt: det.bordes con ruido - orig - sigma1 - sigma2 - sigma3");
+    disp4.set_title("prewitt: det.bordes+ruido - orig - sigma1 - sigma2 - sigma3");
 
     CImgList<double> list3 ( img.get_filtrar_sobel(), 
                             img_gs1.get_filtrar_sobel(), 
                             img_gs2.get_filtrar_sobel(), 
                             img_gs3.get_filtrar_sobel() );
     list3.display(disp5);
-    disp5.set_title("sobel: det.bordes con ruido - orig - sigma1 - sigma2 - sigma3");
+    disp5.set_title("sobel: det.bordes+ruido - orig - sigma1 - sigma2 - sigma3");
+
+    CImgList<double> list4 ( img.get_filtrar_laplaciano_g(), 
+                            img_gs1.get_filtrar_laplaciano_g(), 
+                            img_gs2.get_filtrar_laplaciano_g(), 
+                            img_gs3.get_filtrar_laplaciano_g() );
+    list4.display(disp6);
+    disp6.set_title("laplaciano_g: det.bordes+ruido - orig - sigma1 - sigma2 - sigma3");
     
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();

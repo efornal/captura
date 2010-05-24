@@ -415,5 +415,16 @@ template<typename T> struct CHImg : public CImg<T> {
         return *this;
     }
 
+    CImg<double> get_filtrar_laplaciano_g() {
+        CImg<double> img(*this);
+        filtrado_laplaciano_g( img );
+        return img;
+    }
+
+    CImg<double> filtrar_laplaciano_g() {
+        filtrado_laplaciano_g( *this );
+        return *this;
+    }
+
 
 };
