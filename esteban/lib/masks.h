@@ -425,4 +425,34 @@ namespace masks {
         mask(1,2) =  1;
         return mask;
     }
+
+    /**
+     * retorna una mascara Laplaciano N4
+     * Lap{f} = gradiente{f}^2 = 4z5 - (z2 + z4 + z6 + z8)
+     *   0  -1   0
+     *  -1   4  -1    N=4
+     *   0  -1   0
+     */
+    CImg<double> laplaciano_n4() {
+        CImg<double> mask( 3, 3, 1, 1, 0);
+        mask(0,1) = -1;
+        mask(1,0) = -1;
+        mask(1,2) = -1;
+        mask(2,1) = -1;
+        mask(1,1) =  4;
+        return mask;
+    }
+    /**
+     * retorna una mascara Laplaciano N8
+     * Lap{f} = gradiente{f}^2 = 8z5 - (z1 + z2 + + z3 + z4 + z6 + z7 + z8)
+     *  -1  -1  -1
+     *  -1   8  -1    N=8
+     *  -1  -1  -1
+     */
+    CImg<double> laplaciano_n8() {
+        CImg<double> mask( 3, 3, 1, 1, -1);
+        mask(1,1) =  8;
+        return mask;
+    }
+
 }
