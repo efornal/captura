@@ -1,7 +1,7 @@
 /*
- * ejer7_1.cpp
+ * ejer1_1y2.cpp
  *
- *  Created on: 21/05/2010
+ *  Created on: 22/05/2010
  *      Author: christian
  */
 
@@ -28,8 +28,6 @@ int main(int argc, char **argv) {
 	img.resize_halfXY();
 	CImgDisplay dispori(img, "imagen original");
 	CImgDisplay disp(aplicar_roberts(img), "bd Roberts");
-	CImgDisplay disp1(aplicar_LoG(img), "bd LoG"); //fixme: porque sale con el fondo blanco?
-	//fixme: con log laplaciando y demas no aplico lo del gradiente.. deberia hacer el gradiente??
 	CImgDisplay disp2(aplicar_laplaciano(img), "bd Lap(sin-diag)");
 	CImgDisplay
 			disp3(aplicar_laplaciano_condiagonales(img), "bd Lap(con-diag)");
@@ -37,7 +35,9 @@ int main(int argc, char **argv) {
 	CImgDisplay disp5(aplicar_prewitt_diagonal(img), "bd prewitt(con-diag)");
 	CImgDisplay disp6(aplicar_sobel(img), "bd sobel");
 	CImgDisplay disp7(aplicar_sobel_diagonal(img), "bd sobel(con-diag)");
-
+	CImgDisplay disp1(aplicar_LoG(img), "bd LoG"); //fixme: porque sale con el fondo blanco? tengo que dar vuelta el umbral??
+		//fixme: con log laplaciando y demas no aplico lo del gradiente.. deberia hacer el gradiente??
+	aplicar_LoG(img).stats();
 	while (!disp.is_closed()) {
 		disp.wait();
 	}
