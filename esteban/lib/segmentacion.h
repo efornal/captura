@@ -23,3 +23,11 @@ CImg<double> filtrado_prewitt( CImg<double> &img ) {
         img.convolve( masks::prewitt_gxy() ) +
         img.convolve( masks::prewitt_gyx() );
 }
+
+
+CImg<double> filtrado_sobel( CImg<double> &img ) {
+    return img.convolve( masks::sobel_gx() ) +
+        img.convolve( masks::sobel_gy() ) +
+        img.convolve( masks::sobel_gxy() ) +
+        img.convolve( masks::sobel_gyx() );
+}
