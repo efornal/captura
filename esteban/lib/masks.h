@@ -442,6 +442,7 @@ namespace masks {
         mask(1,1) =  4;
         return mask;
     }
+
     /**
      * retorna una mascara Laplaciano N8
      * Lap{f} = gradiente{f}^2 = 8z5 - (z1 + z2 + + z3 + z4 + z6 + z7 + z8)
@@ -452,6 +453,42 @@ namespace masks {
     CImg<double> laplaciano_n8() {
         CImg<double> mask( 3, 3, 1, 1, -1);
         mask(1,1) =  8;
+        return mask;
+    }
+
+    /**
+     * retorna una mascara Laplaciano del gaussiano - LoG
+     *
+     *              - r^2 / 2sigma^2
+     *  h(r)   = -e
+     *
+     *              (r^2) - sigma^2     - r^2 / 2sigma^2
+     *  Lap{h} = -  --------------- . e
+     *                  sigma^4     
+     *
+     *    con  r^2 = (x^2 + y^2)
+     *
+     *   0   0   -1   0   0
+     *   0  -1   -2  -1   0
+     *  -1  -2   16  -2  -1
+     *   0  -1   -2  -1   0
+     *   0   0   -1   0   0
+     */
+    CImg<double> laplaciano_g() {
+        CImg<double> mask( 5, 5, 1, 1, 0);
+        mask(0,2) =  -1;
+        mask(1,1) =  -1;
+        mask(1,3) =  -1;
+        mask(2,0) =  -1;
+        mask(2,4) =  -1;
+        mask(3,1) =  -1;
+        mask(3,3) =  -1;
+        mask(4,2) =  -1;
+        mask(1,2) =  -2;
+        mask(2,1) =  -2;
+        mask(2,3) =  -2;
+        mask(3,2) =  -2;
+        mask(2,2) =  16;
         return mask;
     }
 
