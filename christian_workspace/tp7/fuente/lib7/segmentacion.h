@@ -9,6 +9,49 @@
 using namespace std;
 using namespace cimg_library;
 
+//horizontal
+template<class T>
+CImg<T> get_horizontal() {
+	//genera una mascara que detecta bordes horizontalmente
+	CImg<T> hx(3, 3, 1, 1, -1);
+	hx(1, 0) = 2.0;
+	hx(1, 1) = 2.0;
+	hx(1, 2) = 2.0;
+	return hx;
+}
+
+//diagonal 45 grados
+template<class T>
+CImg<T> get_diag_45() {
+	//genera una mascara que detecta bordes a 45 grados
+	CImg<T> hx(3, 3, 1, 1, -1);
+	hx(0, 2) = 2.0;
+	hx(1, 1) = 2.0;
+	hx(2, 0) = 2.0;
+	return hx;
+}
+
+//diagonal -45 grados
+template<class T>
+CImg<T> get_diag_135() {
+	//genera una mascara que detecta bordes a -45=135 grados
+	CImg<T> hx(3, 3, 1, 1, -1);
+	hx(0, 0) = 2.0;
+	hx(1, 1) = 2.0;
+	hx(2, 2) = 2.0;
+	return hx;
+}
+//vertical
+template<class T>
+CImg<T> get_vertical() {
+	//genera una mascara que detecta bordes a -45=135 grados
+	CImg<T> hx(3, 3, 1, 1, -1);
+	hx(0, 1) = 2.0;
+	hx(1, 1) = 2.0;
+	hx(2, 1) = 2.0;
+	return hx;
+}
+
 template<class T>
 CImg<T> segmentar(CImg<T> imagen, CImg<T> mascara_x, CImg<T> mascara_y,
 		bool binaria = true) {
@@ -343,7 +386,7 @@ CImg<T> aplicar_LoG(CImg<T> imagen, bool binaria = true) {
 	if (binaria) {
 		cimg_forXY(resul,x,y)
 			{
-				(resul(x, y) < 127) ? resul(x, y) = 0 : resul(x, y) = 255;
+				(resul(x, y) > 127) ? resul(x, y) = 0 : resul(x, y) = 255;
 			}
 	}
 	return resul;
