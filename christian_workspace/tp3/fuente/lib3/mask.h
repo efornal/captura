@@ -104,7 +104,8 @@ CImg<T> generar_mascara_gaussiana(int x = 3, int y = 3, double var = 1.0) {
 	T den = 2.0 * pow(var, 2);
 	cimg_forXY(mask, xm, ym)
 		{
-			mask(x+xm, y+ym) = exp(-(pow(x-xm, 2) + pow(y-ym, 2)) / den);
+			mask(x + xm, y + ym)
+					= exp(-(pow(x - xm, 2) + pow(y - ym, 2)) / den);
 		}
 	return (mask *= c);
 }
@@ -230,4 +231,40 @@ CImg<T> fil_high_boost(CImg<T> imagen, CImg<T> mascara, int coefA = 1) {
 	//devuelve filtrado de alta potencia
 	// la imagen filtrada segun: A*f(x,y)-PB(f(x,y)) usando como mascara del PB la especificada
 	return restar<T> (coefA * imagen, imagen.get_convolve(mascara));
+}
+template <class T>
+CImg<T> fil_high_boost_1solapasada(CImg<T> imagen, T A= 1.0, int tipo_mask = 2) {
+	/*aplica el filtrado de alta potencia en una sola pasada
+	 @imagen = imagen sobre la cual se aplica el filtro
+	 @por defecto A=1 en la formula A*f-Pb(f)
+	 @tipo_mask indica el filtro de mascara a usar para el filtrado
+	 si es 1-> la mascara es del tipo:
+	 0		-1		0
+	 -1		A+4	   -1
+	 0		-1		0
+	 si es 2-> la mascara es del tipo
+	 -1		-1		-1
+	 -1		A+8		-1
+	 -1		-1		-1
+	 si es otro numero asigna por defecto tipo 2 (por defecto)
+	 */
+	CImg<T> mascara(3, 3, 1, 1, 0);
+	if (tipo_mask == 1) {
+		mascara(0, 1) = -1.0;
+		mascara(1, 0) = -1.0;
+		mascara(1, 1) = A + 4.0;
+		mascara(1, 2) = -1.0;
+		mascara(2, 1) = -1.0;
+	} else {
+		mascara(0, 0) = -1.0;
+		mascara(0, 1) = -1.0;
+		mascara(0, 2) = -1.0;
+		mascara(1, 0) = -1.0;
+		mascara(1, 1) = A + 8.0;
+		mascara(1, 2) = -1.0;
+		mascara(2, 0) = -1.0;
+		mascara(2, 1) = -1.0;
+		mascara(2, 2) = -1.0;
+	}
+	return imagen.get_convolve(mascara);
 }
