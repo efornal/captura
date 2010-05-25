@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
 	 * frecuencias es el filtrado de alta pontencia: f_hb=A*f(x,y)-PB(f(x,y)) A>=1
 	 * mayor A -> dejo mas vivas las bajas frecuencias
 	 * */
-	//FIXME: que es eso de investigra metodos de calculo ne una pasaada y que uso de PB ?
 
 	//filtrado por mascara difusa : f(x,y)- PB( f(x,y) )
 	CImg<float> imagenc("../../imagenes/camaleon.tif");
@@ -42,34 +41,38 @@ int main(int argc, char **argv) {
 	disp3.set_title("PB(f(x,y))");
 
 	CImgList<float> lista1(fil_high_boost<float> (imagenc,
-			generar_mascara3x3_no_simetrica<float> ()), fil_high_boost<float> (
-			imagen1, generar_mascara3x3_no_simetrica<float> ()),
+			generar_mascara3x3_no_simetrica<float> ()).normalize(0, 255),
+			fil_high_boost<float> (imagen1, generar_mascara3x3_no_simetrica<
+					float> ()).normalize(0, 255),
 			fil_high_boost<float> (imagenh, generar_mascara3x3_no_simetrica<
-					float> ()));
+					float> ()).normalize(0, 255));
 	lista1.display(disp2);
 	disp2.set_title("filtro de Alta potencia - A*f(x,y)- PB(f(x,y)) con A=1");
 
 	CImgList<float> lista2(fil_high_boost<float> (imagenc,
-			generar_mascara3x3_no_simetrica<float> (), 3),
+			generar_mascara3x3_no_simetrica<float> (), 3).normalize(0, 255),
 			fil_high_boost<float> (imagen1, generar_mascara3x3_no_simetrica<
-					float> (), 3), fil_high_boost<float> (imagenh,
-					generar_mascara3x3_no_simetrica<float> (), 3));
+					float> (), 3).normalize(0, 255),
+			fil_high_boost<float> (imagenh, generar_mascara3x3_no_simetrica<
+					float> (), 3).normalize(0, 255));
 	lista2.display(disp4);
 	disp4.set_title("filtro de Alta potencia - A*f(x,y)- PB(f(x,y)) con A=3");
 
 	CImgList<float> lista4(fil_high_boost<float> (imagenc,
-			generar_mascara3x3_no_simetrica<float> (), 7), fil_high_boost<
-			float> (imagen1, generar_mascara3x3_no_simetrica<float> (), 7),
+			generar_mascara3x3_no_simetrica<float> (), 7).normalize(0, 255),
+			fil_high_boost<float> (imagen1, generar_mascara3x3_no_simetrica<
+					float> (), 7).normalize(0, 255),
 			fil_high_boost<float> (imagenh, generar_mascara3x3_no_simetrica<
-					float> (), 7));
+					float> (), 7).normalize(0, 255));
 	lista4.display(disp5);
 	disp5.set_title("filtro de Alta potencia - A*f(x,y)- PB(f(x,y)) con A=7");
 
 	CImgList<float> lista5(fil_high_boost<float> (imagenc,
-			generar_mascara3x3_no_simetrica<float> (), 10), fil_high_boost<
-			float> (imagen1, generar_mascara3x3_no_simetrica<float> (), 10),
+			generar_mascara3x3_no_simetrica<float> (), 10).normalize(0, 255),
+			fil_high_boost<float> (imagen1, generar_mascara3x3_no_simetrica<
+					float> (), 10).normalize(0, 255),
 			fil_high_boost<float> (imagenh, generar_mascara3x3_no_simetrica<
-					float> (), 10));
+					float> (), 10).normalize(0, 255));
 	lista5.display(disp6);
 	disp6.set_title("filtro de Alta potencia - A*f(x,y)- PB(f(x,y)) con A=10");
 	while (!disp1.is_closed()) {
