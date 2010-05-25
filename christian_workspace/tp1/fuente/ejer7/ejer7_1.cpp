@@ -1,5 +1,3 @@
-//TODO: Ver la funcion el tema cuando hago la asignacion que deja los bordes mal como solucuionarlo..
-
 //============================================================================
 // Name        :
 // Author      : Christian Pfarher
