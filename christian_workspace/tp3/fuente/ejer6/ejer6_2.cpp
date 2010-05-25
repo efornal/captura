@@ -67,6 +67,14 @@ int main(int argc, char **argv) {
 	lista4.display(disp5);
 	disp5.set_title("filtro de Alta potencia - A*f(x,y)- PB(f(x,y)) con A=7");
 
+	CImgDisplay dispnew;
+	CImgList<float> lista1solapasada(fil_high_boost_1solapasada<float> (
+			imagenc, 7.0, 2).normalize(0,255), fil_high_boost_1solapasada<float> (imagenc, 3.0,
+			1).normalize(0,255));
+	lista1solapasada.display(dispnew);
+	dispnew.set_title(
+			"filtrada con una sola pasada, mascara tipo 1 y tipo 2 respectivamente");
+
 	CImgList<float> lista5(fil_high_boost<float> (imagenc,
 			generar_mascara3x3_no_simetrica<float> (), 10).normalize(0, 255),
 			fil_high_boost<float> (imagen1, generar_mascara3x3_no_simetrica<
