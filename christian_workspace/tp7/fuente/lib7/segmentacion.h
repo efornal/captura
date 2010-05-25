@@ -54,9 +54,10 @@ CImg<T> get_vertical() {
 
 template<class T>
 CImg<T> segmentar(CImg<T> imagen, CImg<T> mascara_x, CImg<T> mascara_y,
-		bool binaria = true) {
+		float umbral = 127.0, bool binaria = true) {
 	/* fucnion generica que segmenta una imagen con las mascaras pasadas por parametro
 	 * por defecto binaria=true indica que devuelve una imagen binaria como resultado
+	 * @umbral= valor de umbral para binarizado para valores menosres asigna 0
 	 * */
 	CImg<T> img_filx = imagen.get_convolve(mascara_x).get_abs();
 	CImg<T> img_fily = imagen.get_convolve(mascara_y).get_abs();
@@ -66,7 +67,7 @@ CImg<T> segmentar(CImg<T> imagen, CImg<T> mascara_x, CImg<T> mascara_y,
 		{
 			suma(x, y) = img_filx(x, y) + img_fily(x, y);
 			if (binaria) {
-				(suma(x, y) < 127) ? suma(x, y) = 0 : suma(x, y) = 255;
+				(suma(x, y) < umbral) ? suma(x, y) = 0 : suma(x, y) = 255;
 			}
 		}
 	return suma;
@@ -313,39 +314,47 @@ CImg<T> get_laplaciano2() {
 }
 
 template<class T>
-CImg<T> aplicar_roberts(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_roberts(CImg<T> imagen, float umbral = 127.0, bool binaria =
+		true) {
 	/*aplica una mascara de roberts a la imagen y devuelve el resultado
 	 * */
-	return segmentar(imagen, get_roberts_x<T> (), get_roberts_y<T> (), binaria);
+	return segmentar(imagen, get_roberts_x<T> (), get_roberts_y<T> (), umbral,
+			binaria);
 }
 template<class T>
-CImg<T> aplicar_prewitt(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_prewitt(CImg<T> imagen, float umbral = 127.0, bool binaria =
+		true) {
 	/*aplica una mascara de prewitt a la imagen y devuelve el resultado
 	 * */
-	return segmentar(imagen, get_prewitt_x<T> (), get_prewitt_y<T> (), binaria);
+	return segmentar(imagen, get_prewitt_x<T> (), get_prewitt_y<T> (), umbral,
+			binaria);
 }
 template<class T>
-CImg<T> aplicar_sobel(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_sobel(CImg<T> imagen, float umbral = 127.0, bool binaria = true) {
 	/*aplica una mascara de sobel a la imagen y devuelve el resultado
 	 * */
-	return segmentar(imagen, get_sobel_x<T> (), get_sobel_y<T> (), binaria);
+	return segmentar(imagen, get_sobel_x<T> (), get_sobel_y<T> (), umbral,
+			binaria);
 }
 template<class T>
-CImg<T> aplicar_sobel_diagonal(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_sobel_diagonal(CImg<T> imagen, float umbral = 127.0,
+		bool binaria = true) {
 	/*aplica una mascara de sobel para det de diag. a la imagen y devuelve el resultado
 	 * */
 	return segmentar(imagen, get_sobel_x_diagonal<T> (),
-			get_sobel_y_diagonal<T> (), binaria);
+			get_sobel_y_diagonal<T> (), umbral, binaria);
 }
 template<class T>
-CImg<T> aplicar_prewitt_diagonal(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_prewitt_diagonal(CImg<T> imagen, float umbral = 127.0,
+		bool binaria = true) {
 	/*aplica una mascara de prewitt para det de diag. a la imagen y devuelve el resultado
 	 * */
 	return segmentar(imagen, get_prewitt_x_diagonal<T> (),
-			get_prewitt_y_diagonal<T> (), binaria);
+			get_prewitt_y_diagonal<T> (), umbral, binaria);
 }
 template<class T>
-CImg<T> aplicar_laplaciano(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_laplaciano(CImg<T> imagen, float umbral = 127.0, bool binaria =
+		true) {
 	/*aplica una mascara de laplaciano(sin tener en cuentas diagonales
 	 *  a la imagen y devuelve el resultado
 	 * */
@@ -354,14 +363,15 @@ CImg<T> aplicar_laplaciano(CImg<T> imagen, bool binaria = true) {
 	if (binaria) {
 		cimg_forXY(resul,x,y)
 			{
-				(resul(x, y) < 127) ? resul(x, y) = 0 : resul(x, y) = 255;
+				(resul(x, y) < umbral) ? resul(x, y) = 0 : resul(x, y) = 255;
 			}
 	}
 	return resul;
 }
 
 template<class T>
-CImg<T> aplicar_laplaciano_condiagonales(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_laplaciano_condiagonales(CImg<T> imagen, float umbral = 127.0,
+		bool binaria = true) {
 	/*aplica una mascara de laplaciano (TIENE en cuentas diagonales
 	 *  a la imagen y devuelve el resultado
 	 * */
@@ -370,23 +380,23 @@ CImg<T> aplicar_laplaciano_condiagonales(CImg<T> imagen, bool binaria = true) {
 	if (binaria) {
 		cimg_forXY(resul,x,y)
 			{
-				(resul(x, y) < 127) ? resul(x, y) = 0 : resul(x, y) = 255;
+				(resul(x, y) < umbral) ? resul(x, y) = 0 : resul(x, y) = 255;
 			}
 	}
 	return resul;
 }
 
 template<class T>
-CImg<T> aplicar_LoG(CImg<T> imagen, bool binaria = true) {
+CImg<T> aplicar_LoG(CImg<T> imagen, float umbral = 127.0, bool binaria = true) {
 	/*aplica una mascara de laplaciano (TIENE en cuentas diagonales
 	 *  a la imagen y devuelve el resultado
 	 * */
-	CImg<T> resul = imagen.channel(0).get_convolve( get_LoG <T> ());
+	CImg<T> resul = imagen.channel(0).get_convolve(get_LoG<T> ());
 	resul.abs();
 	if (binaria) {
 		cimg_forXY(resul,x,y)
 			{
-				(resul(x, y) > 127) ? resul(x, y) = 0 : resul(x, y) = 255;
+				(resul(x, y) > umbral) ? resul(x, y) = 0 : resul(x, y) = 255;
 			}
 	}
 	return resul;
