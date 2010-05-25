@@ -50,7 +50,6 @@ int main(int argc, char **argv) {
 	 * Plano 6 -> quantizo en 4 niveles
 	 * Plano 7 -> cuantizo en 2 niveles = umbral en 128/
 	 *--------------------------------------------------------------------------------------------------------------
-	 * FIXME: chaco lo entendes?
 	 * Si es básicamente un umbral. Atención cuando reconstruis con un solo plano, siempre es una binaria,
 	 * cambian los intervalos donde se aplican los umbrales. Así por ejemplo, el último plano solo,
 	 * te da 0 para los nros pares y 1 para los impares.
