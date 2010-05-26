@@ -224,42 +224,6 @@ CImg<T> aplicar_PB_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 	return filtrar<T> (imagen, Hf);
 }
 
-template<class T>
-CImg<T> zero_padding(CImg<T> imagen, int tam_x, int tam_y) {
-	/* Dado una imagen rellena con ceros para poder hacer la convolucion en frecuencia
-	 * @tam_x ancho de la imagen (la imagen devuleta sera de 2*tam_x-1)
-	 * @tam_y altura de la imagen (la imagen devuelta sera de 2*tam_y-1)
-	 * */
-	int tam_cx = 2.0 * tam_x - 1.0;
-	int tam_cy = 2.0 * tam_y - 1.0;
-	CImg<T> nueva(tam_cx, tam_cy, 1, 1, 0.0);
-	cimg_forXY(imagen,x,y)
-		{
-			nueva(x, y) = imagen(x, y);
-		}
-	return nueva;
-}
-
-//FILTROS DEFINIDOS EN TIEMPO Y CONVERTIDOS A FRECUENCIA
-template<class T>
-CImg<T> aplicar_Gaussiano_PB_desdetiempo(CImg<T> imagen, CImg<T> &H,
-		float sigma = 1.0) {
-	//fixme: esta funcion no anda!
-	/*aplica un filtro pasa Bajos Gaussiano con varianza=sigma desde tiempo convierte a frecuencia... so
-	 * Devuelve la imagen filtrada para ser mostrada.
-	 * devuelve por referencia H para poder plotear el filtro
-	 * solo andaa para datos del tipo DOUBLE!!
-	 * */
-
-	CImg<T> h = gaussian_mask(imagen.width(), sigma); //filtro gaussiando pasa bajos espacial
-	h.shift(h.width() / 2, h.height() / 2, 0, 0, 2);
-	CImg<T> h_zeros = zero_padding(h, imagen.width(), imagen.height());
-	CImgList<T> H_FFT = h_zeros.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
-	CImg<T> imagen_zeros =
-			zero_padding(imagen, imagen.width(), imagen.height());
-	return filtrar<T> (imagen, H_FFT[0]);
-}
-
 /*##########################################################################################
  * ##########################################################################################*/
 
@@ -299,43 +263,6 @@ CImg<T> aplicar_PA_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 	H = get_PA_gauss<T> (imagen.width(), imagen.height(), varianza);
 	CImg<T> Hf = H.get_shift(H.width() / 2.0, H.height() / 2.0, 0, 0, 2.0);
 	return filtrar<T> (imagen, Hf);
-}
-
-//FILTROS DEFINIDOS EN TIEMPO Y CONVERTIDOS A FRECUENCIA
-template<class T>
-CImg<T> aplicar_Gaussiano_PA_desdetiempo(CImg<T> imagen, CImg<T> &H,
-		float sigma = 1.0) {
-	/*aplica un filtro pasa Altos Gaussiano con varianza=sigma
-	 * Devuelve la imagen filtrada para ser mostrada.
-	 * devuelve por referencia H para poder plotear el filtro
-	 * solo andaa para datos del tipo DOUBLE!!
-	 * */
-	CImg<T> h = gaussian_mask(imagen.width(), sigma); //filtro gaussiando pasa bajos espacial
-	CImgList<T> H_FFT = h.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
-	/*	cimglist_apply(H_FFT, shift)
-	 (imagen.width() / 2, imagen.height() / 2, 0, 0, 2);*/
-	CImg<T> H_real = H_FFT[0];
-	cimg_forXY(H_real, x,y)
-		{
-			H_real(x, y) = 1.0 - H_real(x, y); // lo paso a Pasa altos
-		}
-	H = H_real;
-	//h.shift(h.height() / 2.0, H.width() / 2.0, 0, 0, 2); //todo: para que cuerno hago esto? revisar...
-	imagen.shift(imagen.width() / 2, imagen.height() / 2, 0, 0, 2);
-	//H_real.shift(H_real.width() / 2, H_real.height() / 2, 0, 0, 2); //descentro para palicarselo a la iamgen
-
-	CImgList<T> IMAGEN_FFT = imagen.get_FFT();
-	CImg<T> IMAGEN_real = IMAGEN_FFT[0];
-	CImg<T> IMAGEN_imag = IMAGEN_FFT[1];
-
-	IMAGEN_real = multiplicar<T> (IMAGEN_real, H_real, false);
-	IMAGEN_imag = multiplicar<T> (IMAGEN_imag, H_real, false); //fixme: la parte imaginaria la multiplico por la parte real de la funcion de transferencia... esta bien esto?
-	cimg_forXY(IMAGEN_FFT[0],X,Y)
-		{
-			IMAGEN_FFT[0](X, Y) = IMAGEN_real(X, Y);
-			IMAGEN_FFT[1](X, Y) = IMAGEN_imag(X, Y);
-		}
-	return IMAGEN_FFT.get_FFT(true)[0]; //devuelvo la parte real
 }
 
 //##########################################################################################
