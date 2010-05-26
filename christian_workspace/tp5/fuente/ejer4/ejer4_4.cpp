@@ -14,11 +14,8 @@ extern "C" {
 
 #include <iostream>
 #include <CImg.h>
-/*
- #include "../lib5/lib5.h"
- #include "../lib5/figuras.h"
- #include "../../../tp3/fuente/lib3/mask.h"
- */
+//#include "../../../tp3/fuente/lib3/mask.h"
+//#include "../../../tp4/fuente/lib4/CPDSI_functions.h"
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -29,14 +26,14 @@ int main(int argc, char **argv) {
 			*filename =
 					cimg_option( "-f", "../../imagenes/huang2.jpg", "ruta archivo imagen" );
 	const int tam_mask = cimg_option( "-size", 3, "tam mascara gaussiana" );
-	const float varianza = cimg_option( "-varianza", 1.0, "varianza del filtro" );
+	const double varianza = cimg_option( "-varianza", 1.0, "varianza del filtro" );
 	CImg<float> img(filename); //imagen original
 	img.normalize(0, 255);
 
 	CImgDisplay disporiginal(img, "imagen original");
+	//fixme: esto todavia no anda ver!! - deberia ser pasa altos
+	CImg <float> h = 1.0-gaussian_mask(tam_mask, varianza); //obtengo un filtro gaussiano de 3x3 con varianza 1
 
-	CImg<float> h = get_PA_gauss<float> (tam_mask, tam_mask, varianza); //obtengo un filtro gaussiano de 3x3 con varianza 1
-	//fixme: esto todavia no anda ver!!
 	//h.shift(h.width()/2, h.height()/2,0,0,2);
 	CImg<float> filtrado_espacial = img.get_convolve(h);
 	CImgDisplay esp(filtrado_espacial, "imagen filtrada en el dom espacial");
