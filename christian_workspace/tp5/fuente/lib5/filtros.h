@@ -97,7 +97,7 @@ CImg<T> filtrar_complejo(CImg<T> img, CImgList<T> filtro) {
 //######################################################################################
 template<class T>
 CImg<T> get_PB_ideal(int dimx, int dimy, float frec_corte = 10.0) {
-	/* genera un PB ideal con frec corte =10.0 por defecto de dimx x dimy*/
+	/* genera un PB ideal en frecuencia (H) con frec corte =10.0 por defecto de dimx x dimy*/
 	CImg<T> H(dimx, dimy, 1, 1, 0.0);
 	circulo_centrado<T> (H.width() / 2, H.height() / 2, H, frec_corte, 0); //creo la mascara
 	H.normalize(0.0, 1.0);
@@ -108,7 +108,7 @@ CImg<T> get_PB_ideal(int dimx, int dimy, float frec_corte = 10.0) {
 template<class T>
 CImg<T> get_PB_Butter(int dimx, int dimy, float frec_corte = 10.0, float orden =
 		1.0) {
-	//genera un filtro pasa bajos butterworth de dimx x dimy con frec corte =10 por defecto y orden 1.0 por defecto
+	//genera un filtro pasa bajos butterworth en frecuencia (H)  de dimx x dimy con frec corte =10 por defecto y orden 1.0 por defecto
 	float distancia;
 	float mediox = dimx / 2.0;
 	float medioy = dimy / 2.0;
@@ -123,6 +123,7 @@ CImg<T> get_PB_Butter(int dimx, int dimy, float frec_corte = 10.0, float orden =
 }
 template<class T>
 CImg<T> get_PB_gauss(int dimx, int dimy, float varianza = 1.0) {
+	//genera un filtro gaussiano  en frecuencia (H)
 	float distancia;
 	CImg<T> H(dimx, dimy, 1, 1, 0);
 	float mediox = dimx / 2.0;
@@ -138,7 +139,7 @@ CImg<T> get_PB_gauss(int dimx, int dimy, float varianza = 1.0) {
 
 template<class T>
 CImg<T> get_PA_ideal(int dimx, int dimy, float frec_corte = 10.0) {
-	/* genera un PA ideal con frec corte =10.0 por defecto de dimx x dimy*/
+	/* genera un PA ideal  en frecuencia (H) con frec corte =10.0 por defecto de dimx x dimy*/
 	CImg<T> H(dimx, dimy, 1, 1);
 	circulo_centrado_inverso<T> (H.width() / 2, H.height() / 2, H, frec_corte,
 			0); //creo la mascara
@@ -150,7 +151,7 @@ CImg<T> get_PA_ideal(int dimx, int dimy, float frec_corte = 10.0) {
 template<class T>
 CImg<T> get_PA_Butter(int dimx, int dimy, float frec_corte = 10.0, float orden =
 		1.0) {
-	//genera un filtro pasa altos butterworth de dimx x dimy con frec corte =10 por defecto y orden 1.0 por defecto
+	//genera un filtro pasa altos butterworth  en frecuencia (H) de dimx x dimy con frec corte =10 por defecto y orden 1.0 por defecto
 	float distancia;
 	float mediox = dimx / 2.0;
 	float medioy = dimy / 2.0;
@@ -165,7 +166,7 @@ CImg<T> get_PA_Butter(int dimx, int dimy, float frec_corte = 10.0, float orden =
 }
 template<class T>
 CImg<T> get_PA_gauss(int dimx, int dimy, float varianza = 1.0) {
-	//genera un filtro PA gaussiano con varianza 1.0 por defecto
+	//genera un filtro PA gaussiano  en frecuencia (H) con varianza 1.0 por defecto
 	float distancia;
 	CImg<T> H(dimx, dimy, 1, 1, 0);
 	float mediox = dimx / 2.0;
@@ -180,7 +181,6 @@ CImg<T> get_PA_gauss(int dimx, int dimy, float varianza = 1.0) {
 }
 //######################################################################################
 //######################################################################################
-// FILTROS DEFINIDOS EN FRECUENCIA:
 template<class T>
 CImg<T> aplicar_PB_ideal(CImg<T> imagen, float frec_corte = 10.0) {
 	/*aplica un filtro pasa Bajos IDEAL centrado de radio=frec_corte. Por defecto 10. (muy selectivo)
