@@ -16,11 +16,53 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
+CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h, CImg<T> &mag_H) {
+	/* Filtra una imagen en el dominio de las frecuencias a partir de un filtro en el dominio espacial y de una imagen en el mismo
+	 * dominio.
+	 * (Esta funcion fue hecha con fines didacticos ya que sino simplemente se podria obtener le mismo resultado mediante conv.)
+	 * Devuelve: la imagen filtrada y por referencia la magnitud del filtro
+	 * @image_a_filtrar: imagen en el dominio espacial que se quiere filtrar
+	 * @h: filtro espacial que se desea aplicar a la imagen
+	 * @mag_H: Imagen del filtro centrada que se devuelve por referencia.. MagH debe ser de dimensiones = 2*imagen_a_filtrar
+	 * */
+
+	//agrandamos al doble el tam de la imagen rellenando con ceros en el espacio..:
+	CImg<T> img_zeros = imagen_a_filtrar.get_resize(2
+			* imagen_a_filtrar.width(), 2 * imagen_a_filtrar.height(), -100,
+			-100, 0);
+	CImgList<T> IMG_ZEROS = img_zeros.get_FFT(); //obtengo fft de la imagen con el zeropadding
+
+	CImg<T> h_zeros = h.get_resize(img_zeros.width(), img_zeros.height(),
+			-100, -100, 0); //hago el zero padding en el filtro en el espacio
+	CImgList<T> H_ZEROS = h_zeros.get_FFT(); //obtengo el filtro en frecuencia a traves de el H rellenado con ceros
+
+	//aplicamos el filtro en frecuencia
+	CImgList<T> imgfilt(mag_H, mag_H);
+
+	cimg_forXY(H_ZEROS[0],x,y)
+		{
+			mag_H(x, y) = sqrt(pow(H_ZEROS[0](x, y), 2) + pow(H_ZEROS[1](x, y),
+					2));
+
+			imgfilt[0](x, y) = IMG_ZEROS[0](x, y) * mag_H(x, y);
+			imgfilt[1](x, y) = IMG_ZEROS[1](x, y) * mag_H(x, y);
+		}
+
+	mag_H.shift(H_ZEROS[0].width() / 2, H_ZEROS[0].height() / 2, 0, 0, 2);//centramos el filtro para ser mostrado
+
+	//calculamos la transformada inversa
+	CImg<T> imgf = imgfilt.get_FFT(true)[0].crop(0, 0, imagen_a_filtrar.width() - 1,
+			imagen_a_filtrar.height() - 1);
+	return imgf;
+}
+
+template<class T>
 CImg<T> filtrar(CImg<T> imagen, CImg<T> H) {
 	/**
 	 * Retorna la imagen filtrada con el filtro pasado
-	 * El filtro debe estar diseñado centrado
+	 * El filtro debe estar diseñado no centrado y en frecuencia!!
 	 */
+	//imagen.shift(imagen.width()/2.0, imagen.height()/2.0, 0,0,2);
 	CImgList<T> F = imagen.get_FFT();//obtengo la transformada
 	CImg<T> F_real = F[0]; //parte real
 	CImg<T> F_imag = F[1]; //parte imaginaria
@@ -182,6 +224,22 @@ CImg<T> aplicar_PB_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 	return filtrar<T> (imagen, Hf);
 }
 
+template<class T>
+CImg<T> zero_padding(CImg<T> imagen, int tam_x, int tam_y) {
+	/* Dado una imagen rellena con ceros para poder hacer la convolucion en frecuencia
+	 * @tam_x ancho de la imagen (la imagen devuleta sera de 2*tam_x-1)
+	 * @tam_y altura de la imagen (la imagen devuelta sera de 2*tam_y-1)
+	 * */
+	int tam_cx = 2.0 * tam_x - 1.0;
+	int tam_cy = 2.0 * tam_y - 1.0;
+	CImg<T> nueva(tam_cx, tam_cy, 1, 1, 0.0);
+	cimg_forXY(imagen,x,y)
+		{
+			nueva(x, y) = imagen(x, y);
+		}
+	return nueva;
+}
+
 //FILTROS DEFINIDOS EN TIEMPO Y CONVERTIDOS A FRECUENCIA
 template<class T>
 CImg<T> aplicar_Gaussiano_PB_desdetiempo(CImg<T> imagen, CImg<T> &H,
@@ -194,26 +252,12 @@ CImg<T> aplicar_Gaussiano_PB_desdetiempo(CImg<T> imagen, CImg<T> &H,
 	 * */
 
 	CImg<T> h = gaussian_mask(imagen.width(), sigma); //filtro gaussiando pasa bajos espacial
-	h.resize(imagen.width(), imagen.height(), 1, 1); //fixme es asi??
-	CImgList<T> H_FFT = h.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
-
-	CImg<T> H_real = H_FFT[0];
-	H = H_real;
-	H.shift(h.height() / 2.0, H.width() / 2.0, 0, 0, 2);
-	imagen.shift(imagen.width() / 2, imagen.height() / 2, 0, 0, 2);
-
-	CImgList<T> IMAGEN_FFT = imagen.get_FFT();
-	CImg<T> IMAGEN_real = IMAGEN_FFT[0];
-	CImg<T> IMAGEN_imag = IMAGEN_FFT[1];
-
-	IMAGEN_real = multiplicar<T> (IMAGEN_real, H_real, false);
-	IMAGEN_imag = multiplicar<T> (IMAGEN_imag, H_real, false); //fixme: la parte imaginaria la multiplico por la parte real de la funcion de transferencia... esta bien esto?
-	cimg_forXY(IMAGEN_FFT[0],X,Y)
-		{
-			IMAGEN_FFT[0](X, Y) = IMAGEN_real(X, Y);
-			IMAGEN_FFT[1](X, Y) = IMAGEN_imag(X, Y);
-		}
-	return IMAGEN_FFT.get_FFT(true)[0]; //devuelvo la parte real
+	h.shift(h.width() / 2, h.height() / 2, 0, 0, 2);
+	CImg<T> h_zeros = zero_padding(h, imagen.width(), imagen.height());
+	CImgList<T> H_FFT = h_zeros.get_FFT(); //obtengo la respuesta en frecuencia del filtro gaussiano
+	CImg<T> imagen_zeros =
+			zero_padding(imagen, imagen.width(), imagen.height());
+	return filtrar<T> (imagen, H_FFT[0]);
 }
 
 /*##########################################################################################
