@@ -36,13 +36,12 @@ int main(int argc, char **argv) {
 	lista3.display(disp3);
 	disp3.set_title("PB(f(x,y))");
 
-	CImgList<float>
-			lista1(fil_masc_difusa <float> (imagenc, generar_mascara3x3_no_simetrica<
-					float> ()), fil_masc_difusa <float> (imagen1,
-					generar_mascara3x3_no_simetrica<float> ()),
-					fil_masc_difusa <float> (imagenh, generar_mascara3x3_no_simetrica<
-							float> ()));
-	//fixme: las imagenes salen grisaseas.. que habria que sumarle un offset?
+	CImgList<float> lista1(fil_masc_difusa<float> (imagenc,
+			generar_mascara3x3_no_simetrica<float> ()).normalize(0, 255),
+			fil_masc_difusa<float> (imagen1, generar_mascara3x3_no_simetrica<
+					float> ()).normalize(0, 255),
+			fil_masc_difusa<float> (imagenh, generar_mascara3x3_no_simetrica<
+					float> ()).normalize(0, 255));
 	lista1.display(disp2);
 	disp2.set_title("filtro de mascara difusa - f(x,y)- PB(f(x,y))");
 	while (!disp1.is_closed()) {

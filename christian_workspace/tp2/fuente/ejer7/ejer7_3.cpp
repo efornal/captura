@@ -57,16 +57,10 @@ int main(int argc, char **argv) {
 			"Imagenes a mejorar e identificar X y SE respectivamente");
 
 
-
-
-
 	ensuciada_img_a7v600se[10].display("ensuciadas por mi");
 	/*CImgList<unsigned char> sucias(ensuciada_img_a7v600x[10],
 			ensuciada_img_a7v600se[10]);
 	sucias.display("limpias contaminadas manualmente, x y se respectivamente");*/
-
-
-
 
 /*	//TODO:
 	CImgList<unsigned char> reconstruidas(reconst_img_a7v600x,
