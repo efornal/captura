@@ -17,8 +17,10 @@ CImg<unsigned char> NOT(CImg<unsigned char> img) {
 		}
 	return img;
 }
-
-CImg<unsigned char> AND(CImg<unsigned char> img1, CImg<unsigned char> img2) {
+template<class T>
+CImg<T> AND(CImg<T> img1, CImg<T> img2) {
+	img1.normalize(0, 255);
+	img2.normalize(0, 255);
 	cimg_forXY( img1, x, y )
 		{
 			img1(x, y) = (img1(x, y) / 255 && img2(x, y) / 255) * 255;
