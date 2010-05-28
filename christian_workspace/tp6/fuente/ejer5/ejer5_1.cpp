@@ -15,7 +15,9 @@ extern "C" {
 
 #include <iostream>
 #include "../lib6/restauracion.h"
-#include "../../../tp5/fuente/lib5/filtros.h"
+#include "../../../tp3/fuente/lib3/mask.h"
+//#include "../../../tp5/fuente/lib5/filtros.h"
+
 #include <CImg.h>
 
 using namespace std;
@@ -25,11 +27,13 @@ int main(int argc, char **argv) {
 	const char
 			*filename =
 					cimg_option( "-f", "../../imagenes/huang2_corrida.tif", "ruta archivo imagen" );
-	CImg<double> img(filename); //imagen original
-	//fixme: no anda
-	CImgDisplay disp(img, "imagen huang corrida");
+	CImg<double> g(filename); //imagen original
 
-	sacar_movimiento(img, 1, 0.1,0.1).display(dii);
+	CImgDisplay disp(g, "imagen huang corrida");
+	CImg<double> h=generar_mascara_promediadora <float> (3);
+	h=1.0/h;
+
+	//sacar_movimiento(img, 1, 0.1,0.1).display(dii);//fixme: no anda
 	while (!disp.is_closed()) {
 		disp.wait();
 	}

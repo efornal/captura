@@ -31,64 +31,24 @@ CImg<T> segmentaHSI(CImg<T> img, float tol_h, float tol_s, float H, float S,
 	bool flag_derecho = false, flag_izquierdo = false;
 	cimg_forXY(img_segmentada,x,y)
 		{
-			if (S > (img_S(x, y) + tol_s)) { //si el valor del pixel de la imagen es menor que el H a segmentar... esta afuera del arco... colorerar con negro
+			if (img_S(x, y) >= (S + tol_s)) { //si el valor del pixel de la imagen es mayor que el punto a segm.+la tol
 				img_segmentada(x, y, 0, 0) = 0.0;
 				img_segmentada(x, y, 0, 1) = 0.0;
 				img_segmentada(x, y, 0, 2) = 0.0;
 			} else //esta en un radio <= a S
 			{
-				if ((H - tol_h) < 0.0) //si el valor del pixel a segementar menos la tolerancia
-				{
-					if (img_H(x, y) >= (H - tol_h) || (img_H(x, y) >= 0
-							&& img_H(x, y) <= tol_h)) {//esta adentro del angulo con la tolerancia
-						if (color_verdadero) { //pinto con color verdadero
-							img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
-							img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
-							img_segmentada(x, y, 0, 2) = img(x, y, 0, 2);
-						} else { //pinto con el color que eligio...
-							img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
-							img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
-							img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
-						}
-					} else {//esta afuera
-						img_segmentada(x, y, 0, 0) = 0.0;
-						img_segmentada(x, y, 0, 1) = 0.0;
-						img_segmentada(x, y, 0, 2) = 0.0;
-					}
-				} else if ((H + tol_h) > 360.0) { // si es mayor a 360 grados...
-					if ((img_H(x, y)>H) || (img_H(x,y)<=0+tol_h)) {//esta adentro del angulo con la tolerancia
-						if (color_verdadero) { //pinto con color verdadero
-							img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
-							img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
-							img_segmentada(x, y, 0, 2) = img(x, y, 0, 2);
-						} else { //pinto con el color que eligio...
-							img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
-							img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
-							img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
-						}
-					} else {//esta afuera
-						img_segmentada(x, y, 0, 0) = 0.0;
-						img_segmentada(x, y, 0, 1) = 0.0;
-						img_segmentada(x, y, 0, 2) = 0.0;
-					}
-				} else
-				//ahora tengo que ver si esta en el rango de H que queremos....
-
-				if ((H >= (img_H(x, y) - tol_h))
-						|| (H <= (img_H(x, y) + tol_h))) {//esta adentro del angulo con la tolerancia
-					if (color_verdadero) { //pinto con color verdadero
-						img_segmentada(x, y, 0, 0) = img(x, y, 0, 0);
-						img_segmentada(x, y, 0, 1) = img(x, y, 0, 1);
-						img_segmentada(x, y, 0, 2) = img(x, y, 0, 2);
-					} else { //pinto con el color que eligio...
+				//empieza conprobacion de H...
+				if ((img_H(x, y) > (H + tol_h)) && (img_H(x, y)
+						< abs(H - tol_h))) { //pinto de negro
+					img_segmentada(x, y, 0, 0) = 0.0;
+					img_segmentada(x, y, 0, 1) = 0.0;
+					img_segmentada(x, y, 0, 2) = 0.0;
+				} else { //esta dentro del rango...
+					if (color_a_rellenar) {
 						img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
 						img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
 						img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
 					}
-				} else {//esta afuera
-					img_segmentada(x, y, 0, 0) = 0.0;
-					img_segmentada(x, y, 0, 1) = 0.0;
-					img_segmentada(x, y, 0, 2) = 0.0;
 				}
 			} //cierra el else de S
 		}
@@ -269,8 +229,8 @@ CImg<T> invertir_HSI(CImg<T> imagen_H) {
 		}
 	return imagen_H;
 }
-
-CImg<float> aplicar_paleta(CImg<float> imagen, int numero_paleta = 1) {
+template<class T>
+CImg<T> aplicar_paleta(CImg<T> imagen, int numero_paleta = 1) {
 	/* carga una paleta con nombre_paleta la aplica a la imagen pasada como parametro y
 	 * devuelve la imagen con la paleta aplicada
 	 * @numeropaleta=1 -> ../../paletas/bone.pal
@@ -312,8 +272,7 @@ CImg<float> aplicar_paleta(CImg<float> imagen, int numero_paleta = 1) {
 		break;
 	}
 
-	CImg<float> imagen_con_paleta_aplicada(imagen.width(), imagen.height(), 1,
-			3);
+	CImg<T> imagen_con_paleta_aplicada(imagen.width(), imagen.height(), 1, 3);
 	cimg_forXY(imagen_con_paleta_aplicada, x, y)
 		{ //es mas o menos una lut...
 			imagen_con_paleta_aplicada(x, y, 0, 0) = paleta[imagen(x, y)][0]
