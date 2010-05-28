@@ -35,13 +35,13 @@ int main(int argc, char **argv) {
 	CImg<double> Hough = hough_directa(img);
 	Hough.display();
 	//Hough.normalize(0, 255); //normalizo la transformada
-	Hough.threshold(Hough.max() - 0.5); //aplico un thresold restando 1 para dejar un solo maximo
-	CImgDisplay disppp(Hough, "imagen thresoldeada - plano rho() -tita(-90 a 90)");
-	CImg<double> inversa = hough_inversa(Hough);
+	CImg<double> Hough_thresh=Hough.get_threshold(Hough.max() - 0.5); //aplico un thresold restando 1 para dejar un solo maximo
+	CImgDisplay disppp(Hough_thresh, "imagen thresoldeada - plano rho() -tita(-90 a 90)");
+	CImg<double> inversa = hough_inversa(Hough_thresh);
 	//la recta se ve a -45 grados y pasa por el origen de acuerdo a la posicion del punto que se puede observar en la imagen
 
 	CImgDisplay disp(Hough, "Transf de Hough - plano rho - tita(-90 a 90");
-	CImgDisplay disp1(inversa, "inversa de Hough - plano x y");
+	CImgDisplay disp1(inversa, "inversa de Hough thresoldeada - plano x y");
 	CImgDisplay disp2(img, "imagen plano xy");
 
 	while (!disp.is_closed()) {
