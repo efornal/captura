@@ -6,6 +6,7 @@
  */
 
 #include <CImg.h>
+#include <vector>
 using namespace std;
 using namespace cimg_library;
 
@@ -55,7 +56,8 @@ CImg<T> get_vertical() {
 template<class T>
 CImg<T> segmentar(CImg<T> imagen, CImg<T> mascara_x, CImg<T> mascara_y,
 		float umbral = 40.0, bool binaria = true) {
-	/* fucnion generica que segmenta una imagen con las mascaras pasadas por parametro
+	/* LA IMAGEN DEVUELTA ES NORMALIZADA ENTRE 0 Y 255
+	 * fucnion generica que segmenta una imagen con las mascaras pasadas por parametro
 	 * por defecto binaria=true indica que devuelve una imagen binaria como resultado
 	 * @umbral= valor de umbral para binarizado para valores menosres asigna 0
 	 * */
@@ -407,4 +409,56 @@ CImg<T> aplicar_LoG(CImg<T> imagen, float umbral = 40.0, bool binaria = true) {
 			}
 	}
 	return resul;
+}
+template<class T>
+vector<T> get_pos_max(CImg<T> imagen) {
+	/* Retorna en un vector la posicion del maximo de una imagen;
+	 * */
+	T posx = -1, posy = -1;
+	T valor = -9999;
+	cimg_forXY(imagen, x, y)
+		{
+			if (imagen(x, y) > valor) {
+				posx = x;
+				posy = y;
+				valor = imagen(x, y);
+			}
+		}
+	vector<T> max;
+	max.push_back(posx);
+	max.push_back(posy);
+	return max;
+}
+/* funciones para transformada de hough*/
+template<class T>
+vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1) {
+	/* funcion que deuvelve en un arrelgo la cantidad de maximos especificados
+	 * siendo la pos 0 del arreglo el maximo de la imagen, pos 1 el anterior al maximo, etc.
+	 * @param imagen: es la imagen sobre la cual se hallara los maximos
+	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen..
+	 * */
+	vector<T> maximo_actual;
+	vector<T> maximos;
+	for (int i = 0; i < cantidad; i++) {
+		maximo_actual.clear();
+		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
+		maximos.push_back(maximo_actual[0]);
+		maximos.push_back(maximo_actual[1]);
+		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+	}
+	return maximos;
+}
+
+template<class T>
+CImg<T> colorea_rojo(CImg<T> imagen) {
+	/* colorea los bordes de la imagen con rojo
+	 * */
+	CImg<double> color(imagen.width(), imagen.height(), 1, 3, 0);
+	cimg_forXY(color,x,y)
+		{
+			color(x, y, 0, 0) = imagen(x, y);
+			color(x, y, 0, 1) = 0.0;
+			color(x, y, 0, 2) = 0.0;
+		}
+	return color;
 }
