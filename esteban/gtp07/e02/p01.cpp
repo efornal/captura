@@ -7,9 +7,6 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f",
                                         "../../imagenes/estanbul.tif",
                                          "ruta archivo imagen" );
-    double dtita = cimg_option( "-dtita", 1, "dtita" );
-    double dro   = cimg_option( "-dro", 1, "dro" );
-    bool getHist = cimg_option( "-hist", 0, "getHist" );
 
     CImgDisplay disp, disp1, disp2, disp3, disp4, disp5, disp6;
     
@@ -26,7 +23,7 @@ int main( int argc, char **argv ) {
 
     img.display(disp);
     
-    img_po = hough_directa( img, dtita, dro, getHist); 
+    img_po = hough_directa( img ); 
 
     img_po_fil  = img_po.get_threshold( img_po.max() );
     img_po_fil1 = img_po.get_threshold( img_po.max()-1 );

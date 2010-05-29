@@ -21,7 +21,7 @@ int main( int argc, char **argv ) {
 
     img.display(disp);
     
-    img_po = hough_directa( img, dtita, dro, getHist);
+    img_po = hough_directa( img );
     img_xy = hough_inversa( img_po );
 
     img_po.display( disp1 );
@@ -41,7 +41,7 @@ int main( int argc, char **argv ) {
             img.fill(0);
             img( disp.mouse_x(), disp.mouse_y() ) = 1;
 
-            img_po = hough_directa( img, dtita, dro, getHist);
+            img_po = hough_directa( img );
             img_xy = hough_inversa( img_po );
 
             img.display( disp );

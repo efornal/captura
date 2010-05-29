@@ -65,10 +65,7 @@ CImg<double> filtrado_laplaciano_g( CImg<double> img ) {
  *
  */            
 template<class T>
-CImg<T> hough_directa( CImg<T> img, 
-                       double dtheta = 1, 
-                       double drho = 1, 
-                       bool getHist = 0 ) {
+CImg<T> hough_directa( CImg<T> img ) {
 
   CImg<double> hough(img); 
   const unsigned width  = img.width();
@@ -93,7 +90,6 @@ CImg<T> hough_directa( CImg<T> img,
   }
   return hough;
 }
-
 
 
 /**
