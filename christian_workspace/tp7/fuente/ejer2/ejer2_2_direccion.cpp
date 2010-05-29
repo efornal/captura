@@ -25,18 +25,18 @@ using namespace cimg_library;
  * http://users.cs.cf.ac.uk/Paul.Rosin/CM0311/dual2/hough.html
  * */
 int main(int argc, char **argv) {
-	const char *filename = cimg_option("-f", "../../imagenes/snowman.png",
+	const char *filename = cimg_option("-f", "../../imagenes/letras1.tif",
 			"ruta archivo imagen");
 
-	const float umbral = cimg_option("-umbral", 50.0, "umbral");
+	const float umbral = cimg_option("-umbral", 20.0, "umbral");
 	const int
 			direccion =
-					cimg_option ("-direccionborde", -99, "direccion borde a buscar - -99 implica todas las direcciones");
+					cimg_option ("-direccionborde", 45, "direccion borde a buscar - -99 implica todas las direcciones");
 	const int cant_maximos =
 			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
 	CImg<double> img(filename); //imagen original
 	//img.rotate(90);
-
+	//todo: habria que agregar una tolerancia para el direccionamiento!
 	//aplicar deteccion de bordes a la imagen
 	CImg<double> img_bordes = aplicar_sobel<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
 
@@ -50,8 +50,10 @@ int main(int argc, char **argv) {
 	//luego se lehace la inversa de hough a maxs para ver las lineas
 	maxs.normalize(0, 255);
 	maxs.fill(0.0);
+
 	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i++) {
 		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
+		cout << "posiciones_maximos[i]: " << posiciones_maximos[i] << endl;
 	}
 	CImg<double> deteccion = hough_inversa(maxs);
 

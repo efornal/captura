@@ -451,17 +451,18 @@ vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1, int direccion = -99)
 		int alto = imagen.height() - 1;
 		int medio = (int) ancho / 2.0; // este va a ser el 0 grados
 
-		int x = medio + (int) ((direccion * (ancho - medio)) / 90.0);
+		int x = medio + (int) ((direccion * (ancho - medio)) / 90.0); //posicion real del plano rho theta donde se quiere
+		// busar los maximos
 		imagen.crop(x, 0, x, alto); //ojo con los 90 y -90 explota creo
 		//imagen.display();
-
+		//todo: habria que agregar una tolerancia para el direccionamiento
 		//hay que hacerlo asi ya que maximo me devuelve un vector con posx(que en este caso va a ser siempre 0!)
 		for (int i = 0; i < cantidad; i++) {
 			maximo_actual.clear();
 			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
-			maximos.push_back(maximo_actual[0] + x);
-			maximos.push_back(maximo_actual[1]);
-			imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+			maximos.push_back(x); // la posicion en x va a ser siempre la misma... (la misma direccion)
+			maximos.push_back(maximo_actual[1]); //la posicion de y va variar segun el maximo
+			imagen(x, maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
 		}
 	} else {
 		for (int i = 0; i < cantidad; i++) {
