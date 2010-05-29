@@ -18,63 +18,49 @@ extern "C" {
 //#include "../../../tp4/fuente/lib4/proc_color.h"
 #include "../lib7/CPDSI_segmentacion.h"
 #include "../lib7/segmentacion.h"
+#include "../../../tp2/fuente/lib2/operadores_logicos.h"
 
 using namespace std;
 using namespace cimg_library;
 
 int main(int argc, char **argv) {
-	const char *filename =
-			cimg_option("-f", "../../imagenes/flowers_oscura.tif",
-					"ruta archivo imagen");
+	const char *filename = cimg_option("-f", "../../imagenes/bone.tif",
+			"ruta archivo imagen");
 	CImg<float> imagen(filename);
-	CImgDisplay disp1(imagen, "imagen", 0);
-	CImgDisplay disp2, dish1, dish2, dish3;
+	imagen = imagen.channel(0);
+	CImgDisplay disp1(imagen, "imagen");
+	int x = 200;
+	int y = 200;
+	float tolerancia = 50.0;
+	int cantidad_vecinos = 4;
 
-	//imagen.normalize(0,1);
-	CImg<> ladelabel = label_cc(imagen.channel(0));
-	//ladelabel.display();
-	//ladelabel.display(disp2);
-	//ladelabel.print();
+	CImg<float> imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+			cantidad_vecinos);
+	CImgDisplay disp2(imagen_segmentada, "imagen segmentada");
 
-	//b---------------------------------------------------------------------------------------
-	// tome una muestra representativa del color a segmentar y calcule el centro de la esfera
-	// (valor medio de cada compoennete)
-
-	int posx = 149, posy = 135;
-	float color_original[] = { imagen(posx, posy, 0, 0), imagen(posx, posy, 0,
-			1), imagen(posx, posy, 0, 2) };
+	CImg<float> original_segmentada(imagen);
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
+		if (disp1.button()) {
+			x = disp1.mouse_x();
+			y = disp1.mouse_y();
+			cout<<"X: "<<imagen(x,y)<<endl;
+		} else if (disp1.is_keyV()) { //alterna entre 4 u 8 vecinos
+			(cantidad_vecinos == 4) ? cantidad_vecinos = 8 : cantidad_vecinos
+					= 4;
+			cout << "cantidad de vecinos: " << cantidad_vecinos << endl;
+		} else if (disp1.is_keyARROWUP()) {
+			tolerancia++;
+			cout << "Tolerancia: " << tolerancia << endl;
+		} else if (disp1.is_keyARROWDOWN()) {
+			tolerancia--;
+			cout << "Tolerancia: " << tolerancia << endl;
+		}
+		imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+				cantidad_vecinos);
+		imagen_segmentada.display(disp2);
+		disp2.set_title("imagen segmentada");
 	}
-
-	/*	float tol = 0.5;
-
-
-	 segmentaRGB<float> (imagen, tol, imagen(posx, posy, 0, 0), imagen(posx,
-	 posy, 0, 1), imagen(posx, posy, 0, 2), color_original).display(
-	 disp2);
-	 disp1.set_title(
-	 "use la ruedita del raton y el click - C para alternar entre color verdadero y color seteado");
-	 bool color_verd = false;
-	 while (!disp1.is_closed()) {
-	 disp1.wait();
-	 if (disp1.is_keyC()) {//cambia a color verdadero
-	 color_verd = !color_verd;
-	 }
-	 if (disp1.button()) {
-	 posx = disp1.mouse_x();
-	 posy = disp1.mouse_y();
-	 color_original[0] = imagen(posx, posy, 0, 0);
-	 color_original[1] = imagen(posx, posy, 0, 1);
-	 color_original[2] = imagen(posx, posy, 0, 2);
-	 }
-	 segmentaRGB<float> (imagen, tol + (disp1.wheel() * 0.01), imagen(posx,
-	 posy, 0, 0), imagen(posx, posy, 0, 1),
-	 imagen(posx, posy, 0, 2), color_original, color_verd).display(
-	 disp2);
-	 cout << "Tolerancia: " << tol + (disp1.wheel() * 0.01) << endl;
-	 disp2.set_title("imagen segmentada");
-	 }*/
 	return 0;
 }
