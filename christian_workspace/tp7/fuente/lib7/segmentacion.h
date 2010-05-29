@@ -490,7 +490,6 @@ CImg<T> colorea_rojo(CImg<T> imagen) {
 	return color;
 }
 
-
 template<class T>
 void recursion(int x_inicial, int y_inicial, T intensidad, int width,
 		int height, float tolerancia, CImg<T> &imagen,
@@ -508,13 +507,17 @@ void recursion(int x_inicial, int y_inicial, T intensidad, int width,
 	 * que  imagen y rellenada con negro.
 	 * @param: cant_vecinos(valores aceptados=4 o 8): es la cantidad de vecinos que se usan para comparar. 4 por defecto
 	 * */
-	if (x_inicial > width || x_inicial < 0 || y_inicial > height || y_inicial
-			< 0) {
+
+	if (x_inicial > width - 1 || x_inicial < 0 || y_inicial > height - 1
+			|| y_inicial < 0) {
 		return;
 	}
+	int valor = intensidad - tolerancia;
+	if (valor < 0)
+		valor = 0;
 	if ((imagen(x_inicial, y_inicial) <= (intensidad + tolerancia) && imagen(
-			x_inicial, y_inicial) >= (intensidad - tolerancia))
-			&& imagen_segmentada(x_inicial, y_inicial) == 0) {
+			x_inicial, y_inicial) >= valor) && imagen_segmentada(x_inicial,
+			y_inicial) == 0) {
 		imagen_segmentada(x_inicial, y_inicial) = 1;
 		if (cant_vecinos == 8) { //hace los de la diagonal y cuando sale del if hace los que faltan...
 			recursion(x_inicial - 1, y_inicial - 1, intensidad, width, height,
@@ -558,4 +561,19 @@ CImg<T> segmentar(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
 	recursion(x_inicial, y_inicial, intensidad, width, height, tolerancia,
 			imagen_a_segmentar, imagen_segmentada, cantidad_vecinos);
 	return imagen_segmentada;
+}
+
+template<class T>
+CImg<T> binaria_a_original(CImg<T> imagen_binaria, CImg<T> imagen_original) {
+	/* Devuelve una imagen en base a la mascara imagen_binaria aplicada sobre la imagen_original...
+	 * Lo que este blanco en imagen_binaria es remplazado por lo que tenga la imagen_original y es devuelto en una nueva imagen
+	 * */
+	CImg<T> imagen(imagen_original.width(), imagen_original.height(), 1, 1, 0); //imagen original rellena con cero de entrada
+	cimg_forXY(imagen_binaria, x, y)
+		{
+			if (imagen_binaria(x, y) != 0) {
+				imagen(x, y) = imagen_original(x, y);
+			}
+		}
+	return imagen;
 }
