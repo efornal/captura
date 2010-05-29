@@ -38,14 +38,15 @@ int main(int argc, char **argv) {
 			cantidad_vecinos);
 	CImgDisplay disp2(imagen_segmentada, "imagen segmentada");
 
-	CImg<float> original_segmentada(imagen);
-
+	CImg<float> original_segmentada = binaria_a_original(imagen_segmentada,
+			imagen);
+	CImgDisplay disp3(original_segmentada, "imagen orig. segmentada");
 	while (!disp1.is_closed()) {
 		disp1.wait();
 		if (disp1.button()) {
 			x = disp1.mouse_x();
 			y = disp1.mouse_y();
-			cout<<"X: "<<imagen(x,y)<<endl;
+			cout << "X: " << imagen(x, y) << endl;
 		} else if (disp1.is_keyV()) { //alterna entre 4 u 8 vecinos
 			(cantidad_vecinos == 4) ? cantidad_vecinos = 8 : cantidad_vecinos
 					= 4;
@@ -61,6 +62,10 @@ int main(int argc, char **argv) {
 				cantidad_vecinos);
 		imagen_segmentada.display(disp2);
 		disp2.set_title("imagen segmentada");
+
+		original_segmentada = binaria_a_original(imagen_segmentada, imagen);
+		original_segmentada.display(disp3);
+		disp3.set_title("imagen original segmentada");
 	}
 	return 0;
 }
