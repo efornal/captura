@@ -54,7 +54,7 @@ CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool 
          scale_theta = width/M_PI,
          rho, theta;
 
-  cout << "Calculando la transformada Hough..." << endl;
+  //  cout << "Calculando la transformada Hough..." << endl;
   for (unsigned y=0; y < height; y++)
     for (unsigned x=0; x < width; x++)
       if (img(x,y) > 0.5)
@@ -64,7 +64,7 @@ CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool 
           unsigned r=(unsigned)(rho*scale_rho+height/2.);
           iHough(t,r)+= 1;
          }
-  cout << "...listo!" << endl;
+  // cout << "...listo!" << endl;
   return iHough;
 }
 
