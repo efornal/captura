@@ -383,46 +383,38 @@ template<typename T> struct CHImg : public CImg<T> {
     // - filtrado espacial con convolucion tema:segmentacion - \\
 
     CImg<double> get_filtrar_roberts() {
-        CImg<double> img(*this);
-        filtrado_roberts( img );
-        return img;
+        return filtrado_roberts( *this );
     }
 
     CImg<double> filtrar_roberts() {
-        filtrado_roberts( *this );
+        *this = filtrado_roberts( *this );
         return *this;
     }
 
     CImg<double> get_filtrar_prewitt() {
-        CImg<double> img(*this);
-        filtrado_prewitt( img );
-        return img;
+        return filtrado_prewitt( *this );
     }
 
     CImg<double> filtrar_prewitt() {
-        filtrado_prewitt( *this );
+        *this = filtrado_prewitt( *this );
         return *this;
     }
 
     CImg<double> get_filtrar_sobel() {
-        CImg<double> img(*this);
-        filtrado_sobel( img );
-        return img;
+        return filtrado_sobel( *this );
     }
 
     CImg<double> filtrar_sobel() {
-        filtrado_sobel( *this );
+        *this = filtrado_sobel( *this );
         return *this;
     }
 
     CImg<double> get_filtrar_laplaciano_g() {
-        CImg<double> img(*this);
-        filtrado_laplaciano_g( img );
-        return img;
+        return filtrado_laplaciano_g( *this );
     }
 
     CImg<double> filtrar_laplaciano_g() {
-        filtrado_laplaciano_g( *this );
+        *this = filtrado_laplaciano_g( *this );
         return *this;
     }
 

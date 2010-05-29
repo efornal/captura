@@ -1,3 +1,8 @@
+/**
+ * POSTA: a todos los filtrados (al menos en segmentacion)
+ * le aplicamos abs(), es la forma correcta de verlos.
+*/
+
 #define pdi_segmentacion 1
 #define cimg_use_fftw3 1
 
@@ -17,25 +22,28 @@ using namespace std;
 using namespace cimg_library;
 
 
-CImg<double> filtrado_roberts( CImg<double> &img ) {
-    return img.convolve( masks::roberts_gx() ) +
-        img.convolve( masks::roberts_gy() );
+CImg<double> filtrado_roberts( CImg<double> img ) {
+    return 
+        img.get_convolve( masks::roberts_gx() ).abs() +
+        img.get_convolve( masks::roberts_gy() ).abs();
 }
 
-CImg<double> filtrado_prewitt( CImg<double> &img ) {
-    return img.convolve( masks::prewitt_gx() ) +
-        img.convolve( masks::prewitt_gy() ) +
-        img.convolve( masks::prewitt_gxy() ) +
-        img.convolve( masks::prewitt_gyx() );
+CImg<double> filtrado_prewitt( CImg<double> img ) {
+    return 
+        img.get_convolve( masks::prewitt_gx() ).abs() +
+        img.get_convolve( masks::prewitt_gy() ).abs() +
+        img.get_convolve( masks::prewitt_gxy() ).abs() +
+        img.get_convolve( masks::prewitt_gyx() ).abs();
 }
 
-CImg<double> filtrado_sobel( CImg<double> &img ) {
-    return img.convolve( masks::sobel_gx() ) +
-        img.convolve( masks::sobel_gy() ) +
-        img.convolve( masks::sobel_gxy() ) +
-        img.convolve( masks::sobel_gyx() );
+CImg<double> filtrado_sobel( CImg<double> img ) {
+    return 
+        img.get_convolve( masks::sobel_gx() ).abs() +
+        img.get_convolve( masks::sobel_gy() ).abs() +
+        img.get_convolve( masks::sobel_gxy() ).abs() +
+        img.get_convolve( masks::sobel_gyx() ).abs();
 }
 
-CImg<double> filtrado_laplaciano_g( CImg<double> &img ) {
-    return img.convolve( masks::laplaciano_g() );
+CImg<double> filtrado_laplaciano_g( CImg<double> img ) {
+    return img.get_convolve( masks::laplaciano_g() ).abs();
 }
