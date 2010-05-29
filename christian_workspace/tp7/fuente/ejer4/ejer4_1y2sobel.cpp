@@ -18,10 +18,12 @@ int main(int argc, char **argv) {
 
 	const char *filename = cimg_option("-f", "../../imagenes/rosas.jpg",
 			"ruta archivo imagen");
+
 	float threshold = cimg_option("-umbral", 5.0, "threshold");
 	float tol = cimg_option("-tolerancia", 0.3, "tolerancia");
 
 	CImg<float> imagen(filename);
+	imagen.rotate(30);
 
 	CImgDisplay disp1(imagen, "imagen de futbol", 0);
 	CImgDisplay disp2, dish1, dish2, dish3;
