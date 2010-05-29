@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
 	const int cant_maximos =
 			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
 	CImg<double> img(filename); //imagen original
+	//img.rotate(90);
 
 	//aplicar deteccion de bordes a la imagen
 	CImg<double> img_bordes =
