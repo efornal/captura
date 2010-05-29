@@ -84,7 +84,7 @@ CImg<double> hough_inversa(CImg<double> img) {
          scale_theta = width/M_PI,
          rho, theta;
 
-  cout << "Calculando la transformada Hough inversa..." << endl;
+  //  cout << "Calculando la transformada Hough inversa..." << endl;
   for (unsigned b=0; b < height; b++)
     for (unsigned a=0; a < width; a++)
       if (img(a,b) > 0.5) {
@@ -93,7 +93,7 @@ CImg<double> hough_inversa(CImg<double> img) {
           y1=(int)(((b-(height/2.))/scale_rho)/sin(theta)-width/tan(theta));
           iHoughI.draw_line(0,(int)y0,(int)width,(int)y1,color);
          }
-  cout << "...listo!" << endl;
+  //  cout << "...listo!" << endl;
   return iHoughI;
 }
 
