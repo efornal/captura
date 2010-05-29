@@ -431,20 +431,46 @@ vector<T> get_pos_max(CImg<T> imagen) {
 }
 /* funciones para transformada de hough*/
 template<class T>
-vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1) {
+vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1, int direccion = -99) {
 	/* funcion que deuvelve en un arrelgo la cantidad de maximos especificados
 	 * siendo la pos 0 del arreglo el maximo de la imagen, pos 1 el anterior al maximo, etc.
-	 * @param imagen: es la imagen sobre la cual se hallara los maximos
+	 * @param imagen: es la imagen sobre la cual se hallara los maximos (debe ser la imagen del espacio
+	 * de hough que se obtuvo a partir de una imagen de bordes... imagen=hough_directa(bordes(imagen_bordes))
 	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen..
+	 * @param direccion: obtiene solo los maximos en la direccion especificada por defecto 90 grados.
+	 * 					 si el parametro vale -99 especifica que se hallan maximos en _todo el plano transf
+	 * 					 sin importar la direccion
+	 * 					 el valor de direccion debe estar entre -90 y 90.
+	 *
 	 * */
 	vector<T> maximo_actual;
 	vector<T> maximos;
-	for (int i = 0; i < cantidad; i++) {
-		maximo_actual.clear();
-		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
-		maximos.push_back(maximo_actual[0]);
-		maximos.push_back(maximo_actual[1]);
-		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+
+	if (direccion != -99) { //busca en direccion especifica
+		int ancho = imagen.width() - 1;
+		int alto = imagen.height() - 1;
+		int medio = (int) ancho / 2.0; // este va a ser el 0 grados
+
+		int x = medio + (int) ((direccion * (ancho - medio)) / 90.0);
+		imagen.crop(x, 0, x, alto); //ojo con los 90 y -90 explota creo
+		//imagen.display();
+
+		//hay que hacerlo asi ya que maximo me devuelve un vector con posx(que en este caso va a ser siempre 0!)
+		for (int i = 0; i < cantidad; i++) {
+			maximo_actual.clear();
+			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
+			maximos.push_back(maximo_actual[0] + x);
+			maximos.push_back(maximo_actual[1]);
+			imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+		}
+	} else {
+		for (int i = 0; i < cantidad; i++) {
+			maximo_actual.clear();
+			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
+			maximos.push_back(maximo_actual[0]);
+			maximos.push_back(maximo_actual[1]);
+			imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+		}
 	}
 	return maximos;
 }
