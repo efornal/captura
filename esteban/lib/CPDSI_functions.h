@@ -38,64 +38,64 @@ char linea[MAX_LINE_LENGTH];
 const int NFilas256=256, NColumnas256=256;
 
 
-
+/// USA LA QUE ESTA EN segmentacion.h
 ///****************************************
 /// Transformada Hough directa
 /// Todavia no funciona el cuantizado del plano ro-theta
 ///****************************************
 
-CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool getHist=0) {
+/* CImg<double> hough_directa(CImg<double> img, double dtita=1, double dro=1, bool getHist=0) { */
 
-  CImg<double> iHough(img); iHough.fill(0.0);
-  const unsigned width  = img.width();
-  const unsigned height = img.height();
+/*   CImg<double> iHough(img); iHough.fill(0.0); */
+/*   const unsigned width  = img.width(); */
+/*   const unsigned height = img.height(); */
 
-  double scale_rho = height/(2*sqrt(pow(float(height),2)+pow(float(width),2))),
-         scale_theta = width/M_PI,
-         rho, theta;
+/*   double scale_rho = height/(2*sqrt(pow(float(height),2)+pow(float(width),2))), */
+/*          scale_theta = width/M_PI, */
+/*          rho, theta; */
 
-  //  cout << "Calculando la transformada Hough..." << endl;
-  for (unsigned y=0; y < height; y++)
-    for (unsigned x=0; x < width; x++)
-      if (img(x,y) > 0.5)
-         for (unsigned t=0; t < width; t++) {
-          theta=t/scale_theta-M_PI/2;
-          rho=x*cos(theta)+y*sin(theta);
-          unsigned r=(unsigned)(rho*scale_rho+height/2.);
-          iHough(t,r)+= 1;
-         }
-  // cout << "...listo!" << endl;
-  return iHough;
-}
+/*   //  cout << "Calculando la transformada Hough..." << endl; */
+/*   for (unsigned y=0; y < height; y++) */
+/*     for (unsigned x=0; x < width; x++) */
+/*       if (img(x,y) > 0.5) */
+/*          for (unsigned t=0; t < width; t++) { */
+/*           theta=t/scale_theta-M_PI/2; */
+/*           rho=x*cos(theta)+y*sin(theta); */
+/*           unsigned r=(unsigned)(rho*scale_rho+height/2.); */
+/*           iHough(t,r)+= 1; */
+/*          } */
+/*   // cout << "...listo!" << endl; */
+/*   return iHough; */
+/* } */
 
 
-
+/// USA LA QUE ESTA EN segmentacion.h
 ///****************************************
 /// Transformada Hough inversa
 ///****************************************
-CImg<double> hough_inversa(CImg<double> img) {
+/* //CImg<double> hough_inversa(CImg<double> img) { */
 
-  const double color[] = {255.f, 0.0f, 0.0f};
-  CImg<double> iHoughI(img); iHoughI.fill(0.0);
-  int width  = img.width(), height = img.height(),
-      y0, y1;
+/*   const double color[] = {255.f, 0.0f, 0.0f}; */
+/*   CImg<double> iHoughI(img); iHoughI.fill(0.0); */
+/*   int width  = img.width(), height = img.height(), */
+/*       y0, y1; */
 
-  double scale_rho = height/(2*sqrt(pow(float(height),2)+pow(float(width),2))),
-         scale_theta = width/M_PI,
-         rho, theta;
+/*   double scale_rho = height/(2*sqrt(pow(float(height),2)+pow(float(width),2))), */
+/*          scale_theta = width/M_PI, */
+/*          rho, theta; */
 
-  //  cout << "Calculando la transformada Hough inversa..." << endl;
-  for (unsigned b=0; b < height; b++)
-    for (unsigned a=0; a < width; a++)
-      if (img(a,b) > 0.5) {
-          theta=a/scale_theta-M_PI/2;
-          y0=(int)(((b-(height/2.))/scale_rho)/sin(theta)); // -0/tan(theta));
-          y1=(int)(((b-(height/2.))/scale_rho)/sin(theta)-width/tan(theta));
-          iHoughI.draw_line(0,(int)y0,(int)width,(int)y1,color);
-         }
-  //  cout << "...listo!" << endl;
-  return iHoughI;
-}
+/*   //  cout << "Calculando la transformada Hough inversa..." << endl; */
+/*   for (unsigned b=0; b < height; b++) */
+/*     for (unsigned a=0; a < width; a++) */
+/*       if (img(a,b) > 0.5) { */
+/*           theta=a/scale_theta-M_PI/2; */
+/*           y0=(int)(((b-(height/2.))/scale_rho)/sin(theta)); // -0/tan(theta)); */
+/*           y1=(int)(((b-(height/2.))/scale_rho)/sin(theta)-width/tan(theta)); */
+/*           iHoughI.draw_line(0,(int)y0,(int)width,(int)y1,color); */
+/*          } */
+/*   //  cout << "...listo!" << endl; */
+/*   return iHoughI; */
+/* } */
 
 
 
