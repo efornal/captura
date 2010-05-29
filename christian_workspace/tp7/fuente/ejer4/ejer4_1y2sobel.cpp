@@ -10,6 +10,7 @@
 #include "../../../tp4/fuente/lib4/proc_color.h"
 #include "../../../tp3/fuente/lib3/mask.h"
 #include "../lib7/segmentacion.h"
+
 using namespace std;
 using namespace cimg_library;
 
