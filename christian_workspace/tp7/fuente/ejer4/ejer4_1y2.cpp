@@ -1,7 +1,7 @@
 /*
- * ejer6_1.cpp
+ * ejer4_1y2.cpp
  *
- *  Created on: 23/04/2010
+ *  Created on: 29/05/2010
  *      Author: christian
  */
 
