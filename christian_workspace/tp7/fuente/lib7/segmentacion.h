@@ -431,20 +431,47 @@ vector<T> get_pos_max(CImg<T> imagen) {
 }
 /* funciones para transformada de hough*/
 template<class T>
-vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1) {
+vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1, int direccion = -99) {
 	/* funcion que deuvelve en un arrelgo la cantidad de maximos especificados
 	 * siendo la pos 0 del arreglo el maximo de la imagen, pos 1 el anterior al maximo, etc.
-	 * @param imagen: es la imagen sobre la cual se hallara los maximos
+	 * @param imagen: es la imagen sobre la cual se hallara los maximos (debe ser la imagen del espacio
+	 * de hough que se obtuvo a partir de una imagen de bordes... imagen=hough_directa(bordes(imagen_bordes))
 	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen..
+	 * @param direccion: obtiene solo los maximos en la direccion especificada por defecto 90 grados.
+	 * 					 si el parametro vale -99 especifica que se hallan maximos en _todo el plano transf
+	 * 					 sin importar la direccion
+	 * 					 el valor de direccion debe estar entre -90 y 90.
+	 *
 	 * */
 	vector<T> maximo_actual;
 	vector<T> maximos;
-	for (int i = 0; i < cantidad; i++) {
-		maximo_actual.clear();
-		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
-		maximos.push_back(maximo_actual[0]);
-		maximos.push_back(maximo_actual[1]);
-		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+
+	if (direccion != -99) { //busca en direccion especifica
+		int ancho = imagen.width() - 1;
+		int alto = imagen.height() - 1;
+		int medio = (int) ancho / 2.0; // este va a ser el 0 grados
+
+		int x = medio + (int) ((direccion * (ancho - medio)) / 90.0); //posicion real del plano rho theta donde se quiere
+		// busar los maximos
+		imagen.crop(x, 0, x, alto); //ojo con los 90 y -90 explota creo
+		//imagen.display();
+		//todo: habria que agregar una tolerancia para el direccionamiento
+		//hay que hacerlo asi ya que maximo me devuelve un vector con posx(que en este caso va a ser siempre 0!)
+		for (int i = 0; i < cantidad; i++) {
+			maximo_actual.clear();
+			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
+			maximos.push_back(x); // la posicion en x va a ser siempre la misma... (la misma direccion)
+			maximos.push_back(maximo_actual[1]); //la posicion de y va variar segun el maximo
+			imagen(x, maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+		}
+	} else {
+		for (int i = 0; i < cantidad; i++) {
+			maximo_actual.clear();
+			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
+			maximos.push_back(maximo_actual[0]);
+			maximos.push_back(maximo_actual[1]);
+			imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
+		}
 	}
 	return maximos;
 }
@@ -461,4 +488,92 @@ CImg<T> colorea_rojo(CImg<T> imagen) {
 			color(x, y, 0, 2) = 0.0;
 		}
 	return color;
+}
+
+template<class T>
+void recursion(int x_inicial, int y_inicial, T intensidad, int width,
+		int height, float tolerancia, CImg<T> &imagen,
+		CImg<T> &imagen_segmentada, int cant_vecinos = 4) {
+	/* <NO USAR ESTA FUNCION USAR segmentar()...
+	 * segmenta una imagen segun la semilla inicial x,y, con uan cierta tolerancia y usa 4 vecinos para la comparacion
+	 * @param: x_inicial: posicion en x del pixel a segmentar
+	 * @param: y_inicial: posicion en y del pixel a segmentar
+	 * @param: intensidad: intensidad del pixel a segmentar
+	 * @param: widht: ancho de la imagen pasada como parametro
+	 * @param: height: alto de la imagen pasada como parametro
+	 * @param: tolerancia: tolerancia con la que se segmenta intendidad+- tolerancia.
+	 * @param: imagen: imagen sobre la cual se aplica la segmentacion
+	 * @param: imagen_segmentada: imagen segmentada que es devuelta por referencia. (incialmente debe ser una del mismo tamanio
+	 * que  imagen y rellenada con negro.
+	 * @param: cant_vecinos(valores aceptados=4 o 8): es la cantidad de vecinos que se usan para comparar. 4 por defecto
+	 * */
+
+	if (x_inicial > width - 1 || x_inicial < 0 || y_inicial > height - 1
+			|| y_inicial < 0) {
+		return;
+	}
+	int valor = intensidad - tolerancia;
+	if (valor < 0)
+		valor = 0;
+	if ((imagen(x_inicial, y_inicial) <= (intensidad + tolerancia) && imagen(
+			x_inicial, y_inicial) >= valor) && imagen_segmentada(x_inicial,
+			y_inicial) == 0) {
+		imagen_segmentada(x_inicial, y_inicial) = 1;
+		if (cant_vecinos == 8) { //hace los de la diagonal y cuando sale del if hace los que faltan...
+			recursion(x_inicial - 1, y_inicial - 1, intensidad, width, height,
+					tolerancia, imagen, imagen_segmentada);//esquina superior izquierda
+			recursion(x_inicial - 1, y_inicial + 1, intensidad, width, height,
+					tolerancia, imagen, imagen_segmentada);//esquina superior derecha
+			recursion(x_inicial + 1, y_inicial - 1, intensidad, width, height,
+					tolerancia, imagen, imagen_segmentada); //esquina inferior izquierda
+			recursion(x_inicial + 1, y_inicial + 1, intensidad, width, height,
+					tolerancia, imagen, imagen_segmentada); //esquina inferior derecha
+		}// si no selecciono los 8 solo hago los 4 vecinos:
+		recursion(x_inicial + 1, y_inicial, intensidad, width, height,
+				tolerancia, imagen, imagen_segmentada);//vecino inferior centro
+		recursion(x_inicial, y_inicial + 1, intensidad, width, height,
+				tolerancia, imagen, imagen_segmentada);//vecino vecindo derecho centro
+		recursion(x_inicial - 1, y_inicial, intensidad, width, height,
+				tolerancia, imagen, imagen_segmentada); //vecino superior centro
+		recursion(x_inicial, y_inicial - 1, intensidad, width, height,
+				tolerancia, imagen, imagen_segmentada); //vecino izquierdo centro
+	} else
+		return;
+}
+
+template<class T>
+CImg<T> segmentar(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
+		float tolerancia = 50.0, int cantidad_vecinos = 4) {
+	/* Funcion wrapper que segmenta una imagen en base al parecido con sus vecinos intensidad del vecino+-tolerancia
+	 * devuelve una imagen binaria pintada de blanco la parte segmentada.
+	 * SOLO SIRVE PARA IMAGENES DE 1 solo canal!
+	 * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar la segmentacion
+	 * @param: x_inicial: posicion en x del pixel a segmentar
+	 * @param: y_inicial: posicion en y del pixel a segmentar
+	 * @param: tolerancia: los pixeles segemntados seran aquellos que cumpla con intensidad+-tolerancia..
+	 * @param: cantidad_vecinos(Val. posibles: 4 u 8): cantidad de vecinos usados en la segmentacion 4->cruz, 8->_todo el borde
+	 * */
+	int width = imagen_a_segmentar.width();
+	int height = imagen_a_segmentar.height();
+	T intensidad = imagen_a_segmentar(x_inicial, y_inicial);
+	CImg<T> imagen_segmentada(imagen_a_segmentar.width(),
+			imagen_a_segmentar.height(), 1, 1, 0); //relleno con ceros
+	recursion(x_inicial, y_inicial, intensidad, width, height, tolerancia,
+			imagen_a_segmentar, imagen_segmentada, cantidad_vecinos);
+	return imagen_segmentada;
+}
+
+template<class T>
+CImg<T> binaria_a_original(CImg<T> imagen_binaria, CImg<T> imagen_original) {
+	/* Devuelve una imagen en base a la mascara imagen_binaria aplicada sobre la imagen_original...
+	 * Lo que este blanco en imagen_binaria es remplazado por lo que tenga la imagen_original y es devuelto en una nueva imagen
+	 * */
+	CImg<T> imagen(imagen_original.width(), imagen_original.height(), 1, 1, 0); //imagen original rellena con cero de entrada
+	cimg_forXY(imagen_binaria, x, y)
+		{
+			if (imagen_binaria(x, y) != 0) {
+				imagen(x, y) = imagen_original(x, y);
+			}
+		}
+	return imagen;
 }

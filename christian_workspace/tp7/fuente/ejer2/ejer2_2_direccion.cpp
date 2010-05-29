@@ -28,30 +28,32 @@ int main(int argc, char **argv) {
 	const char *filename = cimg_option("-f", "../../imagenes/letras1.tif",
 			"ruta archivo imagen");
 
-	const float umbral = cimg_option("-umbral", 80.0, "umbral");
-
+	const float umbral = cimg_option("-umbral", 20.0, "umbral");
+	const int
+			direccion =
+					cimg_option ("-direccionborde", 45, "direccion borde a buscar - -99 implica todas las direcciones");
 	const int cant_maximos =
 			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
 	CImg<double> img(filename); //imagen original
 	//img.rotate(90);
-
+	//todo: habria que agregar una tolerancia para el direccionamiento!
 	//aplicar deteccion de bordes a la imagen
-	CImg<double> img_bordes =
-			aplicar_sobel_diagonal<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
+	CImg<double> img_bordes = aplicar_sobel<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
 
 	//aplico la transf de hough:
 	CImg<double> HOUGH_IMG_BORDES = hough_directa(img_bordes); // aplico la transformada
 
-
 	vector<double> posiciones_maximos = obtener_maximos(HOUGH_IMG_BORDES,
-			cant_maximos);
+			cant_maximos, direccion);
 
 	CImg<double> maxs(img); //imagen que voy a usar para dibujar maximos
 	//luego se lehace la inversa de hough a maxs para ver las lineas
 	maxs.normalize(0, 255);
 	maxs.fill(0.0);
+
 	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i++) {
 		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
+		cout << "posiciones_maximos[i]: " << posiciones_maximos[i] << endl;
 	}
 	CImg<double> deteccion = hough_inversa(maxs);
 

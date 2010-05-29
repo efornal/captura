@@ -94,7 +94,7 @@ CImg<int> label_cc(CImg<int> img, int blanco = 1, int nueva_etiqueta = 2) {
 				img(x, y) = vecinos.front(); // asigno etiqueta
 			}
 		}
-	img.display("Primera Pasada");
+	//img.display("Primera Pasada");
 
 	// Muestro como quedo la tabla
 	cout << "Tabla de equivalencias" << endl << endl;
