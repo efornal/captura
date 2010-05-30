@@ -250,3 +250,113 @@ CImg<T> get_solo_maximos( CImg<T> img, int cantidad=1 ) {
     }
     return img;
 }
+
+/**
+ * segmenta una imagen segun la semilla inicial x,y, 
+ * con una cierta tolerancia y usa 4 vecinos para la comparacion
+ *
+ * @param: x_inicial: posicion en x del pixel a segmentar
+ * @param: y_inicial: posicion en y del pixel a segmentar
+ * @param: intensidad: intensidad del pixel a segmentar
+ * @param: widht: ancho de la imagen pasada como parametro
+ * @param: height: alto de la imagen pasada como parametro
+ * @param: tolerancia: tolerancia con la que se segmenta intendidad+- tolerancia.
+ * @param: imagen: imagen sobre la cual se aplica la segmentacion
+ * @param: imagen_segmentada: imagen segmentada que es devuelta por referencia. 
+ *         (incialmente debe ser una del mismo tamanio que  imagen y rellenada con negro.
+ * @param: cant_vecinos(valores aceptados=4 o 8): es la cantidad de vecinos 
+ *         que se usan para comparar. 4 por defecto
+ * */
+
+template<class T>
+void explorar_intensidad( int x_inicial, 
+                          int y_inicial, 
+                          T intensidad, 
+                          int width,
+                          int height, 
+                          float tolerancia, 
+                          CImg<T> &imagen,
+                          CImg<T> &imagen_segmentada, 
+                          int cant_vecinos = 4) {
+
+    if ( x_inicial > width  - 1 || x_inicial < 0 || 
+         y_inicial > height - 1 || y_inicial < 0) {
+        return;
+    }
+
+    int valor = intensidad - tolerancia;
+    if (valor < 0) valor = 0;
+
+    if ( (imagen( x_inicial, y_inicial) <= (intensidad + tolerancia) && 
+          imagen( x_inicial, y_inicial) >= valor ) && 
+         imagen_segmentada( x_inicial, y_inicial ) == 0) {
+
+        imagen_segmentada( x_inicial, y_inicial ) = 1;
+
+        if ( cant_vecinos == 8 ) { // la diagonal y luego el resto
+            //esquina superior izquierda
+            explorar_intensidad( x_inicial - 1, y_inicial - 1, intensidad,
+                                 width, height, tolerancia, 
+                                 imagen, imagen_segmentada);
+            //esquina superior derecha 
+            explorar_intensidad( x_inicial - 1, y_inicial + 1, intensidad,
+                                 width, height, tolerancia, imagen, imagen_segmentada);
+            //esquina inferior izquierda
+            explorar_intensidad( x_inicial + 1, y_inicial - 1, intensidad,
+                                 width, height, tolerancia, imagen, imagen_segmentada);
+            //esquina inferior derecha
+            explorar_intensidad( x_inicial + 1, y_inicial + 1, intensidad,
+                                 width, height, tolerancia, imagen, imagen_segmentada);
+        } // si no selecciono los 8 solo hago los 4 vecinos:
+
+        //vecino inferior centro
+        explorar_intensidad( x_inicial + 1, y_inicial, intensidad, width,
+                             height, tolerancia, imagen, imagen_segmentada);
+        //vecino vecindo derecho centro
+        explorar_intensidad( x_inicial, y_inicial + 1, intensidad, width,
+                             height, tolerancia, imagen, imagen_segmentada);
+        //vecino superior centro
+        explorar_intensidad( x_inicial - 1, y_inicial, intensidad, width,
+                             height, tolerancia, imagen, imagen_segmentada);
+        //vecino izquierdo centro
+        explorar_intensidad(x_inicial, y_inicial - 1, intensidad, width,
+                            height, tolerancia, imagen, imagen_segmentada);
+    } else {
+        return;
+    }
+}
+
+/** 
+ * Funcion wrapper que segmenta una imagen en base al parecido con sus vecinos
+ * intensidad del vecino+-tolerancia
+ * devuelve una imagen binaria pintada de blanco la parte segmentada.
+ * SOLO SIRVE PARA IMAGENES DE 1 solo canal!
+ * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar la segmentacion
+ * @param: x_inicial: posicion en x del pixel a segmentar
+ * @param: y_inicial: posicion en y del pixel a segmentar
+ * @param: tolerancia: los pixeles segemntados seran aquellos que cumpla con 
+ *         intensidad+-tolerancia..
+ * @param: cantidad_vecinos(Val. posibles: 4 u 8): cantidad de vecinos usados 
+ *         en la segmentacion 4->cruz, 8->_todo el borde
+ */
+template<class T>
+CImg<T> segmentar( CImg<T> imagen_a_segmentar, 
+                   int x_inicial, 
+                   int y_inicial,
+                   float tolerancia = 50.0, 
+                   int cantidad_vecinos = 4) {
+
+    int width = imagen_a_segmentar.width();
+    int height = imagen_a_segmentar.height();
+    T intensidad = imagen_a_segmentar(x_inicial, y_inicial);
+
+    CImg<T> imagen_segmentada ( imagen_a_segmentar.width(),
+                                imagen_a_segmentar.height(), 1, 1, 0); //relleno con ceros
+
+    // criterio de segmentacion, modificar para cambiar criterio
+    explorar_intensidad ( x_inicial, y_inicial, intensidad, 
+                          width, height, tolerancia, 
+                          imagen_a_segmentar, imagen_segmentada, cantidad_vecinos );
+
+    return imagen_segmentada;
+}
