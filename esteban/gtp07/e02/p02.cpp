@@ -25,7 +25,7 @@ int main( int argc, char **argv ) {
     img_po = hough_directa( img ); 
     
     img_hough_fil = filtrar_hough_theta( img_po, theta, tol_theta );
-    img_hough_fil = get_solo_maximos( img_hough_fil, 100 ).display();
+    img_hough_fil = get_solo_maximos( img_po, 100 ).display();
     img_xy = hough_inversa( img_hough_fil );
 
     img_hough_fil.display(disp2);

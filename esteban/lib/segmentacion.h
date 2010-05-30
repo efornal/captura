@@ -90,7 +90,112 @@ CImg<T> hough_directa( CImg<T> img ) {
   }
   return hough;
 }
+/**
 
+*/
+template<class T>
+CImg<T> filtrar_hough( CImg<T> hough, 
+                       double u_rho, 
+                       double u_theta,
+                       double tol_rho = 0.1,
+                       double tol_theta = 0.1 ) {
+    int width  = hough.width();
+    int height = hough.height();
+    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
+        d_theta = width/M_PI, // ancho/pi
+        theta, rho;
+    for ( unsigned y = 0; y < height; y++ ) {
+        for ( unsigned x = 0; x < width; x++ ) {
+            if ( hough(x,y) > 0.5 ) {
+                for ( unsigned t = 0; t < width; t++ ) {
+                    theta = t/d_theta - M_PI/2;
+                    rho   = x*cos(theta) + y*sin(theta);
+                    hough(x,y) = (
+                                  ( theta < u_theta+tol_theta && 
+                                    theta > u_theta-tol_theta ) &&
+                                  ( rho < u_rho+tol_rho && 
+                                    rho > u_rho-tol_rho )
+                                  ) ? 0 : 1;
+                        //printf("p si %f < %f && %f > %f \n",
+                        //     rho,u_rho+tol_rho, rho,u_rho-tol_rho    );
+
+
+                }
+            }
+        }
+    }
+    printf("o = %f  p = %f    o = %f  p = %f \n", theta,rho,theta+tol_theta,rho+tol_rho);
+    return hough;
+}
+/**
+
+*/
+template<class T>
+CImg<T> filtrar_hough_rho( CImg<T> hough, 
+                       double u_rho, 
+                       double tol_rho = 0.1 ) {
+    int width  = hough.width();
+    int height = hough.height();
+    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
+        d_theta = width/M_PI, // ancho/pi
+        theta, rho;
+    for ( unsigned y = 0; y < height; y++ ) {
+        for ( unsigned x = 0; x < width; x++ ) {
+            if ( hough(x,y) > 0.5 ) {
+                for ( unsigned t = 0; t < width; t++ ) {
+                    theta = t/d_theta - M_PI/2;
+                    rho   = x*cos(theta) + y*sin(theta);
+                    hough(x,y) = ( rho < u_rho+tol_rho && 
+                                   rho > u_rho-tol_rho ) ? 1 : 0;
+                        //printf("p si %f < %f && %f > %f \n",
+                        //     rho,u_rho+tol_rho, rho,u_rho-tol_rho    );
+                }
+            }
+        }
+    }
+    return hough;
+}
+/**
+
+*/
+template<class T>
+CImg<T> filtrar_hough_theta( CImg<T> hough, 
+                       double u_theta, 
+                       double tol_theta) {
+    int width  = hough.width();
+    int height = hough.height();
+    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
+        d_theta = width/M_PI, // ancho/pi
+        theta, rho;
+
+    for ( unsigned y = 0; y < height; y++ ) {
+        for ( unsigned x = 0; x < width; x++ ) {
+            if ( hough(x,y) > 0.5 ) {
+                for ( unsigned t = 0; t < width; t++ ) {
+                    theta = t/d_theta - M_PI/2;
+                    rho   = x*cos(theta) + y*sin(theta);
+                    unsigned r  = (unsigned)( rho*d_rho + height/2.0 );
+                    if ( sqrt(theta*theta-u_theta*u_theta) <= tol_theta ) {
+                        hough(t,r) = 1;
+                        printf("if %f <= %f   => %f \n",
+                               abs((theta-u_theta)),
+                               tol_theta,
+                               hough(t,r) );
+
+                    } else {
+                        hough(t,r) = 0;
+                        /* printf("if %f <= %f   => %f \n", */
+                        /*        abs((theta-u_theta)), */
+                        /*        tol_theta, */
+                        /*        hough(t,r) ); */
+
+                    }
+                }
+            }
+        }
+    }
+    return hough;
+}
 
 /**
  * Transformada Hough inversa
@@ -122,4 +227,26 @@ CImg<T> hough_inversa( CImg<T> img ) {
       }
   }
   return hough;
+}
+
+
+
+
+/**
+ * solo maximos de la t hough
+ */
+template <class T>
+CImg<T> get_solo_maximos( CImg<T> img, int cantidad=1 ) {
+
+    CImg<T> maximos(cantidad,1,1,1,0);
+    CImg<T> aux(img);
+    int cont = 0;
+    for ( int i = 0; i < cantidad; i++ ) {
+        maximos(cont++) = img.max();
+        img.max() = 1;
+    }
+    cimg_forXY(img,x,y){
+        if ( img(x,y) == aux(x,y) ) img(x,y) = 0;
+    }
+    return img;
 }
