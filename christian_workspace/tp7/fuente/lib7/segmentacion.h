@@ -7,6 +7,8 @@
 
 #include <CImg.h>
 #include <vector>
+#include <list>
+
 using namespace std;
 using namespace cimg_library;
 
@@ -577,3 +579,37 @@ CImg<T> binaria_a_original(CImg<T> imagen_binaria, CImg<T> imagen_original) {
 		}
 	return imagen;
 }
+
+template<class T>
+CImg<T> binarizar(CImg<T> imagen) {
+	/* binariza una imagen haciendo 1 todos aquellos valores de intensidad de la imagen difrente de 0
+	 * @param: imagen: es la imagen que se quiere binarizar
+	 * */
+	CImg<T> imagen_binaria(imagen.width(), imagen.height(), 1, 1, 0);
+	cimg_forXYC(imagen, x, y, c)
+			{
+				if (imagen(x, y, c) != 0) {
+					imagen_binaria(x, y) = 1.0;
+				}
+			}
+	return imagen_binaria;
+}
+
+int contar_diferentes(CImg<int> imagen_etiquetada) {
+	/* Funcion que cuenta la cantidad de etiquetas diferentes que existen en una imagen
+	 * @param: imagen_etiquetada es la imagen etiquetada que se obtuvo con labelcc.
+	 * Retorna un enetero con la cantidad de regiones diferentes (ignorando la region con valores de intensidad 0).
+	 */
+	list<int> etiquetas;
+	cimg_forXY(imagen_etiquetada, x, y)
+		{
+			etiquetas.push_back(imagen_etiquetada(x, y)); //paso _todo a una lista
+		}
+	etiquetas.sort(); //ordeno lista
+	etiquetas.unique(); //borro repetidos
+	if (*etiquetas.begin() == 0) { //etiquetas.begin es un iterador con * referencio el contenido
+		return (etiquetas.size() - 1); //si existe el cero en la lista tengo que restar 1
+	}
+	return etiquetas.size();
+}
+
