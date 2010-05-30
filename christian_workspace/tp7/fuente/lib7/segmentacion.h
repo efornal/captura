@@ -577,3 +577,15 @@ CImg<T> binaria_a_original(CImg<T> imagen_binaria, CImg<T> imagen_original) {
 		}
 	return imagen;
 }
+
+template<class T>
+CImg<T> binarizar(CImg<T> imagen) {
+	CImg<T> imagen_binaria(imagen.width(), imagen.height(), 1, 1, 0);
+	cimg_forXYC(imagen, x, y, c)
+			{
+				if (imagen(x, y, c) != 0) {
+					imagen_binaria(x, y) = 1.0;
+				}
+			}
+	return imagen_binaria;
+}
