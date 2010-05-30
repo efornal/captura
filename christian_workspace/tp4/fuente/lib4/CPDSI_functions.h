@@ -39,7 +39,7 @@ const int NFilas256=256, NColumnas256=256;
 
 
 
-///****************************************
+/*///****************************************
 /// Transformada Hough directa
 /// Todavia no funciona el cuantizado del plano ro-theta
 ///****************************************
@@ -94,7 +94,7 @@ CImg<double> hough_inversa(CImg<double> img) {
          }
   cout << "...listo!" << endl;
   return iHoughI;
-}
+}*/
 
 
 
