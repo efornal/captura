@@ -493,7 +493,7 @@ CImg<T> colorea_rojo(CImg<T> imagen) {
 }
 
 template<class T>
-void recursion(int x_inicial, int y_inicial, T intensidad, int width,
+void explorar_intensidad(int x_inicial, int y_inicial, T intensidad, int width,
 		int height, float tolerancia, CImg<T> &imagen,
 		CImg<T> &imagen_segmentada, int cant_vecinos = 4) {
 	/* <NO USAR ESTA FUNCION USAR segmentar()...
@@ -522,23 +522,23 @@ void recursion(int x_inicial, int y_inicial, T intensidad, int width,
 			y_inicial) == 0) {
 		imagen_segmentada(x_inicial, y_inicial) = 1;
 		if (cant_vecinos == 8) { //hace los de la diagonal y cuando sale del if hace los que faltan...
-			recursion(x_inicial - 1, y_inicial - 1, intensidad, width, height,
-					tolerancia, imagen, imagen_segmentada);//esquina superior izquierda
-			recursion(x_inicial - 1, y_inicial + 1, intensidad, width, height,
-					tolerancia, imagen, imagen_segmentada);//esquina superior derecha
-			recursion(x_inicial + 1, y_inicial - 1, intensidad, width, height,
-					tolerancia, imagen, imagen_segmentada); //esquina inferior izquierda
-			recursion(x_inicial + 1, y_inicial + 1, intensidad, width, height,
-					tolerancia, imagen, imagen_segmentada); //esquina inferior derecha
+			explorar_intensidad(x_inicial - 1, y_inicial - 1, intensidad,
+					width, height, tolerancia, imagen, imagen_segmentada);//esquina superior izquierda
+			explorar_intensidad(x_inicial - 1, y_inicial + 1, intensidad,
+					width, height, tolerancia, imagen, imagen_segmentada);//esquina superior derecha
+			explorar_intensidad(x_inicial + 1, y_inicial - 1, intensidad,
+					width, height, tolerancia, imagen, imagen_segmentada); //esquina inferior izquierda
+			explorar_intensidad(x_inicial + 1, y_inicial + 1, intensidad,
+					width, height, tolerancia, imagen, imagen_segmentada); //esquina inferior derecha
 		}// si no selecciono los 8 solo hago los 4 vecinos:
-		recursion(x_inicial + 1, y_inicial, intensidad, width, height,
-				tolerancia, imagen, imagen_segmentada);//vecino inferior centro
-		recursion(x_inicial, y_inicial + 1, intensidad, width, height,
-				tolerancia, imagen, imagen_segmentada);//vecino vecindo derecho centro
-		recursion(x_inicial - 1, y_inicial, intensidad, width, height,
-				tolerancia, imagen, imagen_segmentada); //vecino superior centro
-		recursion(x_inicial, y_inicial - 1, intensidad, width, height,
-				tolerancia, imagen, imagen_segmentada); //vecino izquierdo centro
+		explorar_intensidad(x_inicial + 1, y_inicial, intensidad, width,
+				height, tolerancia, imagen, imagen_segmentada);//vecino inferior centro
+		explorar_intensidad(x_inicial, y_inicial + 1, intensidad, width,
+				height, tolerancia, imagen, imagen_segmentada);//vecino vecindo derecho centro
+		explorar_intensidad(x_inicial - 1, y_inicial, intensidad, width,
+				height, tolerancia, imagen, imagen_segmentada); //vecino superior centro
+		explorar_intensidad(x_inicial, y_inicial - 1, intensidad, width,
+				height, tolerancia, imagen, imagen_segmentada); //vecino izquierdo centro
 	} else
 		return;
 }
@@ -560,8 +560,8 @@ CImg<T> segmentar(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
 	T intensidad = imagen_a_segmentar(x_inicial, y_inicial);
 	CImg<T> imagen_segmentada(imagen_a_segmentar.width(),
 			imagen_a_segmentar.height(), 1, 1, 0); //relleno con ceros
-	recursion(x_inicial, y_inicial, intensidad, width, height, tolerancia,
-			imagen_a_segmentar, imagen_segmentada, cantidad_vecinos);
+	explorar_intensidad(x_inicial, y_inicial, intensidad, width, height,
+			tolerancia, imagen_a_segmentar, imagen_segmentada, cantidad_vecinos);
 	return imagen_segmentada;
 }
 
