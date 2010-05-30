@@ -331,7 +331,8 @@ void explorar_intensidad( int x_inicial,
  * intensidad del vecino+-tolerancia
  * devuelve una imagen binaria pintada de blanco la parte segmentada.
  * SOLO SIRVE PARA IMAGENES DE 1 solo canal!
- * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar la segmentacion
+ * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar 
+ *         la segmentacion
  * @param: x_inicial: posicion en x del pixel a segmentar
  * @param: y_inicial: posicion en y del pixel a segmentar
  * @param: tolerancia: los pixeles segemntados seran aquellos que cumpla con 
@@ -340,7 +341,7 @@ void explorar_intensidad( int x_inicial,
  *         en la segmentacion 4->cruz, 8->_todo el borde
  */
 template<class T>
-CImg<T> segmentar( CImg<T> imagen_a_segmentar, 
+CImg<T> segmentar_binario( CImg<T> imagen_a_segmentar, 
                    int x_inicial, 
                    int y_inicial,
                    float tolerancia = 50.0, 
@@ -359,4 +360,25 @@ CImg<T> segmentar( CImg<T> imagen_a_segmentar,
                           imagen_a_segmentar, imagen_segmentada, cantidad_vecinos );
 
     return imagen_segmentada;
+}
+
+/** 
+ * forma la imagen segmentada tomando los tonos de grises de la img original
+ * a partir de los valores en la mascara binaria ya segmentada
+ *
+ * Lo que este blanco en imagen_binaria es remplazado por lo que tenga 
+ * la imagen_original y es devuelto en una nueva imagen
+ */
+template<class T>
+CImg<T> binaria_a_grises ( CImg<T> imagen_binaria, CImg<T> imagen_original ) {
+
+    // imagen original rellena con cero de entrada
+    CImg<T> imagen ( imagen_original.width(), imagen_original.height(), 1, 1, 0); 
+
+    cimg_forXY( imagen_binaria, x, y ) {
+        if ( imagen_binaria(x, y) != 0 ) {
+            imagen(x,y) = imagen_original(x,y);
+        }
+    }
+    return imagen;
 }

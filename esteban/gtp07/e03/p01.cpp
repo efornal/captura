@@ -20,8 +20,15 @@ int main( int argc, char **argv ) {
     img.display(disp);
     disp.set_title("original");
                                    
-    segmentada_binaria = segmentar ( img, x_inicial, y_inicial, tolerancia, vecinos );
+    segmentada_binaria = segmentar_binario ( img, x_inicial, y_inicial, 
+                                             tolerancia, vecinos );
     segmentada_binaria.display(disp1);
+
+    segmentada_original = binaria_a_grises( segmentada_binaria, img );
+    segmentada_original.display(disp2);
+
+    disp1.set_title("segmentada binaria");
+    disp2.set_title("segmentada escala grises");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();
