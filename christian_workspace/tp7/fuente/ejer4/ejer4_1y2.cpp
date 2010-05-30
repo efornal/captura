@@ -77,13 +77,3 @@ int main(int argc, char **argv) {
 	}
 	return 0;
 }
-
-/*
-
-
-
-
- cout<<"Threshold: "<<threshold<<endl;
- }
- return 0;
- */
