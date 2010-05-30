@@ -17,7 +17,7 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 
-	const char *filename = cimg_option("-f", "../../imagenes/rosas.jpg",
+	const char *filename = cimg_option("-f", "/home/christian/Documentos/universidad/2010/captura/tp-aplicacion/imagenes/trenfrente/tren_frente02.jpg",
 			"ruta archivo imagen");
 
 	float threshold = cimg_option("-umbral", 5.0, "threshold");
