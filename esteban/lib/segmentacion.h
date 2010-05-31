@@ -234,6 +234,9 @@ CImg<T> hough_inversa( CImg<T> img ) {
 
 /**
  * solo maximos de la t hough
+ * FIXME: para valores menores que uno no va detectarlos
+ * o va detecta el mismo q esta usando para marcar..
+ * se podria usar valores negativos???
  */
 template <class T>
 CImg<T> get_solo_maximos( CImg<T> img, int cantidad=1 ) {
