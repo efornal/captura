@@ -13,6 +13,8 @@ extern "C"{
 #endif
 
 #include <masks.h>
+#include <vector>
+#include <iostream>
 
 using namespace std;
 using namespace cimg_library;
@@ -254,6 +256,20 @@ CImg<T> get_solo_maximos( CImg<T> img, int cantidad=1 ) {
     return img;
 }
 
+
+/**
+ *    Procedimiento para crecimiento de regiones:
+ * 
+ *    region_growing(nodo, propiedad, etiqueta){
+ *      if (nodo NO verifica propiedad) return;
+ *      if (nodo etiquetado) return;
+ *      etiquetar nodo;
+ *      region_growing(nodo derecho, propiedad, etiqueta);
+ *      region_growing(nodo izquierdo, propiedad, etiqueta);
+ *      region_growing(nodo superior, propiedad, etiqueta);
+ *      region_growing(nodo inferior, propiedad, etiqueta);
+ *    }
+ */
 /**
  * segmenta una imagen segun la semilla inicial x,y, 
  * con una cierta tolerancia y usa 4 vecinos para la comparacion
@@ -384,4 +400,111 @@ CImg<T> binaria_a_grises ( CImg<T> imagen_binaria, CImg<T> imagen_original ) {
         }
     }
     return imagen;
+}
+
+
+
+///****************************************
+/// Etiquetado de componentes conectadas
+///****************************************
+CImg<int> label_cc( CImg<int> img, 
+                    int blanco = 1, 
+                    int nueva_etiqueta = 2 ) {
+
+    vector<int> equiv(nueva_etiqueta + 1, 0); //vector de equivalencias
+    vector<int> vecinos; //vector de etiquetas vecinos superiores e izquierda
+    int pos, etiqueta, aux;
+
+    cimg_forXY(img,x,y) { // recorro la imagen
+        if ( img(x,y) == blanco ) { // si es blanco
+            vecinos.clear(); // inicializo
+
+            // si x no es borde izq e y no es borde superior miro el vecino sup izq
+            if ( x && y )
+                if ( img(x-1,y-1) != 0 )
+                    vecinos.push_back( img(x-1,y-1) ); // si tiene etiqueta la guardo
+
+            // si y no es borde superior miro vecino superior
+            if ( y )
+                if ( img(x,y-1) != 0 )
+                    vecinos.push_back( img(x,y-1) ); // si tiene etiqueta la guardo
+
+            // si x no es borde derecho e y borde superior miro vecino sup der
+            if ( y && x != img.width()-1 )
+                if ( img(x+1, y-1 ) != 0 )
+                    vecinos.push_back( img(x+1,y-1) ); // si tiene etiqueta la guardo
+
+            // si x no es borde izquierdo miro vecino izq
+            if ( x )
+                if ( img(x-1,y) != 0 )
+                    vecinos.push_back( img(x-1,y) ); // si tiene etiqueta la guardo
+            
+
+            // si no tengo vecinos etiquetados debo generar nueva etiqueta
+            if ( vecinos.empty() ) { 
+
+                // de vecinos voy a sacar la etiqueta que corresponde al pixel
+                vecinos.push_back( nueva_etiqueta ); 
+
+                // guardo en la posicion nva etiqueta el valor nva etiqueta
+                equiv[nueva_etiqueta] = nueva_etiqueta;
+
+                nueva_etiqueta++; // genero una nueva etiqueta para cdo necesite
+                equiv.push_back( 0 ); // agrego una posicion en equivalencias con 0
+
+            } else {
+
+                for ( int i=0; i<vecinos.size()-1; i++ ) // controlo la lista de etiquetas vecinas
+
+                    // si hay diferentes etiquetas en el vecindario anoto
+                    if ( vecinos[i] != vecinos[i + 1]) { 
+                        etiqueta = vecinos[i];
+                        pos = vecinos[i + 1];
+
+                        // en la pos de la mayor etiqueta anoto el valor de la menor
+                        if ( pos < etiqueta ) { 
+                            aux = etiqueta;
+                            etiqueta = pos;
+                            pos = aux;
+                        }
+
+                        // si tengo una entrada en esa pos reviso la cadena
+                        if ( equiv[pos] != etiqueta ) { 
+                            if ( equiv[pos] != pos ) {
+                                aux = etiqueta;
+                                etiqueta = equiv[pos];
+                                pos = aux;
+                            
+                                while ( equiv[pos] != pos )
+                                    pos = equiv[pos];
+
+                                if (equiv[pos] < etiqueta)
+                                    etiqueta = equiv[pos];
+                            }
+                            equiv[pos] = etiqueta;
+                        }
+                    }
+            }
+            img(x, y) = vecinos.front(); // asigno etiqueta
+        }
+    }
+    //img.display("Primera Pasada");
+
+    // Muestro como quedo la tabla
+    cout << "Tabla de equivalencias" << endl << endl;
+    for ( int j = 0; j < equiv.size(); j++ )
+        cout << j << " " << equiv[j] << endl;
+    cout << endl;
+
+    // reasigno la etiqueta
+    cimg_forXY (img,x,y )
+        if ( img(x, y) != 0 )
+            if ( equiv[img(x,y)] != img(x,y) ) {
+                etiqueta = equiv[img(x, y)];
+                while ( equiv[etiqueta] != etiqueta )
+                    etiqueta = equiv[etiqueta];
+                img(x,y) = etiqueta;
+            }
+    
+    return img;
 }

@@ -5,33 +5,33 @@
 ///****************************************
 /// Crecimiento de regiones
 ///****************************************
-region_growing(nodo, propiedad, etiqueta){
-  if (nodo NO verifica propiedad) return;
-  if (nodo etiquetado) return;
-  etiquetar nodo;
-  region_growing(nodo derecho, propiedad, etiqueta);
-  region_growing(nodo izquierdo, propiedad, etiqueta);
-  region_growing(nodo superior, propiedad, etiqueta);
-  region_growing(nodo inferior, propiedad, etiqueta);
-}
+
+// region_growing(nodo, propiedad, etiqueta){
+//   if (nodo NO verifica propiedad) return;
+//   if (nodo etiquetado) return;
+//   etiquetar nodo;
+//   region_growing(nodo derecho, propiedad, etiqueta);
+//   region_growing(nodo izquierdo, propiedad, etiqueta);
+//   region_growing(nodo superior, propiedad, etiqueta);
+//   region_growing(nodo inferior, propiedad, etiqueta);
+// }
 
 ///****************************************
 /// Crecimiento de regiones con cola
 ///****************************************
 
-
-region_growing_alternativo(nodo, propiedad, etiqueta){
-  inicializar una cola vacia
-  etiquetar nodo (semilla)
-  agregar nodo al final de la cola
-  while (cola no este vacia){
-    tomar el primer nodo de la cola de Q (como pivote) y borrarlo de la cola (ya esta etiquetado)
-    if (nodo derecho verifica propiedad) etiquetar nodo derecho y agregarlo a la cola
-    if (nodo izquierdo verifica propiedad) etiquetar nodo izquierdo y agregarlo a la cola
-    if (nodo superior verifica propiedad) etiquetar nodo superior y agregarlo a la cola
-    if (nodo inferior verifica propiedad) etiquetar nodo inferior y agregarlo a la cola
-  }
-}
+// region_growing_alternativo(nodo, propiedad, etiqueta){
+//   inicializar una cola vacia
+//   etiquetar nodo (semilla)
+//   agregar nodo al final de la cola
+//   while (cola no este vacia){
+//     tomar el primer nodo de la cola de Q (como pivote) y borrarlo de la cola (ya esta etiquetado)
+//     if (nodo derecho verifica propiedad) etiquetar nodo derecho y agregarlo a la cola
+//     if (nodo izquierdo verifica propiedad) etiquetar nodo izquierdo y agregarlo a la cola
+//     if (nodo superior verifica propiedad) etiquetar nodo superior y agregarlo a la cola
+//     if (nodo inferior verifica propiedad) etiquetar nodo inferior y agregarlo a la cola
+//   }
+// }
 
 
 
