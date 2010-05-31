@@ -413,16 +413,16 @@ CImg<T> binaria_a_grises ( CImg<T> imagen_binaria, CImg<T> imagen_original ) {
  *                      Esta imagen debe ser binaria !
  * @param int blanco=1 Intencidad que se considera el blanco (0=negro|1=blanco) 
  * @param int nueva_etiqueta=2 Valor inicial de etiqueta (inicia en 2)
- * @param bool ver_tabla=0 Si es verdadero(=1) imprime la tabla de etiquetas
+ * @param vector<int> &equivalencias Vector de equivalencias de etiquetas
  * @return CImg<int> Imagen etiquetada por regiones: Una misma region u objeto
  *                   dentro de la imagen, tiene los mismo valores de intencidad
  *                   Por lo tanto: la cantidad diferente de valores (de etiquetas)
  *                   da la cantidad de regiones (u objetos) diferentes que hay 
  */
 CImg<int> label_cc( CImg<int> img, 
+                    vector<int> &equivalencias,
                     int blanco = 1, 
-                    int nueva_etiqueta = 2,
-                    bool ver_tabla = 0 ) {
+                    int nueva_etiqueta = 2 ) {
 
     vector<int> equiv(nueva_etiqueta + 1, 0); //vector de equivalencias
     vector<int> vecinos; //vector de etiquetas vecinos superiores e izquierda
@@ -504,12 +504,11 @@ CImg<int> label_cc( CImg<int> img,
     //img.display("Primera Pasada");
 
     // Muestro como quedo la tabla
-    if  ( ver_tabla ) {
-        cout << "Tabla de equivalencias" << endl << endl;
-        for ( int j = 0; j < equiv.size(); j++ )
-            cout << j << " " << equiv[j] << endl;
-        cout << endl;
-    }
+    /* cout << "Tabla de equivalencias" << endl << endl; */
+    /* for ( int j = 0; j < equiv.size(); j++ ) */
+    /*     cout << j << " " << equiv[j] << endl; */
+    /* cout << endl; */
+    equivalencias = equiv; // retorno la tabla
 
     // reasigno la etiqueta
     cimg_forXY (img,x,y )
@@ -522,4 +521,22 @@ CImg<int> label_cc( CImg<int> img,
             }
     
     return img;
+}
+
+/**
+ * Retorna una imagen etiquetada por regiones
+ * @param CImg<int> img Imagen a partir de la cual se realiza el etiquetado
+ *                      Esta imagen debe ser binaria !
+ * @param int blanco=1 Intencidad que se considera el blanco (0=negro|1=blanco) 
+ * @param int nueva_etiqueta=2 Valor inicial de etiqueta (inicia en 2)
+ * @return CImg<int> Imagen etiquetada por regiones: Una misma region u objeto
+ *                   dentro de la imagen, tiene los mismo valores de intencidad
+ *                   Por lo tanto: la cantidad diferente de valores (de etiquetas)
+ *                   da la cantidad de regiones (u objetos) diferentes que hay 
+ */
+CImg<int> label_cc( CImg<int> img, 
+                    int blanco = 1, 
+                    int nueva_etiqueta = 2 ) {
+    vector<int> equivalencias; // omito las etiquetas! lo uso solo como fake!
+    return label_cc( img, equivalencias, blanco, nueva_etiqueta );
 }

@@ -13,6 +13,7 @@ int main( int argc, char **argv ) {
     int x0     = cimg_option ( "-x0" ,   260, "valor x inicial" );
     int y0     = cimg_option ( "-y0" ,   170, "valor y inicial" );
     int radio  = cimg_option( "-r", 50, "radio de  tolerancia");
+    int paleta  = cimg_option( "-p", 5, "color paleta");
 
     CImgDisplay disp, disp1, disp2, disp3, disp4, disp5, disp6;
     
@@ -35,6 +36,9 @@ int main( int argc, char **argv ) {
 
     mask_labeled.normalize(0,255).display(disp4);
     disp4.set_title("mascara segmentada RGB - filtrada - etiquetada");
+
+    aplicar_paleta( mask_labeled, paleta ).display(disp5);
+    disp5.set_title("mascara segmentada coloreada");
 
     mask_labeled.display();
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
