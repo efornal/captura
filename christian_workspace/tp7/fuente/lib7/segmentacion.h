@@ -544,12 +544,13 @@ void explorar_intensidad(int x_inicial, int y_inicial, T intensidad, int width,
 }
 
 template<class T>
-CImg<T> segmentar(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
+CImg<T> region_growing(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
 		float tolerancia = 50.0, int cantidad_vecinos = 4) {
-	/* Funcion wrapper que segmenta una imagen en base al parecido con sus vecinos intensidad del vecino+-tolerancia
-	 * devuelve una imagen binaria pintada de blanco la parte segmentada.
+	/* Funcion wrapper que hace el crecimiento de region sobre una imagen en base al parecido
+	 * con sus vecinos intensidad del vecino+-tolerancia
+	 * devuelve una imagen binaria pintada de blanco la parte que pertenece a la region.
 	 * SOLO SIRVE PARA IMAGENES DE 1 solo canal!
-	 * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar la segmentacion
+	 * @param: imagen_a_segmentar: es la imagen sobre la cual se quiere realizar la segmentacion(regionalizacion)
 	 * @param: x_inicial: posicion en x del pixel a segmentar
 	 * @param: y_inicial: posicion en y del pixel a segmentar
 	 * @param: tolerancia: los pixeles segemntados seran aquellos que cumpla con intensidad+-tolerancia..
