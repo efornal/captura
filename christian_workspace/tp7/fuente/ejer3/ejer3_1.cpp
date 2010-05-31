@@ -26,15 +26,17 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	const char *filename = cimg_option("-f", "../../imagenes/bone.tif",
 			"ruta archivo imagen");
+	int x = cimg_option("-x", 200, "posicion en x del pixel a segemntar");
+	int y = cimg_option("-y", 200, "posicion en y del pixel a segemntar");
+	float tolerancia = cimg_option("-tol", 50.0, "tolerancia");
+	int cantidad_vecinos = cimg_option("-vecinos", 4, "cant vecinos 4 u 8");
+
 	CImg<float> imagen(filename);
 	imagen = imagen.channel(0);
 	CImgDisplay disp1(imagen, "imagen");
-	int x = 200;
-	int y = 200;
-	float tolerancia = 50.0;
-	int cantidad_vecinos = 4;
 
-	CImg<float> imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+
+	CImg<float> imagen_segmentada = region_growing(imagen, x, y, tolerancia,
 			cantidad_vecinos);
 	CImgDisplay disp2(imagen_segmentada, "imagen segmentada");
 
@@ -58,7 +60,7 @@ int main(int argc, char **argv) {
 			tolerancia--;
 			cout << "Tolerancia: " << tolerancia << endl;
 		}
-		imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+		imagen_segmentada = region_growing(imagen, x, y, tolerancia,
 				cantidad_vecinos);
 		imagen_segmentada.display(disp2);
 		disp2.set_title("imagen segmentada");
