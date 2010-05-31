@@ -20,18 +20,17 @@ int main(int argc, char *argv[]) {
   kernel(0,0)=0; kernel(1,0)=1; kernel(2,0)=2;
   kernel(0,1)=1; kernel(1,1)=2; kernel(2,1)=1;
   kernel(0,2)=2; kernel(1,2)=1; kernel(2,2)=0;
+
   CImg<double> imagen( argv[1] );
 
-  CImgList<double> result ( imagen.get_normalize(0,255), kernel.get_normalize(0,255), imagen.get_convolve( kernel ).get_normalize(0,255) );
+  CImgList<double> result ( imagen.get_normalize(0,255),
+			    kernel.get_normalize(0,255),
+			    imagen.get_correlate( kernel ).get_normalize(0,255) );
 
   CImgDisplay d_imgs, d_hist;
 
-
   result.display( );
   
-  // while ( !d_imgs.is_closed() && !d_hist.is_closed() ) {
-  //   d_imgs.wait_all();
-  // }
   return 0;
 }
 
