@@ -36,7 +36,7 @@ int main( int argc, char **argv ) {
     mask_labeled.normalize(0,255).display(disp4);
     disp4.set_title("mascara segmentada RGB - filtrada - etiquetada");
 
-
+    mask_labeled.display();
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();
     }

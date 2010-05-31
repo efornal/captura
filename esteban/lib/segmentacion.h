@@ -407,9 +407,22 @@ CImg<T> binaria_a_grises ( CImg<T> imagen_binaria, CImg<T> imagen_original ) {
 ///****************************************
 /// Etiquetado de componentes conectadas
 ///****************************************
+/**
+ * Retorna una imagen etiquetada por regiones
+ * @param CImg<int> img Imagen a partir de la cual se realiza el etiquetado
+ *                      Esta imagen debe ser binaria !
+ * @param int blanco=1 Intencidad que se considera el blanco (0=negro|1=blanco) 
+ * @param int nueva_etiqueta=2 Valor inicial de etiqueta (inicia en 2)
+ * @param bool ver_tabla=0 Si es verdadero(=1) imprime la tabla de etiquetas
+ * @return CImg<int> Imagen etiquetada por regiones: Una misma region u objeto
+ *                   dentro de la imagen, tiene los mismo valores de intencidad
+ *                   Por lo tanto: la cantidad diferente de valores (de etiquetas)
+ *                   da la cantidad de regiones (u objetos) diferentes que hay 
+ */
 CImg<int> label_cc( CImg<int> img, 
                     int blanco = 1, 
-                    int nueva_etiqueta = 2 ) {
+                    int nueva_etiqueta = 2,
+                    bool ver_tabla = 0 ) {
 
     vector<int> equiv(nueva_etiqueta + 1, 0); //vector de equivalencias
     vector<int> vecinos; //vector de etiquetas vecinos superiores e izquierda
@@ -491,10 +504,12 @@ CImg<int> label_cc( CImg<int> img,
     //img.display("Primera Pasada");
 
     // Muestro como quedo la tabla
-    cout << "Tabla de equivalencias" << endl << endl;
-    for ( int j = 0; j < equiv.size(); j++ )
-        cout << j << " " << equiv[j] << endl;
-    cout << endl;
+    if  ( ver_tabla ) {
+        cout << "Tabla de equivalencias" << endl << endl;
+        for ( int j = 0; j < equiv.size(); j++ )
+            cout << j << " " << equiv[j] << endl;
+        cout << endl;
+    }
 
     // reasigno la etiqueta
     cimg_forXY (img,x,y )
