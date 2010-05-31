@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 	float tolerancia = 50.0;
 	int cantidad_vecinos = 4;
 
-	CImg<float> imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+	CImg<float> imagen_segmentada = region_growing(imagen, x, y, tolerancia,
 			cantidad_vecinos);
 	CImgDisplay disp2(imagen_segmentada, "imagen segmentada");
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
 			tolerancia--;
 			cout << "Tolerancia: " << tolerancia << endl;
 		}
-		imagen_segmentada = segmentar(imagen, x, y, tolerancia,
+		imagen_segmentada = region_growing(imagen, x, y, tolerancia,
 				cantidad_vecinos);
 		imagen_segmentada.display(disp2);
 		disp2.set_title("imagen segmentada");
