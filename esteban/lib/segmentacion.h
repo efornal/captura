@@ -14,6 +14,7 @@ extern "C"{
 
 #include <masks.h>
 #include <vector>
+#include <list>
 #include <iostream>
 
 using namespace std;
@@ -508,6 +509,7 @@ CImg<int> label_cc( CImg<int> img,
     /* for ( int j = 0; j < equiv.size(); j++ ) */
     /*     cout << j << " " << equiv[j] << endl; */
     /* cout << endl; */
+
     equivalencias = equiv; // retorno la tabla
 
     // reasigno la etiqueta
@@ -540,3 +542,47 @@ CImg<int> label_cc( CImg<int> img,
     vector<int> equivalencias; // omito las etiquetas! lo uso solo como fake!
     return label_cc( img, equivalencias, blanco, nueva_etiqueta );
 }
+
+
+// a predicate implemented as a function:
+bool igual_a_cero ( const int& value ) { 
+    return ( value == 0 ); 
+}
+
+/**
+ * cuenta la cntidad de regiones que contiene una lista de etiquetas
+ * retornada por label_cc
+*/
+int cantidad_de_regiones(  list<int> etiquetas ){
+    etiquetas.sort(); //ordeno lista
+    etiquetas.unique(); //borro repetidos
+    etiquetas.remove_if( igual_a_cero );
+    return etiquetas.size();
+}
+
+/**
+ * Retorna una imagen etiquetada por regiones
+ * @param CImg<int> img Imagen a partir de la cual se realiza el etiquetado
+ *                      Esta imagen debe ser binaria !
+ * @param int blanco=1 Intencidad que se considera el blanco (0=negro|1=blanco) 
+ * @param int nueva_etiqueta=2 Valor inicial de etiqueta (inicia en 2)
+ * @return CImg<int> Imagen etiquetada por regiones: Una misma region u objeto
+ *                   dentro de la imagen, tiene los mismo valores de intencidad
+ *                   Por lo tanto: la cantidad diferente de valores (de etiquetas)
+ *                   da la cantidad de regiones (u objetos) diferentes que hay 
+ * uso de la lista:
+ *  for ( it=mylist.begin() ; it != mylist.end(); it++ )
+ *     cout << " " << *it;
+ */
+CImg<int> label_cc( CImg<int> img, 
+                    list<int> &equivalencias,
+                    int blanco = 1, 
+                    int nueva_etiqueta = 2 ) {
+    vector<int> equiv; // omito las etiquetas! lo uso solo como fake!
+    img = label_cc( img, equiv, blanco, nueva_etiqueta );
+    for ( int s= 0; s < equiv.size(); s++ ){
+        equivalencias.push_back( equiv[s] );
+    }
+    return img;
+}
+
