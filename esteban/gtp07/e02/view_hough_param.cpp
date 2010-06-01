@@ -17,6 +17,13 @@
  * Esto es subjetivo segun lo que se busque no...
  * => variando theta y rho se ve que los valores mas grandes da donde
  * hay lineas mas importantes
+ *
+ * FIXME: confirmar:
+ * ./view_hough_param -f ../../imagenes/letras2.tif
+ *     no es util si se tienen muchos objetos o lineas del mismo tamaño
+ *     abria q hacer un filtrado con regiones eliminando los mas pequeños ?
+ * ./view_hough_param -f ../../imagenes/snowman.png
+ * a su vez, grandes bordes pueden dificultar los pequeños?
 */
 #include <CHImg.h>
 
