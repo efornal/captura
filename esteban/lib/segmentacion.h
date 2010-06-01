@@ -51,7 +51,6 @@ CImg<double> filtrado_laplaciano_g( CImg<double> img ) {
 /**
  * Transformada Hough directa
  *
- * Todavia no funciona el cuantizado del plano ro-theta
  * tomada de funciones de la catedra
  *
  *                        alto                  alto
@@ -172,8 +171,9 @@ CImg<T> filtrar_hough_theta( CImg<T> hough,
 /**
  * Filtra la matriz de hough para valores de rho
  * igual al especificado (mas/menos una tolerancia).
- * es decir: Deja solo lineas del largo especificado
- * mas/menos una tolerancia
+ *
+ * Es decir: Permite definir la posicion de la recta
+ * en el plano x-y. mas/menos una tolerancia (no el largo!)
 */
 template<class T>
 CImg<T> filtrar_hough_rho( CImg<T> hough,
@@ -209,8 +209,9 @@ CImg<T> filtrar_hough_rho( CImg<T> hough,
 /**
  * Filtra la matriz de hough para valores de rho y theta
  * igual al especificado (mas/menos una tolerancia).
- * es decir: Deja solo lineas del largo y angulo especificado
- * mas/menos una tolerancia
+ *
+ * Es decir: Permite definir la posicion (no el largo!) de la recta
+ * en el plano x-y y el angulo de la misma, mas/menos una tolerancia
  *
  * para combinaciones usar  funciones combinadas 
  * (coomo lo hace esta)
@@ -228,7 +229,8 @@ CImg<T> filtrar_hough( CImg<T> hough,
 /**
  * Filtra la matriz de hough para valores de rho
  * mayores o iguales al especificado.
- * es decir: Deja solo lineas mas cortas q el umbral
+ * es decir: Toma solo las linas hubicadas de una determinada
+ * posicion(umbral) en la imagen, en adelante
 */
 template<class T>
 CImg<T> filtrar_hough_rho_min( CImg<T> hough,
@@ -252,7 +254,9 @@ CImg<T> filtrar_hough_rho_min( CImg<T> hough,
 /**
  * Filtra la matriz de hough para valores de rho
  * menores o iguales al especificado.
- * es decir: Deja solo lineas mas largas q el umbral
+ *
+ * es decir: Toma solo las linas hubicadas de una determinada
+ * posicion(umbral) en la imagen, hacia atrás. (hasta el umbral)
 */
 template<class T>
 CImg<T> filtrar_hough_rho_max( CImg<T> hough,
