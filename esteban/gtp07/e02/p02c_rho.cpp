@@ -14,8 +14,8 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f",
                                         "../../imagenes/letras1.tif",
                                          "ruta archivo imagen" );
-    double theta = cimg_option( "-theta", M_PI/4.0, "valor de angulo" );
-    double tol_theta = cimg_option( "-tol_theta", 0.01, "tolerancia  angulo" );
+    double rho = cimg_option( "-rho", 100, "valor de modulo" );
+    double tol_rho = cimg_option( "-tol_rho", 1.0, "tolerancia al modulo" );
     double umbral    = cimg_option( "-umbral", 10, "umbral puntos" );
 
     CImgDisplay disp, disp1, disp2, disp3, disp4, disp5, disp6;
@@ -28,7 +28,9 @@ int main( int argc, char **argv ) {
 
     img_po = hough_directa( img ).normalize(0,255); 
 
-    img_hough_fil = filtrar_hough_theta( img_po, theta, tol_theta );
+    //img_hough_fil = filtrar_hough_rho( img_po, rho, tol_rho );
+    img_hough_fil = filtrar_hough_rho_max( img_po, rho );
+    //img_hough_fil = filtrar_hough_rho_min( img_po, rho );
 
     img_hough_fil.display(disp4);
     img_hough_fil = get_solo_maximos( img_hough_fil, umbral );
@@ -42,7 +44,7 @@ int main( int argc, char **argv ) {
     disp1.set_title("xy - original filtrada");
     disp2.set_title("po - ptos elegidos");
     disp3.set_title("po - hough sin filtrar");
-    disp4.set_title("po - ptos para theta");
+    disp4.set_title("po - ptos para rho");
 
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait_all();

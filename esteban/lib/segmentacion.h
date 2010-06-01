@@ -70,134 +70,31 @@ CImg<double> filtrado_laplaciano_g( CImg<double> img ) {
 template<class T>
 CImg<T> hough_directa( CImg<T> img ) {
 
-  CImg<double> hough(img); 
-  const unsigned width  = img.width();
-  const unsigned height = img.height();
+    CImg<double> iHough(img);
 
-  hough.fill(0.0);
-  double d_rho   = height / (2 * sqrt( pow(float(height),2) + pow(float(width),2) )),
-      d_theta = width/M_PI, // ancho/pi
-      rho, theta;
+    // genera espacio parametrico mediante valores equiespaciados 
+    // de p y rho inicializandolo en cero(acumulador)
+    iHough.fill(0.0); 
+    const unsigned M = img.width(), N = img.height();
+    int r; // radio mapeado en los N pixeles
 
-  for ( unsigned y = 0; y < height; y++ ) {
-      for ( unsigned x = 0; x < width; x++ ) {
-          if ( img(x,y) > 0.5 ) {
-              for ( unsigned t = 0; t < width; t++ ) {
-                  theta = t/d_theta - M_PI/2;
-                  rho   = x*cos(theta) + y*sin(theta);
-                  unsigned r  = (unsigned)( rho*d_rho + height/2.0 );
-                  hough(t,r) += 1;
-              }
-          }
-      }
-  }
-  return hough;
-}
-/**
-
-*/
-template<class T>
-CImg<T> filtrar_hough( CImg<T> hough, 
-                       double u_rho, 
-                       double u_theta,
-                       double tol_rho = 0.1,
-                       double tol_theta = 0.1 ) {
-    int width  = hough.width();
-    int height = hough.height();
-    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
-        d_theta = width/M_PI, // ancho/pi
-        theta, rho;
-    for ( unsigned y = 0; y < height; y++ ) {
-        for ( unsigned x = 0; x < width; x++ ) {
-            if ( hough(x,y) > 0.5 ) {
-                for ( unsigned t = 0; t < width; t++ ) {
-                    theta = t/d_theta - M_PI/2;
-                    rho   = x*cos(theta) + y*sin(theta);
-                    hough(x,y) = (
-                                  ( theta < u_theta+tol_theta && 
-                                    theta > u_theta-tol_theta ) &&
-                                  ( rho < u_rho+tol_rho && 
-                                    rho > u_rho-tol_rho )
-                                  ) ? 0 : 1;
-                        //printf("p si %f < %f && %f > %f \n",
-                        //     rho,u_rho+tol_rho, rho,u_rho-tol_rho    );
-
-
-                }
+    // maximo valor posible de radio se da en la diagonal pcipal
+    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))), 
+        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+        step_theta = M_PI / (M - 1), //paso en eje theta (M_PI=pi) (theta=[-90,90])
+        rho, theta;
+    
+    cimg_forXY(img,x,y) {
+        if ( img(x, y) > 0.5 )
+            //calculo rho variando theta en _todo el eje, con x e y fijo
+            for (int t = 0; t < M; t++) { 
+                theta = t * step_theta - M_PI / 2; // mapea [0,M] en [-90,90]
+                rho = x * cos(theta) + y * sin(theta); // calcula rho
+                r = int((rho + max_rho) / step_rho); // mapea [-max_rho , max_rho] en [0,N]
+                iHough(t, r) += 1; // suma el acumulador
             }
-        }
     }
-    printf("o = %f  p = %f    o = %f  p = %f \n", theta,rho,theta+tol_theta,rho+tol_rho);
-    return hough;
-}
-/**
-
-*/
-template<class T>
-CImg<T> filtrar_hough_rho( CImg<T> hough, 
-                       double u_rho, 
-                       double tol_rho = 0.1 ) {
-    int width  = hough.width();
-    int height = hough.height();
-    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
-        d_theta = width/M_PI, // ancho/pi
-        theta, rho;
-    for ( unsigned y = 0; y < height; y++ ) {
-        for ( unsigned x = 0; x < width; x++ ) {
-            if ( hough(x,y) > 0.5 ) {
-                for ( unsigned t = 0; t < width; t++ ) {
-                    theta = t/d_theta - M_PI/2;
-                    rho   = x*cos(theta) + y*sin(theta);
-                    hough(x,y) = ( rho < u_rho+tol_rho && 
-                                   rho > u_rho-tol_rho ) ? 1 : 0;
-                        //printf("p si %f < %f && %f > %f \n",
-                        //     rho,u_rho+tol_rho, rho,u_rho-tol_rho    );
-                }
-            }
-        }
-    }
-    return hough;
-}
-/**
-
-*/
-template<class T>
-CImg<T> filtrar_hough_theta( CImg<T> hough, 
-                       double u_theta, 
-                       double tol_theta) {
-    int width  = hough.width();
-    int height = hough.height();
-    double d_rho = height / (2.0 * sqrt( pow(float(height),2) + pow(float(width),2) )),
-        d_theta = width/M_PI, // ancho/pi
-        theta, rho;
-
-    for ( unsigned y = 0; y < height; y++ ) {
-        for ( unsigned x = 0; x < width; x++ ) {
-            if ( hough(x,y) > 0.5 ) {
-                for ( unsigned t = 0; t < width; t++ ) {
-                    theta = t/d_theta - M_PI/2;
-                    rho   = x*cos(theta) + y*sin(theta);
-                    unsigned r  = (unsigned)( rho*d_rho + height/2.0 );
-                    if ( sqrt(theta*theta-u_theta*u_theta) <= tol_theta ) {
-                        hough(t,r) = 1;
-                        printf("if %f <= %f   => %f \n",
-                               abs((theta-u_theta)),
-                               tol_theta,
-                               hough(t,r) );
-
-                    } else {
-                        hough(t,r) = 0;
-                        /* printf("if %f <= %f   => %f \n", */
-                        /*        abs((theta-u_theta)), */
-                        /*        tol_theta, */
-                        /*        hough(t,r) ); */
-
-                    }
-                }
-            }
-        }
-    }
-    return hough;
+    return iHough;
 }
 
 /**
@@ -205,33 +102,176 @@ CImg<T> filtrar_hough_theta( CImg<T> hough,
  *
  * tomada de funciones de la catedra
  */
-template <class T>
+template<class T>
 CImg<T> hough_inversa( CImg<T> img ) {
 
-  const double color[] = {255.f, 0.0f, 0.0f};
-  CImg<double> hough(img); 
-  hough.fill(0.0);
-  int width  = img.width(), 
-      height = img.height(),
-      y0, y1;
+    const double blanco[1] = { 255.f };
+    CImg<double> iHoughI(img);
+    iHoughI.fill(0.0);
+    int M = img.width(), 
+        N = img.height(), 
+        y0, y1;
 
-  double scale_rho   = height / (2 * sqrt( pow(float(height),2) + pow(float(width),2) ) ),
-         scale_theta = width / M_PI,
-         rho, theta;
+    //maximo valor posible de radio se da en la diagonal pcipal
+    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
+        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+        step_theta = M_PI / (M - 1), //paso en eje theta (M_PI=pi) (theta=[-90,90])
+        rho, theta;
 
-  for ( unsigned b = 0; b < height; b++ ){
-      for ( unsigned a=0; a < width; a++ ) {
-          if ( img(a,b) > 0.5 ) {
-              theta = a/scale_theta - M_PI/2;
-              y0 = (int)(((b-(height/2.0))/scale_rho) / sin(theta)); // -0/tan(theta));
-              y1 = (int)(((b-(height/2.0))/scale_rho) / sin(theta) - width/tan(theta));
-              hough.draw_line( 0, (int)y0, (int)width, (int)y1, color );
-          }
-      }
-  }
-  return hough;
+    cimg_forXY(img,t,r) {
+        if ( img(t, r) > 0.5 ) {
+            theta = t * step_theta - M_PI / 2; // mapea [0,M] en [-90,90]
+            rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+            y0 = int(rho / sin(theta));
+            y1 = int(rho / sin(theta) - M / tan(theta));
+            iHoughI.draw_line(0, (int) y0, (int) M, (int) y1, blanco);
+        }
+    }
+    return iHoughI;
 }
 
+
+/**
+ * Filtra la matriz de hough para valores de theta
+ * igual al especificado (mas/menos una tolerancia).
+ * es decir: Deja solo lineas con un angulo de inclinacion
+ * igual al especificado mas/menos una tolerancia
+ * El angulo debe estar entre +-pi/2, (en radianes)
+*/
+template<class T>
+CImg<T> filtrar_hough_theta( CImg<T> hough,
+                       double u_theta,
+                       double tol_theta) {
+ 
+    int M = hough.width(), 
+        N = hough.height();
+    double theta, step_theta;
+
+    step_theta = M_PI / (M - 1); //paso en eje theta (M_PI=pi) (theta=[-90,90]) */
+
+    cimg_forXY(hough,t,r) {
+        theta = t * step_theta - M_PI / 2;
+        if ( sqrt( pow(theta-u_theta,2) ) <= tol_theta ) {
+            /* printf("if %f <= %f   => %f   tomo: %f \n", */
+            /*        sqrt( pow(theta-u_theta,2) ) , */
+            /*        tol_theta, */
+            /*        hough(t,r), */
+            /*        theta ); */
+        } else {
+            hough(t,r) = 0;
+            /* printf("if %f <= %f   => %f   tomo: %f \n", */
+            /*        sqrt( pow(theta-u_theta,2) ) , */
+            /*        tol_theta, */
+            /*        hough(t,r), */
+            /*        theta ); */
+        }
+    }
+    return hough;
+}
+
+/**
+ * Filtra la matriz de hough para valores de rho
+ * igual al especificado (mas/menos una tolerancia).
+ * es decir: Deja solo lineas del largo especificado
+ * mas/menos una tolerancia
+*/
+template<class T>
+CImg<T> filtrar_hough_rho( CImg<T> hough,
+                       double u_rho,
+                       double tol_rho) {
+ 
+    int M = hough.width(), 
+        N = hough.height();
+    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
+        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+        rho;
+
+    cimg_forXY(hough,t,r) {
+        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+        if ( sqrt( pow(rho-u_rho,2) ) <= tol_rho ) {
+            /* printf("if %f <= %f   => %f   tomo: %f \n", */
+            /*        sqrt( pow(rho-u_rho,2) ) , */
+            /*        tol_rho, */
+            /*        hough(t,r), */
+            /*        rho ); */
+        } else {
+            hough(t,r) = 0;
+            /* printf("if %f <= %f   => %f   tomo: %f \n", */
+            /*        sqrt( pow(rho-u_rho,2) ) , */
+            /*        tol_rho, */
+            /*        hough(t,r), */
+            /*        rho ); */
+        }
+    }
+    return hough;
+}
+
+/**
+ * Filtra la matriz de hough para valores de rho y theta
+ * igual al especificado (mas/menos una tolerancia).
+ * es decir: Deja solo lineas del largo y angulo especificado
+ * mas/menos una tolerancia
+ *
+ * para combinaciones usar  funciones combinadas 
+ * (coomo lo hace esta)
+*/
+template<class T>
+CImg<T> filtrar_hough( CImg<T> hough,
+                       double u_rho,
+                       double u_theta,
+                       double tol_rho,
+                       double tol_theta) {
+    return filtrar_hough_rho( filtrar_hough_theta( hough, u_theta, tol_theta),
+                              u_rho, tol_rho );
+}
+
+/**
+ * Filtra la matriz de hough para valores de rho
+ * mayores o iguales al especificado.
+ * es decir: Deja solo lineas mas cortas q el umbral
+*/
+template<class T>
+CImg<T> filtrar_hough_rho_min( CImg<T> hough,
+                       double u_rho) {
+ 
+    int M = hough.width(), 
+        N = hough.height();
+    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
+        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+        rho;
+
+    cimg_forXY(hough,t,r) {
+        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+        if ( abs(rho) >= u_rho ) {
+            hough(t,r) = 0;
+        }
+    }
+    return hough;
+}
+
+/**
+ * Filtra la matriz de hough para valores de rho
+ * menores o iguales al especificado.
+ * es decir: Deja solo lineas mas largas q el umbral
+*/
+template<class T>
+CImg<T> filtrar_hough_rho_max( CImg<T> hough,
+                       double u_rho) {
+ 
+    int M = hough.width(), 
+        N = hough.height();
+    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
+        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+        rho;
+
+    cimg_forXY(hough,t,r) {
+        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+        if ( abs(rho) <= u_rho ) {
+            hough(t,r) = 0;
+        }
+    }
+    return hough;
+}
 
 
 
@@ -403,12 +443,9 @@ CImg<T> binaria_a_grises ( CImg<T> imagen_binaria, CImg<T> imagen_original ) {
     return imagen;
 }
 
-
-
-///****************************************
-/// Etiquetado de componentes conectadas
-///****************************************
 /**
+ * Etiquetado de componentes conectadas
+ *
  * Retorna una imagen etiquetada por regiones
  * @param CImg<int> img Imagen a partir de la cual se realiza el etiquetado
  *                      Esta imagen debe ser binaria !
@@ -586,3 +623,91 @@ CImg<int> label_cc( CImg<int> img,
     return img;
 }
 
+
+
+
+
+
+/// usando como base la de hough inversa,. no funciona?
+/* template<class T> */
+/* CImg<T> filtrar_hough_theta( CImg<T> iHoughI, */
+/*                        double u_theta, */
+/*                        double tol_theta) { */
+/*    int M = iHoughI.width(),  */
+/*         N = iHoughI.height(),  */
+/*         y0, y1; */
+
+/*     //maximo valor posible de radio se da en la diagonal pcipal */
+/*     double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))), */
+/*         step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho]) */
+/*         step_theta = M_PI / (M - 1), //paso en eje theta (M_PI=pi) (theta=[-90,90]) */
+/*         rho, theta; */
+
+/*     cimg_forXY(iHoughI,t,r) { */
+/*         if ( iHoughI(t, r) > 0.5 ) { */
+/*             theta = t * step_theta - M_PI / 2; // mapea [0,M] en [-90,90] */
+/*             rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho] */
+
+/*             if ( sqrt(theta*theta-u_theta*u_theta) <= tol_theta ) { */
+/*                         iHoughI(t,r) = 1; */
+/*                         printf("if %f <= %f   => %f \n", */
+/*                                abs((theta-u_theta)), */
+/*                                tol_theta, */
+/*                                iHoughI(t,r) ); */
+
+/*                     } else { */
+/*                         iHoughI(t,r) = 0; */
+/*                         /\* printf("if %f <= %f   => %f \n", *\/ */
+/*                         /\*        abs((theta-u_theta)), *\/ */
+/*                         /\*        tol_theta, *\/ */
+/*                         /\*        hough(t,r) ); *\/ */
+
+/*             } */
+/*         } */
+/*     } */
+/*     return iHoughI; */
+/* } */
+
+
+/// usando como base la de hough directa,. no funciona?
+/* template<class T> */
+/* CImg<T> filtrar_hough_theta( CImg<T> hough,  */
+/*                        double u_theta,  */
+/*                        double tol_theta) { */
+ 
+/*     const unsigned M = hough.width(), N = hough.height(); */
+/*     int r; // radio mapeado en los N pixeles */
+
+/*     // maximo valor posible de radio se da en la diagonal pcipal */
+/*     double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),  */
+/*         step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho]) */
+/*         step_theta = M_PI / (M - 1), //paso en eje theta (M_PI=pi) (theta=[-90,90]) */
+/*         rho, theta; */
+    
+/*     cimg_forXY(hough,x,y) { */
+/*         if ( hough(x, y) > 0.5 ) */
+/*             //calculo rho variando theta en _todo el eje, con x e y fijo */
+/*             for (int t = 0; t < M; t++) {  */
+/*                 theta = t * step_theta - M_PI / 2; // mapea [0,M] en [-90,90] */
+/*                 rho = x * cos(theta) + y * sin(theta); // calcula rho */
+/*                 r = int((rho + max_rho) / step_rho); // mapea [-max_rho , max_rho] en [0,N] */
+/*                 if ( sqrt(theta*theta-u_theta*u_theta) <= tol_theta ) { */
+/*                         hough(t,r) = 1; */
+/*                         printf("if %f <= %f   => %f \n", */
+/*                                abs((theta-u_theta)), */
+/*                                tol_theta, */
+/*                                hough(t,r) ); */
+
+/*                     } else { */
+/*                         hough(t,r) = 0; */
+/*                         /\* printf("if %f <= %f   => %f \n", *\/ */
+/*                         /\*        abs((theta-u_theta)), *\/ */
+/*                         /\*        tol_theta, *\/ */
+/*                         /\*        hough(t,r) ); *\/ */
+
+/*                     } */
+                
+/*             } */
+/*     } */
+/*     return hough; */
+/* } */
