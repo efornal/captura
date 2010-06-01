@@ -46,18 +46,11 @@ int main(int argc, char **argv) {
 	vector<double> posiciones_maximos = obtener_maximos(HOUGH_IMG_BORDES,
 			cant_maximos, direccion, tol_grados);
 
-	CImg<double> maxs(img); //imagen que voy a usar para dibujar maximos
-	//luego se lehace la inversa de hough a maxs para ver las lineas
-	maxs.normalize(0, 255);
-	maxs.fill(0.0);
+	CImg<double> maxs = grafica_maximos <double> (posiciones_maximos,
+			HOUGH_IMG_BORDES.width(), HOUGH_IMG_BORDES.height());
 
-	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i+=2) {
-		cout<<"i: "<<i<<"   i+1: "<<i+1<<endl;
-		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
-		cout << "maximos (x,y)= (" << posiciones_maximos[i] << ", "
-				<< posiciones_maximos[i + 1] << ")" << endl;
-	}
 	CImg<double> deteccion = hough_inversa(maxs);
+	deteccion.print();
 
 	// si hago un AND entre la imagen con los bordes detectados y lo que me devolvio la inversa
 	// de hough me voy a quedar co lo que realmente son bordes:
@@ -71,7 +64,6 @@ int main(int argc, char **argv) {
 	CImgDisplay d4(maxs, "maximos detectados");
 	CImgDisplay disp(deteccion, "inversaHough(maximos)");
 	CImgDisplay d5(deteccion_final, "and entre imagen y bordes");
-
 	CImg<> deteccion_final_coloreada = colorea_rojo(deteccion);
 	CImgDisplay disppp(img);
 	deteccion_final_coloreada.display();
