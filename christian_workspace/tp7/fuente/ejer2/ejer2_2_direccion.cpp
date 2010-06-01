@@ -31,12 +31,12 @@ int main(int argc, char **argv) {
 	const float umbral = cimg_option("-umbral", 20.0, "umbral");
 	const int
 			direccion =
-					cimg_option ("-direccionborde", 45, "direccion borde a buscar - -99 implica todas las direcciones");
+					cimg_option ("-direccionborde", 0, "direccion borde a buscar - -99 implica todas las direcciones");
 	const int cant_maximos =
-			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
+			cimg_option("-cantmaximos", 1, "cantidad de maximos a detectar");
+	int tol_grados = cimg_option ("-tolgrados", 2, "tolerancia en grados");
 	CImg<double> img(filename); //imagen original
 	//img.rotate(90);
-	//todo: habria que agregar una tolerancia para el direccionamiento!
 	//aplicar deteccion de bordes a la imagen
 	CImg<double> img_bordes = aplicar_sobel<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
 
@@ -44,16 +44,18 @@ int main(int argc, char **argv) {
 	CImg<double> HOUGH_IMG_BORDES = hough_directa(img_bordes); // aplico la transformada
 
 	vector<double> posiciones_maximos = obtener_maximos(HOUGH_IMG_BORDES,
-			cant_maximos, direccion);
+			cant_maximos, direccion, tol_grados);
 
 	CImg<double> maxs(img); //imagen que voy a usar para dibujar maximos
 	//luego se lehace la inversa de hough a maxs para ver las lineas
 	maxs.normalize(0, 255);
 	maxs.fill(0.0);
 
-	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i++) {
+	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i+=2) {
+		cout<<"i: "<<i<<"   i+1: "<<i+1<<endl;
 		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
-		cout << "posiciones_maximos[i]: " << posiciones_maximos[i] << endl;
+		cout << "maximos (x,y)= (" << posiciones_maximos[i] << ", "
+				<< posiciones_maximos[i + 1] << ")" << endl;
 	}
 	CImg<double> deteccion = hough_inversa(maxs);
 
@@ -63,34 +65,19 @@ int main(int argc, char **argv) {
 	CImg<double> deteccion_final = AND(img_bordes, deteccion);
 
 	//muestro
-	CImgList<double> lista(img, img_bordes, HOUGH_IMG_BORDES, maxs, deteccion,
-			deteccion_final);
-	CImgDisplay disp;
-	lista.display(disp);
-	disp.set_title(
-			"imagen, segmentacion bordes, transformdad de bordes, maximos, inversa_hough",
-			"and entre imagenes");
+	CImgDisplay d1(img, "imagen original");
+	CImgDisplay d2(img_bordes, "deteccion bordes");
+	CImgDisplay d3(HOUGH_IMG_BORDES, "Transf. Hough");
+	CImgDisplay d4(maxs, "maximos detectados");
+	CImgDisplay disp(deteccion, "inversaHough(maximos)");
+	CImgDisplay d5(deteccion_final, "and entre imagen y bordes");
 
-	CImg<> deteccion_final_coloreada = colorea_rojo(deteccion_final);
+	CImg<> deteccion_final_coloreada = colorea_rojo(deteccion);
 	CImgDisplay disppp(img);
 	deteccion_final_coloreada.display();
-	//todo: ver como sobreimprimir en la imagen los bordes.. por ahora uso compiz y listo :)
-	/*todo: como corno hago lo que dice el ejercicio de ver solamente en un angulo y con long. fijadas por le usuario??
-	 * tengo que detectar maximos solamente en esa direccion?? o sea? no se...*/
-
-	/*	img.draw_grid(-50*100.0f/image.width(),-50*100.0f/256,0,0,false,true,black,0.2f,0xCCCCCCCC,0xCCCCCCCC).
-	 draw_axes(0,image.width()-1.0f,255.0f,0.0f,black).
-	 draw_graph(image.get_shared_line(y,0,0),red,1,1,0,255,1).
-	 draw_graph(image.get_shared_line(y,0,1),green,1,1,0,255,1).
-	 draw_graph(image.get_shared_line(y,0,2),blue,1,1,0,255,1).
-	 draw_text(30,5,"Pixel (%d,%d)={%d %d %d}",black,0,1,13,
-	 main_disp.mouse_x(),main_disp.mouse_y(),val_red,val_green,val_blue).
-	 draw_line(xl,0,xl,draw_disp.height()-1,black,0.5f,hatch=cimg::rol(hatch)).*/
 
 	while (!disp.is_closed()) {
 		disp.wait();
-		/*img .draw_text(30, 5, "Pixel (%d,%d)", black, 0, 1, 13, disp.mouse_x(),
-		 disp.mouse_y());*/
 	}
 	return 0;
 }
