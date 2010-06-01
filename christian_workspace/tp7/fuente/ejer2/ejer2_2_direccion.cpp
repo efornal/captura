@@ -31,12 +31,12 @@ int main(int argc, char **argv) {
 	const float umbral = cimg_option("-umbral", 20.0, "umbral");
 	const int
 			direccion =
-					cimg_option ("-direccionborde", 0, "direccion borde a buscar - -99 implica todas las direcciones");
+					cimg_option ("-direccionborde", -99, "direccion borde a buscar - -99 implica todas las direcciones");
 	const int cant_maximos =
-			cimg_option("-cantmaximos", 1, "cantidad de maximos a detectar");
-	int tol_grados = cimg_option ("-tolgrados", 2, "tolerancia en grados");
+			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
+	int tol_grados = cimg_option ("-tolgrados", 0, "tolerancia en grados");
 	CImg<double> img(filename); //imagen original
-	//img.rotate(90);
+
 	//aplicar deteccion de bordes a la imagen
 	CImg<double> img_bordes = aplicar_sobel<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
 
