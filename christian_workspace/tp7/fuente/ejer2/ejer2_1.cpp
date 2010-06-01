@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 	img.normalize(0, 1);
 	CImg<double> Hough = hough_directa(img);
 	Hough.normalize(0, 1);
-	CImg<double> inversa = hough_inversa(img);
+	CImg<double> inversa = hough_inversa(Hough);
 	inversa.normalize(0, 1);
 	img.normalize(0, 1);
 
