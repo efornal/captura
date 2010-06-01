@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 	float tol_grados = cimg_option("-tol", 10.0, "tolerancia");
 	int
 			cant_max =
-					cimg_option("-cantmax", 5, "cantidad de maximos a obtener de la transf de Hough");
+					cimg_option("-cantmax", 10, "cantidad de maximos a obtener de la transf de Hough");
 
 	CImg<double> img(filename); //imagen original
 	img.print();
@@ -63,6 +63,9 @@ int main(int argc, char **argv) {
 
 	CImg<double> img_hough_inversa = hough_inversa(maxs);
 	CImgDisplay disp5(img_hough_inversa, "inversa Hough de maximos");
+
+	img_filtrada.draw_image(colorea_rojo(img_hough_inversa), 0.5);
+	img_filtrada.display();
 
 	CImgDisplay disp6(colorea_rojo(img_hough_inversa));
 	while (!disp1.is_closed()) {
