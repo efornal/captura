@@ -456,7 +456,7 @@ void ab_gaussiano_notch(CImg<T> &H_blanca, int uc = 1, int vc = 1, int ancho =
 //fixme: esto no anda y me re podri!!! pagina 260 libro... formula d emodelado para sacar mov.
 template<class T>
 CImg<T> sacar_movimiento(CImg<T> imagen_movida, float t=1.0, float a=0.1, float b=0.1) {
-	//float pi = 3.14159;
+	/*//float pi = 3.14159;
 	CImgList<T> IMAGEN_MOVIDA = imagen_movida.get_FFT();
 	CImgList<T> H(IMAGEN_MOVIDA);
 	float tmp;
@@ -475,5 +475,6 @@ CImg<T> sacar_movimiento(CImg<T> imagen_movida, float t=1.0, float a=0.1, float 
 			IMAGEN_MOVIDA[0](X, Y) *= H[0](X, Y);
 			IMAGEN_MOVIDA[1](X, Y) *= H[1](X, Y);
 		}
-	return IMAGEN_MOVIDA.get_FFT(true)[0];
+	return IMAGEN_MOVIDA.get_FFT(true)[0];*/
+
 }
