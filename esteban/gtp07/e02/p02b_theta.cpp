@@ -1,7 +1,7 @@
 /**
- * 45 - pi/4 =  0.78540
- * 90 - pi/2 =  1.5708 
- 
+ * (+-)45 => (+-) pi/4  =  (+-)0.78540
+ * (+-)90 => (+-) pi/2  =  (+-)1.5708 
+ *
  * bordes a 45:  ./p02b_theta -theta 0.78540
  * bordes a 90 (horizontales): ./p02b_theta -theta 1.5700 -umbral 1
 */
@@ -15,18 +15,17 @@ int main( int argc, char **argv ) {
                                         "../../imagenes/letras1.tif",
                                          "ruta archivo imagen" );
     double theta = cimg_option( "-theta", M_PI/4.0, "valor de angulo" );
-    double tol_theta = cimg_option( "-tol_theta", 0.0, "tolerancia  angulo" );
-    double umbral    = cimg_option( "-umbral", 100, "umbral puntos" );
+    double tol_theta = cimg_option( "-tol_theta", 0.01, "tolerancia  angulo" );
+    double umbral    = cimg_option( "-umbral", 10, "umbral puntos" );
 
     CImgDisplay disp, disp1, disp2, disp3, disp4, disp5, disp6;
     
     CHImg<double> img( filename ), 
-        img_po ,img_xy, img_hough_fil(img), test(img);
+        img_po ,img_xy, img_hough_fil(img);
     img.channel(0);
     img.filtrar_sobel().normalize(0,255);
     img.display(disp);
-    test.fill(255);
-    filtrar_hough_theta( test, theta, tol_theta ).display("test");
+
     img_po = hough_directa( img ).normalize(0,255); 
 
     img_hough_fil = filtrar_hough_theta( img_po, theta, tol_theta );
