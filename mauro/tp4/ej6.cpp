@@ -30,7 +30,11 @@ T min( T a, T b, T c ) {
  * si norma=1 la esfera será un "rombo", si norma=0 un cubo.
  * /// NOTAR que definí la norma 0 queriendo hacer en realidad la norma infinito,
  *     asi que si norma=0 calcula la norma infinito.
- */
+ * @param r, g, b: coordenadas r, g, b del color a comparar
+ * @param r0, g0, b0: coordenadas del centro del entorno
+ * @param radio: radio del entorno
+ * @param norma: norma usada para definir el entorno (notar que supone 0=inf) 
+*/
 template<class T>
 bool pertenece_entorno( T r, T g, T b, T r0, T g0, T b0, T radio=(T)2, int norma=2 ){
   switch( norma ) {
