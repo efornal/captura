@@ -7,16 +7,18 @@
 using namespace cimg_library;
 using namespace std;
 
-template<class T>
-T max( T a, T b, T c ) {
-  return max( a, max( b, c ) );
-}
-
-template<class T>
-T min( T a, T b, T c ) {
-  return min( a, min( b, c ) );
-}
-
+/**
+ * pertenece_entorno me dice si el color dado por (h, s) está dentro del entorno
+ * centrado en el punto (h0, s0) (notar que ignoro i). Este entorno se define
+ * según el radio radio y la norma norma: si radio=4 y norma=2 será un círculo
+ * centrado en (h0, s0); si norma=1 será un rombo, y si norma=0 un cuadrado.
+ * /// NOTAR que definí la norma 0 queriendo hacer en realidad la norma infinito,
+ *     asi que si norma=0 calcula la norma infinito.
+ * @param h, s: coordenadad h, s del color a comparar
+ * @param h0, s0: coordenadas h0, s0 del centro del entorno
+ * @param radio: radio del entorno
+ * @param norma: norma usada para definir el entorno (notar que supone 0=inf)
+ */
 template<class T>
 bool pertenece_entorno( T h, T s, T h0, T s0, T radio=(T)0.1, int norma=2 ){
   switch( norma ) {
@@ -29,6 +31,15 @@ bool pertenece_entorno( T h, T s, T h0, T s0, T radio=(T)0.1, int norma=2 ){
   }
 }
 
+/**
+ * segmentar_hs segmenta la imagen en el espacio de color HSI, ignorando I, dejando
+ * solo aquellos colores que caen suficientemente "cerca" del entorno centrado en
+ * (h, s) con radio radio y calculado según la norma norma.
+ * @param img: imagen a segmentar, EN ESPACIO DE COLOR RGB
+ * @param h, s: coordenadas (h,s) del centro del entorno
+ * @param radio: radio del entorno
+ * @param norma: norma usada para calcular el entorno en el espacio HS
+ */
 template<class T>
 CImg<T> segmentar_hs ( CImg<T> &img, T h, T s, T radio=(T)2, int norma=2 ) {
 
@@ -48,6 +59,19 @@ CImg<T> segmentar_hs ( CImg<T> &img, T h, T s, T radio=(T)2, int norma=2 ) {
   return resultado;
 }
 
+/**
+ * promedio_valores_hsi toma una vecindad centrada en (x,y) y con ancho
+ * y alto (2*entorno+1), de la imagen imagen y calcula los valores medios de
+ * los canales h, s, e i, seteandolos en estos parametros pasados por referencia
+ * @param imagen: la imagen de la que se saca el entorno
+ * @param h, s, i: variables donde se guradará eel color h, s, i promedio
+ * @param entorno: el "radio" (norma infinito) de la subimagen que se usara para
+ *                 calcular el promedio
+ * @param x, y: coordenadas del punto que será centro de la subimagen
+ * /// NOTAR la diferencia entre este entorno y los de las funciones arriba, este
+ *     entorno es simplemente una medida espacial, arriba era un nombre genérico
+ *     de una figura en el espacio, determinada por la norma y el radio
+ */
 template<class T>
 void promedio_valores_hsi( CImg<T>imagen, T &h, T &s, T &i,
 			   int entorno, int x, int y ) {
