@@ -68,3 +68,23 @@ CImg<T> calcular_magnitud_fft ( const CImg<T> &imagen, bool shift=true, bool log
 
   return magnitud;
 }
+
+/**
+ * 
+ */
+template <class T>
+CImgList<T> realimag2magfase ( const CImgList<T> &realimag ) {
+  CImg<T> magnitud = (realimag[0].get_sqr() + realimag[1].get_sqr()).sqrt();
+  CImg<T> fase = realimag[1].get_div( realimag[0] + 0.01).atan2();
+  return CImgList<T>( magnitud, fase );;
+}
+
+/**
+ * 
+ */
+template <class T>
+CImgList<T> magfase2realimag ( const CImgList<T> &magfase ) {
+  CImg<T> real = magfase[1].get_cos().mul( magfase[0] );
+  CImg<T> imag = magfase[1].get_sin().mul( magfase[0] );
+  return CImgList<T>( real, imag );;
+}
