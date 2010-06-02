@@ -26,7 +26,7 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	const char
 			*filename =
-					cimg_option("-f1", "./CPDSI_Parcial_Practica_2009/corrientes_ruidogris.jpg",
+					cimg_option("-f", "./CPDSI_Parcial_Practica_2009/corrientes_ruidogris.jpg",
 							"ruta archivo imagen");
 	int tam_mascara = cimg_option("-sizemask", 9, "Tam de la mascara");
 	int d = cimg_option("-dfiltro", 1.0, "d del filtro media alfa recortado");
