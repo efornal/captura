@@ -1,3 +1,12 @@
+/**
+ * distribucion de ruidos:
+ * gaussiono        /                            \
+ * uniforme                _-_-_
+ * sal             |___
+ * pimienta                 ___|
+ * sal y pimienta   |___|
+ */
+
 #include <CHImg.h>
 #include <iostream>
 
