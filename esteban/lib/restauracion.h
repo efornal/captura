@@ -16,7 +16,7 @@ using namespace cimg_library;
 
 
 // ==========================================================
-//                        ruido 
+//                Generadores de ruido 
 // ==========================================================
 /*
  * noice: Add random noise to the values of the instance image.
@@ -77,11 +77,36 @@ void gen_ruido_pimienta( CImg<double> &img, double sigma ) {
 }
 
 //====================================================
-//                filtros espaciales 
+//                filtros espaciales : De medias
 //====================================================
 
 /**
+ * retorna un filtro espacial de media aritmetica
+ * usar:     ruido gaussiano.
+ * no usar:  sal y/o pimienta
+ *
+ * @size Tamanio de la mascara
+ * formula:
+ *   f'(x,y) = (1/mn) * sum{ g(x,y) }
+ */
+CImg<double> filtrado_aritmetica( CImg<double> img, int size=3) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        filtrada(x,y) = ( 1.0/(size*size) ) * mask.sum();
+    }
+    
+    return filtrada;
+}
+
+/**
  * retorna un filtro espacial de media geometrica
+ * usar:     ruido gaussiano.
+ * no usar:  sal y/o pimienta
+ *
  * @size Tamanio de la mascara
  * formula:
  *   f'(x,y) = [ prod{ g(x,y) } ] ^ (1/mn)
@@ -106,7 +131,38 @@ CImg<double> filtrado_geometrica( CImg<double> img, int size=3) {
 }
 
 /**
+ * retorna un filtro espacial de media armonica
+ * usar:     ruido gaussiano, sal.
+ * no usar:  pimienta
+ *
+ * @size Tamanio de la mascara
+ * formula:
+ *   f'(x,y) = (mn) * sum{ 1/g(x,y) }
+ */
+CImg<double> filtrado_armonica( CImg<double> img, int size=3) {
+    CImg<double> mask (size,size,1,1,0);
+    CImg<double> filtrada (img);
+    double den;
+    int mid = size/2;
+ 
+    cimg_forXY(img,x,y){
+        den = 0.0;
+        
+        mask = img.get_crop( x-mid, y-mid, x+mid, y+mid, true );            
+        cimg_forXY(mask,s,t) {
+            den += 1.0/mask(s,t);
+        }
+        filtrada(x,y) = (size*size) / den;
+    }
+
+    return filtrada;
+}
+
+/**
  * retorna un filtro espacial de media contra-armonica
+ * usar:     sal y/o pimienta
+ * no usar:  
+ *
  * @q Orden del filtro
  * @size Tamanio de la mascara
  * formula:
@@ -135,8 +191,15 @@ CImg<double> filtrado_contra_armonica( CImg<double> img, int q=0, int size=3 ) {
 }
 
 
+//====================================================
+//                filtros espaciales : De Orden
+//====================================================
+
 /**
  * retorna un filtro espacial de orden, mediana
+ * usar:     sal y/o pimienta
+ * no usar:  
+ *
  * @size Tamanio de la mascara
  * formula:
  *   f'(x,y) =  mediana { g(x,y) }
@@ -157,6 +220,9 @@ CImg<double> filtrado_mediana( CImg<double> img, int size=3 ) {
 
 /**
  * retorna un filtro espacial de orden, punto medio
+ * usar:     gaussiano, uniforme
+ * no usar:  
+ *
  * @size Tamanio de la mascara
  * formula:
  *   f'(x,y) =  1/2 * [ MAX{g(x,y)} + MIN{g(x,y)} ]
@@ -176,6 +242,9 @@ CImg<double> filtrado_punto_medio( CImg<double> img, int size=3 ) {
 
 /**
  * retorna un filtro espacial de orden, alfa recortado
+ * usar: gaussiano, sal y/o pimienta
+ * no usar:
+ *
  * @size Tamanio de la mascara
  * formula:
  *                 1
