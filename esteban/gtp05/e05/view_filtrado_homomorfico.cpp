@@ -1,5 +1,6 @@
 /**
  * ver:
+ * ./view_filtrado_homomorfico -wc 275 -dw 5 -orden 5 -gl 0.35 -gh 1.01 -f ../../imagenes/reunion.tif
  * ./view_filtrado_homomorfico -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
  * ./view_filtrado_homomorfico -f ../../imagenes/reunion.tif
  *
@@ -23,7 +24,7 @@ int main( int argc, char **argv ) {
     double gl = cimg_option( "-gl",    0.0, "decremento brillo    0 < gl < 1" );
     double gh = cimg_option( "-gh",    1.0, "amplifica altas frec     gh > 1" );
     int wc    = cimg_option( "-wc",    1,   "frecuencia de corte" );
-    int orden = cimg_option( "-orden", 10,  "orden del filtro (usa un butter)" );
+    int orden = cimg_option( "-orden", 2,  "orden del filtro (usa un butter)" );
     int dw    = cimg_option( "-dw",    1,   "delta frecuencia" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5, disp6, disp7, disp8;
@@ -61,46 +62,62 @@ int main( int argc, char **argv ) {
 
         if ( disp.is_keySHIFTLEFT () && disp.is_keyARROWDOWN () ){
             wc -= dw; printf("wc: %d\n", wc);
+            goto calcular;
         }
         if ( disp.is_keySHIFTLEFT () && disp.is_keyARROWUP () ){
             wc += dw; printf("wc: %d\n", wc);
+            goto calcular;
         }
 
         if ( disp.is_keySHIFTLEFT () && disp.is_keyARROWLEFT  () ) { 
             orden--; printf("orden: %d\n", orden); 
+            goto calcular;
         }
         if ( disp.is_keySHIFTLEFT () && disp.is_keyARROWRIGHT () ) { 
             orden++; printf("orden: %d\n", orden); 
+            goto calcular;
         }
 
         if ( !disp.is_keySHIFTLEFT () && disp.is_keyARROWLEFT () ) { 
             gl-=0.05; printf("gl [0,1] brillo: %f\n", gl); 
+            goto calcular;
         }
         if ( !disp.is_keySHIFTLEFT () && disp.is_keyARROWRIGHT () ) { 
             gl+=0.05; printf("gl [0,1] brillo: %f\n", gl); 
+            goto calcular;
         }
 
         if ( !disp.is_keySHIFTLEFT () && disp.is_keyARROWDOWN () ) { 
             gh--; printf("gh [>1]: %f\n", gh); 
+            goto calcular;
         }
         if ( !disp.is_keySHIFTLEFT () && disp.is_keyARROWUP () ) { 
             gh++; printf("gh [>1]: %f\n", gh); 
+            goto calcular;
         }
 
-        if ( disp.is_keyPAGEUP()   ) { dw--; printf("dw: %d\n", dw); }
-        if ( disp.is_keyPAGEDOWN() ) { dw++; printf("dw: %d\n", dw); }
-
-        if ( disp.is_event () ){ 
-            filtro = filtro::homomorfico( img, wc, gl, gh, orden );
-            filtrada = img.get_filtrado_homomorfico( filtro );
-            filtrada.normalize(0,255).display(disp4);
-            filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
-            filtrada.get_fft_fase().normalize(0,255).display(disp6);
-
-            filtro.get_fft_modulo_log().normalize(0,255).display(disp7);
-            filtro.get_fft_fase().normalize(0,255).display(disp8);
-
+        if ( disp.is_keyPAGEUP()   ) { 
+            dw--; printf("dw: %d\n", dw); 
+            goto calcular;
         }
+        if ( disp.is_keyPAGEDOWN() ) { 
+            dw++; printf("dw: %d\n", dw); 
+            goto calcular;
+        }
+
+        goto saltar;
+    calcular:
+        filtro = filtro::homomorfico( img, wc, gl, gh, orden );
+        filtrada = img.get_filtrado_homomorfico( filtro );
+        filtrada.normalize(0,255).display(disp4);
+        filtrada.get_fft_modulo_log().normalize(0,255).display(disp5);
+        filtrada.get_fft_fase().normalize(0,255).display(disp6);
+
+        filtro.get_fft_modulo_log().normalize(0,255).display(disp7);
+        filtro.get_fft_fase().normalize(0,255).display(disp8);
+    saltar:
+        printf("");
+
 
     }
     return 0;

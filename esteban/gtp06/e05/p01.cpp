@@ -9,16 +9,16 @@ using namespace std;
 
 int main( int argc, char **argv ) {
     const char *orig = cimg_option( "-f",
-                                        "../../imagenes/del-libro/lib-orig.tif",
+                                        "../../imagenes/del-libro/lib-orig-400.tif",
                                          "ruta archivo imagen" );
     const char *noise = cimg_option( "-g",
-                                        "../../imagenes/del-libro/lib-noise.tif",
+                                        "../../imagenes/del-libro/lib-noise-400.tif",
                                          "ruta archivo imagen" );
     const char *sub_orig = cimg_option( "-subf",
-                                        "../../imagenes/del-libro/lib-sub-orig.tif",
+                                        "../../imagenes/del-libro/lib-sub-orig_10.tif",
                                          "ruta archivo imagen" );
     const char *sub_noise = cimg_option( "-subg",
-                                        "../../imagenes/del-libro/lib-sub-noise.tif",
+                                        "../../imagenes/del-libro/lib-sub-noise_10.tif",
                                          "ruta archivo imagen" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5, disp6;
