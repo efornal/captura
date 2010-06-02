@@ -339,6 +339,8 @@ template<typename T> struct CHImg : public CImg<T> {
     // ==================================================== \\
     // ------ filtrado espacial tema:restauracion  -------- \\
 
+    // ----- filtros de medias
+    
     CImg<double> get_filtrar_aritmetica( int size=3 ) {
         return filtrado_aritmetica( *this, size );
     }
@@ -375,6 +377,8 @@ template<typename T> struct CHImg : public CImg<T> {
         return *this;
     }
 
+    // ----- filtros de orden
+
     CImg<double> filtrar_mediana( int size=3 ) {
         *this =  filtrado_mediana( *this, size );
         return *this;
@@ -382,6 +386,24 @@ template<typename T> struct CHImg : public CImg<T> {
 
     CImg<double> get_filtrar_mediana( int size=3 ) {
         return filtrado_mediana( *this, size );
+    }
+
+    CImg<double> filtrar_max( int size=3 ) {
+        *this =  filtrado_max( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_max( int size=3 ) {
+        return filtrado_max( *this, size );
+    }
+
+    CImg<double> filtrar_min( int size=3 ) {
+        *this =  filtrado_min( *this, size );
+        return *this;
+    }
+
+    CImg<double> get_filtrar_min( int size=3 ) {
+        return filtrado_min( *this, size );
     }
 
     CImg<double> filtrar_punto_medio( int size=3 ) {
