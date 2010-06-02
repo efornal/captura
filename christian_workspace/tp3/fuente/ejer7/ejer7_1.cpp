@@ -27,7 +27,6 @@ int main(int argc, char **argv) {
 	imagen_ecualizada_localmente.display(disp3);
 
 	CImg<unsigned char> auxiliar(imagen);
-	unsigned char rojo[] = { 255, 0, 0 };
 	int deltax = 100;
 	int deltay = 100;
 
