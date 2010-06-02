@@ -666,5 +666,5 @@ double detectar_inclinacion(CImg<T> img, float umbral = 1.0) {
 			break;
 		}
 	}
-	return *(180 * (atan(y1 / medio)) / M_PI); //(180*radiantes/pi)
+	return (180 * (atan(y1 / medio)) / M_PI); //(180*radiantes/pi)
 }

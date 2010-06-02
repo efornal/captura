@@ -30,8 +30,7 @@ int main(int argc, char **argv) {
 			"ruta archivo imagen");
 
 	CImg<double> img(filename); //imagen original
-	img.rotate(90); //roto la imagen 30 grados a proposito...
-
+	img.rotate(30); //roto la imagen 30 grados a proposito...
 	cout << "la inclinacion de la imagen es: " << detectar_inclinacion(img)
 			<< endl;
 	CImgDisplay disp(img, "imagen");
