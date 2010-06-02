@@ -29,9 +29,19 @@ int main(int argc, char **argv) {
 					cimg_option( "-f", "../../imagenes/huang2_corrida.tif", "ruta archivo imagen" );
 	CImg<double> g(filename); //imagen original
 
+	/*
+	 1-) creo una imagen impulso
+	 2-) la aplico la funcion degradacion q te da el ejer por convolucion [...]1/n
+	 3-) obtenes el impulso degradado
+	 y listo...el sistema como es lti queda definido por la respuesta al impulso
+	 entonces G(x,y) sería la TDF de la respuesta al impulso
+	 H=G/A
+	 donde A es una constante q ahi me cago
+	 */
+
 	CImgDisplay disp(g, "imagen huang corrida");
-	CImg<double> h=generar_mascara_promediadora <float> (3);
-	h=1.0/h;
+	CImg<double> h = generar_mascara_promediadora<float> (3);
+	h = 1.0 / h;
 
 	//sacar_movimiento(img, 1, 0.1,0.1).display(dii);//fixme: no anda
 	while (!disp.is_closed()) {

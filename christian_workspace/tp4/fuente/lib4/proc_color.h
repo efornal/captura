@@ -1,9 +1,3 @@
-/*
- * canales.h
- *
- *  Created on: 15/04/2010
- *      Author: christian
- */
 #include<CImg.h>
 #include <string>
 #include <vector>
@@ -11,50 +5,107 @@
 using namespace std;
 using namespace cimg_library;
 
+////////////////////////////////////////////////////////////////////////////////////////////
+//De Mauro:
+////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
-CImg<T> segmentaHSI(CImg<T> img, float tol_h, float tol_s, float H, float S,
-		float *color_a_rellenar, bool color_verdadero = false) {
-	/*	img: imagen RGB a segmentar en HSI
-	 *  tol_h: tolerancia para H
-	 *  tol_s: tolerancia para S
-	 *  H: valor de H que se toma como referencia para segmentar
-	 *  S: valor S que se toma como referencia para segmentar
-	 *  color_a_rellenar: color con el que se va a rellenar lo segmentado
-	 *  color_verdadero =true implica colorear con los colores verdaderos de la iamgen ignorando color_a_rellenar
-	 * */
-	CImg<T> imagen_HSI = img.get_RGBtoHSI();
-	CImg<T> img_H = imagen_HSI.get_channel(0); //obtengo el canal H
-	CImg<T> img_S = imagen_HSI.get_channel(1); //obtengo en canal S
-	CImg<T> img_segmentada(img);
-	float extremo_izquierdo, extremo_derecho;
-	//fixme: hice un quilmbo y sigue sin andar
-	bool flag_derecho = false, flag_izquierdo = false;
-	cimg_forXY(img_segmentada,x,y)
-		{
-			if (img_S(x, y) >= (S + tol_s)) { //si el valor del pixel de la imagen es mayor que el punto a segm.+la tol
-				img_segmentada(x, y, 0, 0) = 0.0;
-				img_segmentada(x, y, 0, 1) = 0.0;
-				img_segmentada(x, y, 0, 2) = 0.0;
-			} else //esta en un radio <= a S
-			{
-				//empieza conprobacion de H...
-				if ((img_H(x, y) > (H + tol_h)) && (img_H(x, y)
-						< abs(H - tol_h))) { //pinto de negro
-					img_segmentada(x, y, 0, 0) = 0.0;
-					img_segmentada(x, y, 0, 1) = 0.0;
-					img_segmentada(x, y, 0, 2) = 0.0;
-				} else { //esta dentro del rango...
-					if (color_a_rellenar) {
-						img_segmentada(x, y, 0, 0) = color_a_rellenar[0];
-						img_segmentada(x, y, 0, 1) = color_a_rellenar[1];
-						img_segmentada(x, y, 0, 2) = color_a_rellenar[2];
-					}
-				}
-			} //cierra el else de S
-		}
-	return img_segmentada;
+T max(T a, T b, T c) {
+	//devuelve el maximo valor de los arguementos
+	return max(a, max(b, c));
 }
 
+template<class T>
+T min(T a, T b, T c) {
+	//devuelve el minimo valor de los arguementos
+	return min(a, min(b, c));
+}
+
+template<class T>
+bool pertenece_entorno(T h, T s, T h0, T s0, T radio = (T) 0.1, int norma = 2) {
+	/**
+	 * pertenece_entorno me dice si el color dado por (h, s) está dentro del entorno
+	 * centrado en el punto (h0, s0) (notar que ignoro i). Este entorno se define
+	 * según el radio radio y la norma norma: si radio=4 y norma=2 será un círculo
+	 * centrado en (h0, s0); si norma=1 será un rombo, y si norma=0 un cuadrado.
+	 * /// NOTAR que definí la norma 0 queriendo hacer en realidad la norma infinito,
+	 *     asi que si norma=0 calcula la norma infinito.
+	 * @param h, s: coordenadad h, s del color a comparar
+	 * @param h0, s0: coordenadas h0, s0 del centro del entorno
+	 * @param radio: radio del entorno
+	 * @param norma: norma usada para definir el entorno (notar que supone 0=inf)
+	 */
+	switch (norma) {
+	case 1:
+		return ((abs(h - h0) / 240.0 + abs(s - s0)) / 2.0 <= radio) ? true
+				: false;
+	case 2:
+		return (sqrt(pow((h - h0) / 240.0, 2) + pow(s - s0, 2)) <= radio) ? true
+				: false;
+	default:
+		return (max(abs(h - h0) / 240.0, abs(s - s0)) <= radio) ? true : false;
+	}
+}
+
+template<class T>
+CImg<T> segmentar_hs(CImg<T> &img, T h, T s, T radio = (T) 2, int norma = 2) {
+	/** entorno=0 se para en ese pixel nomas... y no saca el promedio...
+	 * segmentar_hs segmenta la imagen en el espacio de color HSI, ignorando I, dejando
+	 * solo aquellos colores que caen suficientemente "cerca" del entorno centrado en
+	 * (h, s) con radio radio y calculado según la norma norma.
+	 * @param img: imagen a segmentar, EN ESPACIO DE COLOR RGB
+	 * @param h, s: coordenadas (h,s) del centro del entorno
+	 * @param radio: radio del entorno
+	 * @param norma: norma usada para calcular el entorno en el espacio HS
+	 */
+	CImg<bool> mascara(img.width(), img.height());
+	CImg<T> resultado(img);
+	img.RGBtoHSI();
+	resultado.RGBtoHSI();
+	cimg_forXY(img,x,y)
+		{ //si queres obtener la mascara binaria hay que devolver la mascara
+			mascara(x, y) = pertenece_entorno(img(x, y, 0, 0), img(x, y, 0, 1),
+					h, s, radio, norma); //esto retorna true o false!
+			if (!mascara(x, y)) { //si el pixel no pertenece al entorno lo pinto de negro
+				resultado(x, y, 0, 2) = (T) 0; //pinto de negro componente de Intensidad = negro
+			}
+		}
+	img.HSItoRGB();
+	resultado.HSItoRGB();
+	return resultado;
+}
+
+template<class T>
+void promedio_valores_hsi(CImg<T> imagen, T &h, T &s, T &i, int entorno, int x,
+		int y) {
+	/**
+	 * promedio_valores_hsi toma una vecindad centrada en (x,y) y con ancho
+	 * y alto (2*entorno+1), de la imagen imagen y calcula los valores medios de
+	 * los canales h, s, e i, seteandolos en estos parametros pasados por referencia
+	 * @param imagen: la imagen de la que se saca el entorno
+	 * @param h, s, i: variables donde se guradará eel color h, s, i promedio
+	 * @param entorno: el "radio" (norma infinito) de la subimagen que se usara para
+	 *                 calcular el promedio
+	 * @param x, y: coordenadas del punto que será centro de la subimagen
+	 * /// NOTAR la diferencia entre este entorno y los de las funciones arriba, este
+	 *     entorno es simplemente una medida espacial, arriba era un nombre genérico
+	 *     de una figura en el espacio, determinada por la norma y el radio
+	 */
+	imagen.RGBtoHSI();
+	h = imagen.get_crop(max(0, x - entorno), max(0, y - entorno), min(
+			imagen.width() - 1, x + entorno), min(imagen.height() - 1, y
+			+ entorno)).channel(0).mean();
+	s = imagen.get_crop(max(0, x - entorno), max(0, y - entorno), min(
+			imagen.width() - 1, x + entorno), min(imagen.height() - 1, y
+			+ entorno)).channel(1).mean();
+	i = imagen.get_crop(max(0, x - entorno), max(0, y - entorno), min(
+			imagen.width() - 1, x + entorno), min(imagen.height() - 1, y
+			+ entorno)).channel(2).mean();
+	imagen.HSItoRGB();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+//Mis funciones:
+////////////////////////////////////////////////////////////////////////////////////////////
 template<class T>
 CImg<T> segmentaRGB(CImg<T> img, float radio_tol, float R, float G, float B,
 		float *color_a_rellenar, bool color_verdadero = false) {
