@@ -1,5 +1,6 @@
 /**
  * ver:
+ * ./view_filtrado_homomorfico -wc 275 -dw 5 -orden 5 -gl 0.35 -gh 1.01 -f ../../imagenes/reunion.tif
  * ./view_filtrado_homomorfico -f ../../imagenes/del-libro/test_pattern_blurring_orig.tif
  * ./view_filtrado_homomorfico -f ../../imagenes/reunion.tif
  *
