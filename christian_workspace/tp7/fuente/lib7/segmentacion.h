@@ -446,18 +446,18 @@ vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
 	 * */
 	vector<T> maximo_actual;
 	vector<T> maximos;
-	int x_con_tol_izq=0;
-	int x_con_tol_der=0;
+	int x_con_tol_izq = 0;
+	int x_con_tol_der = 0;
 	if (direccion != -99) { //busca en direccion especifica
 		int ancho = imagen.width() - 1;
 		int alto = imagen.height() - 1;
 		int medio = ancho / 2.0; // este va a ser el 0 grados
 		cout << "medio" << medio << endl << "         ancho: " << ancho << endl;
-		x_con_tol_izq = medio + ((direccion - tolerancia)
-				* ((ancho - medio) / 90.0)); //posicion real del plano rho theta donde se quiere
+		x_con_tol_izq = medio + ((direccion - tolerancia) * ((ancho - medio)
+				/ 90.0)); //posicion real del plano rho theta donde se quiere
 
-		x_con_tol_der = medio + ((direccion + tolerancia)
-				* ((ancho - medio) / 90.0)); //posicion real del plano rho theta donde se quiere
+		x_con_tol_der = medio + ((direccion + tolerancia) * ((ancho - medio)
+				/ 90.0)); //posicion real del plano rho theta donde se quiere
 
 		if (x_con_tol_izq < 0 || x_con_tol_izq > ancho)
 			x_con_tol_izq = 0; //para que no explote porque para -90 tira -1
@@ -473,13 +473,13 @@ vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
 	for (int i = 0; i < cantidad; i++) { //hallo la posicion d elos maximos
 		maximo_actual.clear();
 		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo del pedazo de la imagen
-		maximos.push_back(maximo_actual[0]+x_con_tol_izq); // posicion en x maximo actual es del pedacito! ojo!
+		maximos.push_back(maximo_actual[0] + x_con_tol_izq); // posicion en x maximo actual es del pedacito! ojo!
 		//ojo que aca imagen es un cachito de la  imagen solo el pedazo donde hay que encontrar maximos por
 		//eso se suma el x_con_tol_izq.
 
-		cout<<"maximo x : "<<maximo_actual[0]+x_con_tol_izq<<endl;
+		cout << "maximo x : " << maximo_actual[0] + x_con_tol_izq << endl;
 		maximos.push_back(maximo_actual[1]); //posicion en y del maximo sobre el pedazo de imagen...
-											 //como va desde 0 no se le suma nada...
+		//como va desde 0 no se le suma nada...
 		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro en el cacho de imagen para que detecte el proximo maximo
 	}
 	return maximos;
@@ -620,4 +620,23 @@ int contar_diferentes(CImg<int> imagen_etiquetada) {
 	}
 	return etiquetas.size();
 }
-
+template<class T>
+CImg<T> grafica_maximos(vector<T> posiciones_maximos, int width, int height) {
+	/* Funcion que dado un Vector <T> de posiciones_maximo devueto por la funcion
+	 * obtener_maximos retorna una imagen de tamanio Width x height con los maximos
+	 * marcados en blanco sobre un fondo negro
+	 * @param: posciones_maximos: vector de maximos obtenidos con obtener_maximos
+	 * @param width: ancho de la imagen con la que se obtuvo el vector
+	 * @param height: alto de la imagen con la que se obtuvo el vector
+	 * */
+	CImg<T> maxs(width, height, 1, 1);//imagen que voy a usar para dibujar maximos
+	maxs.fill(0.0);
+	maxs.normalize(0, 255);
+	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i += 2) {
+		cout << "i: " << i << "   i+1: " << i + 1 << endl;
+		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
+		cout << "maximos (x,y)= (" << posiciones_maximos[i] << ", "
+				<< posiciones_maximos[i + 1] << ")" << endl;
+	}
+	return maxs;
+}
