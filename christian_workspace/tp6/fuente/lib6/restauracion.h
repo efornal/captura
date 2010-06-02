@@ -455,26 +455,81 @@ void ab_gaussiano_notch(CImg<T> &H_blanca, int uc = 1, int vc = 1, int ancho =
 //ejercicio 5:
 //fixme: esto no anda y me re podri!!! pagina 260 libro... formula d emodelado para sacar mov.
 template<class T>
-CImg<T> sacar_movimiento(CImg<T> imagen_movida, float t=1.0, float a=0.1, float b=0.1) {
+CImg<T> sacar_movimiento(CImg<T> imagen_movida, float t = 1.0, float a = 0.1,
+		float b = 0.1) {
 	/*//float pi = 3.14159;
-	CImgList<T> IMAGEN_MOVIDA = imagen_movida.get_FFT();
-	CImgList<T> H(IMAGEN_MOVIDA);
-	float tmp;
-	cimg_forXY(H[0],u,v)
-		{
-			tmp = 3.14159 * (u * a + v * b);
-			if (tmp != 0) {
-				H[0](u, v) = 1.0 / (t / tmp) * sin(tmp) * cos(1.0 * tmp);
-				H[1](u, v) = 1.0 / (t / tmp) * sin(tmp) * (-1.0 * sin(tmp));
-			}
-		}
-	//filtrar la imagen:
+	 CImgList<T> IMAGEN_MOVIDA = imagen_movida.get_FFT();
+	 CImgList<T> H(IMAGEN_MOVIDA);
+	 float tmp;
+	 cimg_forXY(H[0],u,v)
+	 {
+	 tmp = 3.14159 * (u * a + v * b);
+	 if (tmp != 0) {
+	 H[0](u, v) = 1.0 / (t / tmp) * sin(tmp) * cos(1.0 * tmp);
+	 H[1](u, v) = 1.0 / (t / tmp) * sin(tmp) * (-1.0 * sin(tmp));
+	 }
+	 }
+	 //filtrar la imagen:
 
-	cimg_forXY(IMAGEN_MOVIDA[0],X,Y)
-		{
-			IMAGEN_MOVIDA[0](X, Y) *= H[0](X, Y);
-			IMAGEN_MOVIDA[1](X, Y) *= H[1](X, Y);
-		}
-	return IMAGEN_MOVIDA.get_FFT(true)[0];*/
+	 cimg_forXY(IMAGEN_MOVIDA[0],X,Y)
+	 {
+	 IMAGEN_MOVIDA[0](X, Y) *= H[0](X, Y);
+	 IMAGEN_MOVIDA[1](X, Y) *= H[1](X, Y);
+	 }
+	 return IMAGEN_MOVIDA.get_FFT(true)[0];*/
 
+}
+
+template<class tipo>
+CImg<tipo> dist_acumulada(CImg<tipo> img) {
+	// Reduce ruido impulsivo en imagenes a color
+
+	int M = img.width(), N = img.height();
+	CImg<tipo> salida(img);
+	double distancia, dmin;
+	int xmin, ymin;
+	tipo r, g, b, R, G, B;
+	CImg_3x3(I,tipo);
+	/*	para hacer un loop 3x3 automaticamente
+	 I es la mascara
+	 y por defecto en cada iteracion..Icc es el valor del centro
+	 Icurrent current
+	 Ipc=img(x-1,y)
+	 previous current
+	 Inn=img(x+1,y+1)...next next
+	 asi tenes las 9 combinaciones
+	 cualquiera de los dos modos define la mascara I
+	 por ejemplo eso es la media aritmetica
+	 el filtro
+	 bueno dividido por 9*/
+	cimg_for3x3(img,x,y,0,0,I,tipo)
+		{
+			if (x == 0 || x == M - 1 || y == 0 || y == N - 1)
+				continue;
+			R = img(x, y, 0), G = img(x, y, 1), B = img(x, y, 2);
+			if (R != 0 && R != 1 && G != 0 && G != 1 && B != 0 && B != 1)
+				continue; // no es impulsivo
+			dmin = 1000;
+			for (int i = -1; i <= 1; i++) { // recorro los 9 pixeles de la vecindad
+				R = img(x - i, y - i, 0);
+				G = img(x - i, y - i, 1);
+				B = img(x - i, y - i, 2);
+				for (int j = -1; j <= 1; j++) { // distancias de un pixel de la vecindad a todos los restantes de la vecindad
+					r = img(x - j, y - j, 0);
+					g = img(x - j, y - j, 1);
+					b = img(x - j, y - j, 2);
+					if (i == j)
+						continue;
+					distancia = (r - R) * (r - R) + (g - G) * (g - G) + (b - B)
+							* (b - B);
+					if (distancia < dmin) {
+						dmin = distancia;
+						xmin = x - j, ymin = y - j;
+					}
+				} //for j
+			}// for i
+			for (int c = 0; c < 3; c++)
+				salida(x, y, c) = img(xmin, ymin, c);
+		} //cimg_for
+	return salida;
 }
