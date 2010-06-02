@@ -5,6 +5,6 @@ h=ifft2(H);
 mesh([1:25],[1:25],H)
 title("frecuencia H")
 
-figure
+figure()
 mesh([1:25],[1:25],fftshift(abs(h)))
 title("tiempo h")
