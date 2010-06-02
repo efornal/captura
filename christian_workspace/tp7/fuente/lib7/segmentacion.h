@@ -640,3 +640,31 @@ CImg<T> grafica_maximos(vector<T> posiciones_maximos, int width, int height) {
 	}
 	return maxs;
 }
+template<class T>
+double detectar_inclinacion(CImg<T> img, float umbral = 1.0) {
+	/*devuelve la inclinacion en grados respecto al eje de las x
+	 * @param img es la imagen sobre la cual se quiere determinar la inclinacion
+	 * @param umbral es el umbral que se aplica a la hora de detectar bordes.
+	 * todo: ver si anda para rotaciones en ambos sentidos...
+	 * */
+	CImg<T> IMG_real = img.get_FFT()[0];
+	IMG_real = IMG_real.crop(0, 0, IMG_real.width() / 2, IMG_real.height()
+			/ 2.0); // porque no esta centrda
+	CImg<T> bordes = aplicar_sobel(IMG_real, umbral, true);
+	CImg<T> IMG_HOUGH = hough_directa(bordes);
+	vector<T> maxs = obtener_maximos(IMG_HOUGH, 1, -99, 0);
+	CImg<T> maxs_img = grafica_maximos(maxs, IMG_HOUGH.width(),
+			IMG_HOUGH.height());
+	CImg<T> deteccion = hough_inversa(maxs_img);
+
+	//mido la distancia:
+	T medio = deteccion.width() / 2.0;
+	T y1 = -1.0;
+	cimg_forY(deteccion, y) {
+		if (deteccion(medio, y) != 0) {
+			y1 = y;
+			break;
+		}
+	}
+	return *(180 * (atan(y1 / medio)) / M_PI); //(180*radiantes/pi)
+}
