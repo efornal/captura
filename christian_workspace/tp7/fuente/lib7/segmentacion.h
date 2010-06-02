@@ -433,47 +433,54 @@ vector<T> get_pos_max(CImg<T> imagen) {
 }
 /* funciones para transformada de hough*/
 template<class T>
-vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1, int direccion = -99) {
+vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
+		int direccion = -99, int tolerancia = 0) {
 	/* funcion que deuvelve en un arrelgo la cantidad de maximos especificados
 	 * siendo la pos 0 del arreglo el maximo de la imagen, pos 1 el anterior al maximo, etc.
 	 * @param imagen: es la imagen sobre la cual se hallara los maximos (debe ser la imagen del espacio
 	 * de hough que se obtuvo a partir de una imagen de bordes... imagen=hough_directa(bordes(imagen_bordes))
-	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen..
-	 * @param direccion: obtiene solo los maximos en la direccion especificada por defecto 90 grados.
-	 * 					 si el parametro vale -99 especifica que se hallan maximos en _todo el plano transf
-	 * 					 sin importar la direccion
+	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen (por defecto 1)
+	 * @param direccion: obtiene solo los maximos en la direccion especificada por defecto -99 = todas las direcciones.
 	 * 					 el valor de direccion debe estar entre -90 y 90.
-	 *
+	 * @param tolerancia: es la tolerancia de la direccion en que busca los maximos.... direcions+-tolerancia
 	 * */
 	vector<T> maximo_actual;
 	vector<T> maximos;
-
+	int x_con_tol_izq = 0;
+	int x_con_tol_der = 0;
 	if (direccion != -99) { //busca en direccion especifica
 		int ancho = imagen.width() - 1;
 		int alto = imagen.height() - 1;
-		int medio = (int) ancho / 2.0; // este va a ser el 0 grados
+		int medio = ancho / 2.0; // este va a ser el 0 grados
+		cout << "medio" << medio << endl << "         ancho: " << ancho << endl;
+		x_con_tol_izq = medio + ((direccion - tolerancia) * ((ancho - medio)
+				/ 90.0)); //posicion real del plano rho theta donde se quiere
 
-		int x = medio + (int) ((direccion * (ancho - medio)) / 90.0); //posicion real del plano rho theta donde se quiere
+		x_con_tol_der = medio + ((direccion + tolerancia) * ((ancho - medio)
+				/ 90.0)); //posicion real del plano rho theta donde se quiere
+
+		if (x_con_tol_izq < 0 || x_con_tol_izq > ancho)
+			x_con_tol_izq = 0; //para que no explote porque para -90 tira -1
+
+		else if (x_con_tol_der < 0 || x_con_tol_der > ancho)
+			x_con_tol_der = 0; //para que no explote porque para -90 tira -1
+
 		// busar los maximos
-		imagen.crop(x, 0, x, alto); //ojo con los 90 y -90 explota creo
-		//imagen.display();
-		//todo: habria que agregar una tolerancia para el direccionamiento
-		//hay que hacerlo asi ya que maximo me devuelve un vector con posx(que en este caso va a ser siempre 0!)
-		for (int i = 0; i < cantidad; i++) {
-			maximo_actual.clear();
-			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
-			maximos.push_back(x); // la posicion en x va a ser siempre la misma... (la misma direccion)
-			maximos.push_back(maximo_actual[1]); //la posicion de y va variar segun el maximo
-			imagen(x, maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
-		}
-	} else {
-		for (int i = 0; i < cantidad; i++) {
-			maximo_actual.clear();
-			maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo de la imagen
-			maximos.push_back(maximo_actual[0]);
-			maximos.push_back(maximo_actual[1]);
-			imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro para que detecte el proximo maximo
-		}
+		imagen.crop(x_con_tol_izq, 0, x_con_tol_der, alto); //ojo estoy  modificando la imagen!
+		imagen.display();
+	}
+
+	for (int i = 0; i < cantidad; i++) { //hallo la posicion d elos maximos
+		maximo_actual.clear();
+		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo del pedazo de la imagen
+		maximos.push_back(maximo_actual[0] + x_con_tol_izq); // posicion en x maximo actual es del pedacito! ojo!
+		//ojo que aca imagen es un cachito de la  imagen solo el pedazo donde hay que encontrar maximos por
+		//eso se suma el x_con_tol_izq.
+
+		cout << "maximo x : " << maximo_actual[0] + x_con_tol_izq << endl;
+		maximos.push_back(maximo_actual[1]); //posicion en y del maximo sobre el pedazo de imagen...
+		//como va desde 0 no se le suma nada...
+		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro en el cacho de imagen para que detecte el proximo maximo
 	}
 	return maximos;
 }
@@ -544,8 +551,8 @@ void explorar_intensidad(int x_inicial, int y_inicial, T intensidad, int width,
 }
 
 template<class T>
-CImg<T> region_growing(CImg<T> imagen_a_segmentar, int x_inicial, int y_inicial,
-		float tolerancia = 50.0, int cantidad_vecinos = 4) {
+CImg<T> region_growing(CImg<T> imagen_a_segmentar, int x_inicial,
+		int y_inicial, float tolerancia = 50.0, int cantidad_vecinos = 4) {
 	/* Funcion wrapper que hace el crecimiento de region sobre una imagen en base al parecido
 	 * con sus vecinos intensidad del vecino+-tolerancia
 	 * devuelve una imagen binaria pintada de blanco la parte que pertenece a la region.
@@ -613,4 +620,23 @@ int contar_diferentes(CImg<int> imagen_etiquetada) {
 	}
 	return etiquetas.size();
 }
-
+template<class T>
+CImg<T> grafica_maximos(vector<T> posiciones_maximos, int width, int height) {
+	/* Funcion que dado un Vector <T> de posiciones_maximo devueto por la funcion
+	 * obtener_maximos retorna una imagen de tamanio Width x height con los maximos
+	 * marcados en blanco sobre un fondo negro
+	 * @param: posciones_maximos: vector de maximos obtenidos con obtener_maximos
+	 * @param width: ancho de la imagen con la que se obtuvo el vector
+	 * @param height: alto de la imagen con la que se obtuvo el vector
+	 * */
+	CImg<T> maxs(width, height, 1, 1);//imagen que voy a usar para dibujar maximos
+	maxs.fill(0.0);
+	maxs.normalize(0, 255);
+	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i += 2) {
+		cout << "i: " << i << "   i+1: " << i + 1 << endl;
+		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
+		cout << "maximos (x,y)= (" << posiciones_maximos[i] << ", "
+				<< posiciones_maximos[i + 1] << ")" << endl;
+	}
+	return maxs;
+}

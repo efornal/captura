@@ -33,10 +33,10 @@ int main(int argc, char **argv) {
 			direccion =
 					cimg_option ("-direccionborde", -99, "direccion borde a buscar - -99 implica todas las direcciones");
 	const int cant_maximos =
-			cimg_option("-cantmaximos", 50, "cantidad de maximos a detectar");
+			cimg_option("-cantmaximos", 10, "cantidad de maximos a detectar");
 	int tol_grados = cimg_option ("-tolgrados", 0, "tolerancia en grados");
 	CImg<double> img(filename); //imagen original
-
+	//img.rotate(90);
 	//aplicar deteccion de bordes a la imagen
 	CImg<double> img_bordes = aplicar_sobel<double> (img, umbral, true); //img_bordes es binaria y tiene valores entre 0 y 255...
 
@@ -46,11 +46,18 @@ int main(int argc, char **argv) {
 	vector<double> posiciones_maximos = obtener_maximos(HOUGH_IMG_BORDES,
 			cant_maximos, direccion, tol_grados);
 
-	CImg<double> maxs = grafica_maximos <double> (posiciones_maximos,
-			HOUGH_IMG_BORDES.width(), HOUGH_IMG_BORDES.height());
+	CImg<double> maxs(img); //imagen que voy a usar para dibujar maximos
+	//luego se lehace la inversa de hough a maxs para ver las lineas
+	maxs.normalize(0, 255);
+	maxs.fill(0.0);
 
+	for (unsigned int i = 0; i < (posiciones_maximos.size() - 1); i+=2) {
+		cout<<"i: "<<i<<"   i+1: "<<i+1<<endl;
+		maxs(posiciones_maximos[i], posiciones_maximos[i + 1]) = 255.0;
+		cout << "maximos (x,y)= (" << posiciones_maximos[i] << ", "
+				<< posiciones_maximos[i + 1] << ")" << endl;
+	}
 	CImg<double> deteccion = hough_inversa(maxs);
-	deteccion.print();
 
 	// si hago un AND entre la imagen con los bordes detectados y lo que me devolvio la inversa
 	// de hough me voy a quedar co lo que realmente son bordes:
@@ -64,6 +71,7 @@ int main(int argc, char **argv) {
 	CImgDisplay d4(maxs, "maximos detectados");
 	CImgDisplay disp(deteccion, "inversaHough(maximos)");
 	CImgDisplay d5(deteccion_final, "and entre imagen y bordes");
+
 	CImg<> deteccion_final_coloreada = colorea_rojo(deteccion);
 	CImgDisplay disppp(img);
 	deteccion_final_coloreada.display();
