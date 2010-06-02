@@ -2,6 +2,8 @@
  * El filtrado es mucho mejor, no hay gibbs !!
  * FIXME: porque la fase no varía ?? comparando con el filtrado
  * ideal, ver: view_filtrado_ideal
+ *
+ * orden =2, el mejor orden por defecto par aun butter!
 */
 #include <CHImg.h>
 #include <iostream>
@@ -14,7 +16,7 @@ int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/huang2.jpg", 
                                         "ruta archivo imagen" );
     int wc = cimg_option( "-wc", 100, "frecuencia de corte" );
-    int orden = cimg_option( "-orden", 10, "orden del filtro" );
+    int orden = cimg_option( "-orden", 2, "orden del filtro" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
 
