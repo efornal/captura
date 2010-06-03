@@ -35,7 +35,7 @@ CImg<T> get_fase(CImg<T> imagen) {
 }
 
 template<class T>
-CImg<T> get_magnitud(CImg<T> imagen, bool centrar =false) {
+CImg<T> get_magnitud(CImg<T> imagen, bool centrar = false) {
 	//devuelve la magnitud de la transformada de fourier... (resp en frecuencia)
 	// por defecto no centrada...
 	CImgList<T> tdf = imagen.get_FFT(); //obtengo la fft
@@ -49,8 +49,8 @@ CImg<T> get_magnitud(CImg<T> imagen, bool centrar =false) {
 			magnitud(i, j) = sqrt(pow(real(i, j), 2.0) + pow(imag(i, j), 2.0));
 		}
 	}
-	if (centrar){
-		magnitud.shift(magnitud.width()/2.0, magnitud.height()/2.0, 0,0, 2);
+	if (centrar) {
+		magnitud.shift(magnitud.width() / 2.0, magnitud.height() / 2.0, 0, 0, 2);
 	}
 	return magnitud;
 }
@@ -96,3 +96,53 @@ CImg<T> get_imagen_solo_fase(CImg<T> imagen) {
 	return tdf.get_FFT(true)[0]; //retorno solo la parte real
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//Funciones mauro:
+//////////////////////////////////////////////////////////////////////////////////
+
+template<class T>
+CImg<T> calcular_magnitud_fft(const CImg<T> &imagen, bool shift = true,
+		bool log = true, bool normalize = true) {
+	/* Devuelve la magntiud de la transformada de fourier de una imagen
+	 * @param: imagen es la iamgen en el dominio espacial
+	 * @shift (true por defecto) implica que es devuelta centrada
+	 * @log (true por defecto): implica que se aplica logaritmo
+	 * @normalize(true por defecto): implica normalizacion 0-1
+	 * */
+	CImgList<T> fft = imagen.get_FFT();
+	CImg<T> magnitud = (fft[0].get_sqr() + fft[1].get_sqr()).sqrt();
+
+	if (shift)
+		magnitud.shift((int) floor(imagen.width() / 2), (int) floor(
+				imagen.height() / 2), 0, 0, 2);
+
+	if (log)
+		magnitud.log();
+
+	if (normalize)
+		magnitud.normalize(0, 1);
+
+	return magnitud;
+}
+
+template<class T>
+CImgList<T> realimag2magfase(const CImgList<T> &realimag) {
+	/* Dada una Lista con la parte real y imaginaria de la transf. de fourier
+	 * calcula la magnitud y la fase de la transformadaq y las devuelve en un alista
+	 * @real_imag: lista con parte real e imaginaria sobre la cual se saca la fase y magnitud
+	 */
+	CImg<T> magnitud = (realimag[0].get_sqr() + realimag[1].get_sqr()).sqrt();
+	CImg<T> fase = realimag[1].get_atan2(realimag[0] + 0.01);
+	return CImgList<T> (magnitud, fase);;
+}
+
+template<class T>
+CImgList<T> magfase2realimag(const CImgList<T> &magfase) {
+
+	/** Dada una lista compuesta por magnitud y fase genera una imagen compuesta por dicha magnitud y fase.
+	 * @magfase es la lista con el primer elemento corresp. a la magnitud y el segundo a la fase
+	 */
+	CImg<T> real = magfase[1].get_cos().mul(magfase[0]);
+	CImg<T> imag = magfase[1].get_sin().mul(magfase[0]);
+	return CImgList<T> (real, imag);;
+}
