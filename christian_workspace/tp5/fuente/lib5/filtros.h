@@ -31,6 +31,7 @@ CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h,
 	CImg<T> img_zeros = imagen_a_filtrar.get_resize(2
 			* imagen_a_filtrar.width(), 2 * imagen_a_filtrar.height(), -100,
 			-100, 0);
+	//img_zeros.display();
 	CImgList<T> IMG_ZEROS = img_zeros.get_FFT(); //obtengo fft de la imagen con el zeropadding
 
 	CImg<T> h_zeros = h.get_resize(img_zeros.width(), img_zeros.height(), -100,
