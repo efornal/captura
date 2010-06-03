@@ -1,5 +1,5 @@
 /*
- * ejer5_1r.cpp
+ * ejer5_1c.cpp
  *
  *  Created on: 15/05/2010
  *      Author: christian
@@ -15,7 +15,7 @@ extern "C" {
 #include <iostream>
 #include <CImg.h>
 
-#include "../lib5/lib5.h"
+//#include "../lib5/lib5.h"
 #include "../lib5/filtros.h"
 
 using namespace std;
@@ -25,16 +25,20 @@ int main(int argc, char **argv) {
 	const char
 			*filename =
 					cimg_option( "-f", "../../imagenes/reunion.tif", "ruta archivo imagen" );
+
+	float frec_corte = cimg_option( "-frec_corte", 40.0, "frec corte filtro" );
+	float gl = cimg_option( "-gl", 0.4,"gl filtro homomorfico" );
+	float gh = cimg_option( "-gh", 1.3,"gh filtro homomorfico" );
+	float orden = cimg_option( "-orden", 2.0,"orden filtro homomorfico" );
+
 	CImg<double> img(filename); //imagen original
 	CImgDisplay disp(img, "imagen");
-	float frec_corte = 20.0;
-	float gl = 0.0;
-	float gh = 1.0;
-	float orden = 1.0;
-	CImg<double> filtrada = aplicar_filtrado_homomorfico<double> (img,
-			get_homomorfico<double> (img, frec_corte, gl, gh, orden));
+	CImg<double> filtrada = aplicar_filtro_homomorfico<double> (img, gl, gh,
+			frec_corte, orden);
+
 	CImgDisplay disp2(filtrada, "imagen filtrada");
-	CImgDisplay disp3(get_homomorfico<double>(img, frec_corte, gl, gh, orden));
+	CImgDisplay disp3(get_homomorfico<double> (img.width(), img.height(), gl,
+			gh, frec_corte, orden, true));
 
 	while ((!disp.is_closed() && !disp.is_keyQ())) {
 		//disp.wait();
@@ -47,18 +51,19 @@ int main(int argc, char **argv) {
 		} else if (disp2.is_keyARROWLEFT()) {
 			frec_corte--;
 		} else if (disp2.is_keyH()) {
-			gh+=0.05;
+			gh += 0.05;
 		} else if (disp2.is_keyY()) {
-			gh-=0.05;
+			gh -= 0.05;
 		} else if (disp2.is_keyL()) {
-			gl+=0.05;
+			gl += 0.05;
 		} else if (disp2.is_keyO()) {
-			gl-=0.05;
+			gl -= 0.05;
 		}
-		filtrada = aplicar_filtrado_homomorfico<double> (img, get_homomorfico<
-				double> (img, frec_corte, gl, gh, orden));
+		filtrada = aplicar_filtro_homomorfico<double> (img, gl, gh, frec_corte,
+				orden);
 		filtrada.display(disp2);
-		get_homomorfico<double>(img, frec_corte, gl, gh, orden).display(disp3);
+		get_homomorfico<double> (img.width(), img.height(), gl, gh, frec_corte,
+				orden, true).display(disp3);
 		disp2.set_title("imagen filtrada - Usar: H, Y, L, O y flechas");
 		cout << "Orden: " << orden << "  -  Frec Corte: " << frec_corte
 				<< "  -  gl: " << gl << "  -  gh: " << gh << endl;
