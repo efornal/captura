@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
 					"imagen a la caul se le aplico la mascara en el canal de intensidada y se reconstruyo");
 	/*POSTA: aplicar mascaras en imagenes de colores en HSI (en esta caso en intensidad)
 	 * logra mejores resultados con la misma mascara no atenunando los tonos a diferencia de RGB.*/
-	//FIXME: siempre se da asi? -> etara bien esto ahora?
 
 	while (!disp1.is_closed()) {
 		disp1.wait();
