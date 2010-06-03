@@ -248,3 +248,91 @@ CImg<T> filtrar_homo ( const CImg<T> &imag, T gl, T gh, T D0, T c=(T)2.0 ) {
 
   return fft.get_FFT(true)[0].exp();
 }
+
+/**
+ * filtro alta potencia
+ */
+template<class T>
+CImg<T> filtro_ap ( const CImg<T> &filtro_pa, T A ) {
+
+  return CImg<T>( filtro_pa+(A-1.0) );
+}
+
+
+/**
+ * filtro énfasis de alta frecuencia
+ */
+template<class T>
+CImg<T> filtro_eaf ( const CImg<T> &filtro_pa, T a, T b ) {
+  return CImg<T>( ((filtro_pa*b)+a) );
+}
+
+/**
+ * imagen para convertir una imagen de 3 canales a una CImglist con 3 imagenes grises
+ */
+template<class T>
+CImgList<T> canales_a_lista ( const CImg<T> &imag ) {
+  CImgList<T> salida;
+  unsigned c;
+  cimg_forC(imag, c) {
+    salida.push_back(imag.get_channel(c));
+  }
+  return salida;
+}
+
+/**
+ * imagen para convertir una CImgList deimagenes grises a una imagen compuesta por n canales
+ */
+template<class T>
+CImg<T> lista_a_canales ( const CImgList<T> &lista ) {
+  CImg<T> salida( lista[0].width(), lista[0].height(), 1, lista.size());
+  unsigned x,y,c;
+  cimg_forXYC(salida, x,y,c) {
+    salida(x,y,0,c)=lista[c](x,y);
+  }
+  return salida;
+}
+
+/**
+ * imagen para filtrar genérica -- SOLO FILTRA UN CANAL!
+ */
+template<class T>
+CImg<T> filtrar ( const CImg<T>& imag, const CImg<T> &filtro, bool filtro_esta_centrado=true ) {
+  short w = imag.width(), h=imag.height();
+  CImgList<T> fft;
+  unsigned x, y;
+  fft = realimag2magfase ( imag.get_FFT() );
+  CImg<T> fil = filtro;
+  if( filtro_esta_centrado)
+    fil.shift(w/2, h/2, 0, 0,2 ); 
+  
+  cimg_forXY( filtro, x, y ) {
+    fft[0](x,y) *= fil(x,y);
+  }
+  fft = magfase2realimag ( fft );
+  return fft.get_FFT(true)[0];
+}
+
+// esta intenté hacerla para lograr filtrar las imagenes color... pero bue no anda
+// template<class T>
+// CImg<T> filtrarNOUSAR ( const CImg<T>& imag, const CImg<T> &filtro, bool filtro_esta_centrado=true ) {
+//   short w = imag.width(), h=imag.height();
+//   CImgList<T> lista = canales_a_lista (imag);
+//   CImgList<T> canales;
+//   CImgList<T> fft;
+//   unsigned x, y;
+//   CImg<T> fil = filtro;
+//   if( filtro_esta_centrado)
+//     fil.shift(w/2, h/2, 0, 0,2 );
+//   for(unsigned i=0; i<lista.size(); i++) {
+//     fft = lista[i].get_FFT();
+//     fft = realimag2magfase ( fft );
+//     cimg_forXY( filtro, x, y ) {
+//       fft[0](x,y) *= filtro(x,y);
+//     }
+//     fft = magfase2realimag ( fft );
+//     canales.push_back( fft.get_FFT(true)[0] );
+//   }
+//   return lista_a_canales ( canales );
+// }
+
