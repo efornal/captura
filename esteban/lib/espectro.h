@@ -23,7 +23,27 @@ extern "C"{
 using namespace std;
 using namespace cimg_library;
 
+/**
+ * realimag2magfase recibe una CImgList { real, imaginario } y devuelve otra
+ * { modulo, fase }
+ */
+template <class T>
+CImgList<T> realimag2magfase ( const CImgList<T> &realimag ) {
+  CImg<T> magnitud = (realimag[0].get_sqr() + realimag[1].get_sqr()).sqrt();
+  CImg<T> fase = realimag[1].get_atan2( realimag[0] + 0.01);
+  return CImgList<T>( magnitud, fase );;
+}
 
+/**
+ * magfase2realimag recibe una CImgList { modulo, fase } y devuelve otra
+ * { real, imaginario }
+ */
+template <class T>
+CImgList<T> magfase2realimag ( const CImgList<T> &magfase ) {
+  CImg<T> real = magfase[1].get_cos().mul( magfase[0] );
+  CImg<T> imag = magfase[1].get_sin().mul( magfase[0] );
+  return CImgList<T>( real, imag );;
+}
 
 /**
    Modulo de la fft: |fft(f)|
