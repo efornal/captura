@@ -31,17 +31,6 @@ int main( int argc, char **argv ) {
     CHImg<double> img ( filename );
 
     CHImg<double> mask = masks::pa_gaussian( img.width(), sigma );
-    CImgList<double> Hpa = mask.get_FFT();
-    CImgList<double> Hap(Hpa[0],Hpa[1]);
-
-    // obtengo filtro alta potencia
-    Hpa = realimag2magfase ( Hpa );
-
-    cimg_forXY(Hpa[0],x,y){
-
-        Hap[0](x,y) = (a-1.0) + Hpa[0](x,y);
-        Hap[1](x,y) = (a-1.0) + Hpa[0](x,y);
-    }
 
     CImgList<double> list1( img.get_normalize(0,255),
                             img.get_fft_modulo_log().normalize(0,255),
@@ -49,8 +38,8 @@ int main( int argc, char **argv ) {
     list1.display(disp);
     disp.set_title("imagen original - modulo log - fase");
 
-    CHImg<double> filtrada = img.get_filtrada( Hap[0] );
-    
+    CHImg<double> filtrada = img.get_filtrado_alta_potencia(mask,a);
+
     CImgList<double> list5( filtrada.get_normalize(0,255),
                             filtrada.get_fft_modulo_log().normalize(0,255),
                             filtrada.get_fft_fase().normalize(0,255) );

@@ -254,6 +254,29 @@ CImg<double> to_log( CImg<double> img ) {
 }
 
 /**
+ * Retorna la imagen filtrada con alta potencia
+ * el filtro debe ser un filtro pasaaltos
+ * a, CTE filtro Alta Potencia a>=1
+*/
+CImg<double> filtrado_alta_potencia( CImg<double> img, 
+                                     CImg<double> filtro_pa, 
+                                     double a=1 ) {
+    CImgList<double> Hpa = filtro_pa.get_FFT();
+    CImgList<double> Hap( Hpa[0], Hpa[1] );
+
+    // obtengo filtro alta potencia
+    Hpa = realimag2magfase ( Hpa );
+
+    cimg_forXY(Hpa[0],x,y){
+        Hap[0](x,y) = (a-1.0) + Hpa[0](x,y);
+        Hap[1](x,y) = (a-1.0) + Hpa[0](x,y);
+    }
+
+    CImg<double> filtrada = filtrar( img, Hap[0] );
+    return filtrada;
+}
+
+/**
  * Retorna la imagen con filtrado Homomorfico con el filtro pasado
  * El filtro debe estar diseñado centrado, 
  * y ser de tipo homomorfico: filtro::homomorfico(...)

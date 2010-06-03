@@ -272,6 +272,14 @@ template<typename T> struct CHImg : public CImg<T> {
     }
 
     // ==================================================== \\
+    // --------------- Filtrado Alta Potencia --------------- \\
+
+    CImg<double> get_filtrado_alta_potencia( CImg<double> filtro, double a=1 ) {
+        CImg<double> img = *this;
+        return filtrado_alta_potencia( img, filtro, a );
+    }
+
+    // ==================================================== \\
     // --------------- Filtrado Homomorfico --------------- \\
 
     CImg<double> get_filtrado_homomorfico( CImg<double> filtro ) {
