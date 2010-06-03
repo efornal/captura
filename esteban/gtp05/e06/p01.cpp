@@ -29,8 +29,8 @@ int main( int argc, char **argv ) {
     CImgDisplay disp, disp2, disp3, disp4, disp5;
 
     CHImg<double> f ( filename1 ), h( filename2 ) ;
-    f.resize(201,201); //f.resize(21,21);
-    h.resize(201,201); //h.resize(21,21);
+    f.resize(101,101); //f.resize(21,21);
+    h.resize(101,101); //h.resize(21,21);
 
     CHImg<double> g = f.get_convolve( h );
 
