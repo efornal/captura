@@ -152,6 +152,8 @@ CImg<T> filtrar_M(const CImg<T>& imag, const CImg<T> &filtro,
 		bool filtro_esta_centrado = true) {
 	/**
 	 * imagen para filtrar genérica -- SOLO FILTRA UN CANAL!
+	 * @imag es la imagen en espacio
+	 * @filtro es el filtro en frecuencia
 	 */
 	short w = imag.width(), h = imag.height();
 	CImgList<T> fft;

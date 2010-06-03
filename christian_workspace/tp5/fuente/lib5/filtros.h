@@ -196,14 +196,16 @@ CImg<T> aplicar_PB_ideal(CImg<T> imagen, float frec_corte = 10.0) {
 template<class T>
 CImg<T> aplicar_PB_Butter(CImg<T> imagen, CImg<T> &H, float frec_corte = 10.0,
 		float orden = 1.0) {
-	/*aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.
+	/* aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.
 	 * Por defecto: frec_corte=10 y orden=1
 	 * Devuelve la imagen filtrada para ser mostrada.
 	 * devuelve por referencia H para poder plotear el filtro...
 	 */
 	H = get_PB_Butter<T> (imagen.width(), imagen.height(), frec_corte, orden);
 	CImg<T> Hf = H.get_shift(H.width() / 2.0, H.height() / 2.0, 0, 0, 2);
-	return filtrar<T> (imagen, Hf);
+	//return filtrar<T> (imagen, Hf);
+	return filtrar_M(imagen, H, true); //esta es la de M -> ojo si no anda comentarla y usar la otra de arriba
+
 }
 
 template<class T>
