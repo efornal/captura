@@ -64,10 +64,9 @@ int main(int argc, char **argv) {
 	CImg<double> img_hough_inversa = hough_inversa(maxs);
 	CImgDisplay disp5(img_hough_inversa, "inversa Hough de maximos");
 
-	img_filtrada.draw_image(colorea_rojo(img_hough_inversa), 0.5);
-	img_filtrada.display();
+	CImgDisplay disp6(colorea_imagen<double> (img_filtrada,
+			img_hough_inversa, 255, 0, 0));
 
-	CImgDisplay disp6(colorea_rojo(img_hough_inversa));
 	while (!disp1.is_closed()) {
 		disp1.wait();
 		if (disp1.is_keyARROWUP()) {
