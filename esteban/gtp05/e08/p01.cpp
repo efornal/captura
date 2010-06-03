@@ -23,8 +23,8 @@ using namespace std;
 int main( int argc, char **argv ) {
     const char *filename = cimg_option( "-f", "../../imagenes/hand.tif", 
                                         "ruta archivo imagen" );
-    double sigma = cimg_option( "-sigma", 0.1, "varianza del filtro gaussiano" );
-    double a = cimg_option( "-a", 1.0, "a, CTE filtro Alta Potencia a>=1" );
+    double sigma = cimg_option( "-sigma", 10.0, "varianza del filtro gaussiano" );
+    double a = cimg_option( "-a", 10.0, "a, CTE filtro Alta Potencia a>=1" );
 
     CImgDisplay disp, disp2, disp3, disp4, disp5;
 
@@ -35,9 +35,12 @@ int main( int argc, char **argv ) {
     CImgList<double> Hap(Hpa[0],Hpa[1]);
 
     // obtengo filtro alta potencia
+    Hpa = realimag2magfase ( Hpa );
+
     cimg_forXY(Hpa[0],x,y){
+
         Hap[0](x,y) = (a-1.0) + Hpa[0](x,y);
-        Hap[1](x,y) = (a-1.0) + Hpa[1](x,y);
+        Hap[1](x,y) = (a-1.0) + Hpa[0](x,y);
     }
 
     CImgList<double> list1( img.get_normalize(0,255),
@@ -46,12 +49,7 @@ int main( int argc, char **argv ) {
     list1.display(disp);
     disp.set_title("imagen original - modulo log - fase");
 
-    // mal, debe plotear el modulo no la parte real
-    // CImgList<double> list2( Hap[0].get_normalize(0,255) );
-    // list2.display(disp2);
-    // disp2.set_title("filtro - modulo log - fase");
-
-    CHImg<double> filtrada = img.get_filtrada_complejo( Hap );
+    CHImg<double> filtrada = img.get_filtrada( Hap[0] );
     
     CImgList<double> list5( filtrada.get_normalize(0,255),
                             filtrada.get_fft_modulo_log().normalize(0,255),
