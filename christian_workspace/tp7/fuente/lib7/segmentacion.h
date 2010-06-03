@@ -432,59 +432,6 @@ vector<T> get_pos_max(CImg<T> imagen) {
 	return max;
 }
 
-template<class T>
-vector<T> obtener_maximos_filtroacumulado(CImg<T> imagen, int cantidad = 1,
-		int direccion = -99, int tolerancia = 0, int acumul = -1) {
-	/* funcion que deuvelve en un arrelgo la cantidad de maximos especificados
-	 * siendo la pos 0 del arreglo el maximo de la imagen, pos 1 el anterior al maximo, etc.
-	 * @param imagen: es la imagen sobre la cual se hallara los maximos (debe ser la imagen del espacio
-	 * de hough que se obtuvo a partir de una imagen de bordes... imagen=hough_directa(bordes(imagen_bordes))
-	 * @param cantidad: cantidad de maximos que se desean extraer de la imagen (por defecto 1)
-	 * @param direccion: obtiene solo los maximos en la direccion especificada por defecto -99 = todas las direcciones.
-	 * 					 el valor de direccion debe estar entre -90 y 90.
-	 * @param tolerancia: es la tolerancia de la direccion en que busca los maximos.... direcions+-tolerancia
-	 * */
-	vector<T> maximo_actual;
-	vector<T> maximos;
-	int x_con_tol_izq = 0;
-	int x_con_tol_der = 0;
-	if (direccion != -99) { //busca en direccion especifica
-		int ancho = imagen.width() - 1;
-		int alto = imagen.height() - 1;
-		int medio = ancho / 2.0; // este va a ser el 0 grados
-		cout << "medio" << medio << endl << "         ancho: " << ancho << endl;
-		x_con_tol_izq = medio + ((direccion - tolerancia) * ((ancho - medio)
-				/ 90.0)); //posicion real del plano rho theta donde se quiere
-
-		x_con_tol_der = medio + ((direccion + tolerancia) * ((ancho - medio)
-				/ 90.0)); //posicion real del plano rho theta donde se quiere
-
-		if (x_con_tol_izq < 0 || x_con_tol_izq > ancho)
-			x_con_tol_izq = 0; //para que no explote porque para -90 tira -1
-
-		else if (x_con_tol_der < 0 || x_con_tol_der > ancho)
-			x_con_tol_der = 0; //para que no explote porque para -90 tira -1
-
-		// busar los maximos
-		imagen.crop(x_con_tol_izq, 0, x_con_tol_der, alto); //ojo estoy  modificando la imagen!
-		imagen.display();
-	}
-
-	for (int i = 0; i < cantidad; i++) { //hallo la posicion d elos maximos
-		maximo_actual.clear();
-		maximo_actual = get_pos_max(imagen); //tengo la posicion del maximo del pedazo de la imagen
-		maximos.push_back(maximo_actual[0] + x_con_tol_izq); // posicion en x maximo actual es del pedacito! ojo!
-		//ojo que aca imagen es un cachito de la  imagen solo el pedazo donde hay que encontrar maximos por
-		//eso se suma el x_con_tol_izq.
-
-		cout << "maximo x : " << maximo_actual[0] + x_con_tol_izq << endl;
-		maximos.push_back(maximo_actual[1]); //posicion en y del maximo sobre el pedazo de imagen...
-		//como va desde 0 no se le suma nada...
-		imagen(maximo_actual[0], maximo_actual[1]) = 0; // lo pongo negro en el cacho de imagen para que detecte el proximo maximo
-	}
-	return maximos;
-}
-
 /* funciones para transformada de hough*/
 template<class T>
 vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
