@@ -1,4 +1,4 @@
-all: ej1 ej2 ej3 ej5
+all: ej1 ej2 ej3 ej5 ej8
 
 cflags=-lX11 -lm -lpthread -lfftw3
 
@@ -13,3 +13,6 @@ ej3: ej3.cpp
 
 ej5: ej5.cpp
 	g++ $(cflags) ej5.cpp -o ej5
+
+ej8: ej8.cpp
+	g++ $(cflags) ej8.cpp -o ej8
