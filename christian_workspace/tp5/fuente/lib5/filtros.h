@@ -16,7 +16,8 @@ using namespace std;
 using namespace cimg_library;
 
 template<class T>
-CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h, CImg<T> &mag_H) {
+CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h,
+		CImg<T> &mag_H) {
 	/* Filtra una imagen en el dominio de las frecuencias a partir de un filtro en el dominio espacial y de una imagen en el mismo
 	 * dominio.
 	 * (Esta funcion fue hecha con fines didacticos ya que sino simplemente se podria obtener le mismo resultado mediante conv.)
@@ -30,10 +31,11 @@ CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h, CImg<T> &mag_H
 	CImg<T> img_zeros = imagen_a_filtrar.get_resize(2
 			* imagen_a_filtrar.width(), 2 * imagen_a_filtrar.height(), -100,
 			-100, 0);
+	//img_zeros.display();
 	CImgList<T> IMG_ZEROS = img_zeros.get_FFT(); //obtengo fft de la imagen con el zeropadding
 
-	CImg<T> h_zeros = h.get_resize(img_zeros.width(), img_zeros.height(),
-			-100, -100, 0); //hago el zero padding en el filtro en el espacio
+	CImg<T> h_zeros = h.get_resize(img_zeros.width(), img_zeros.height(), -100,
+			-100, 0); //hago el zero padding en el filtro en el espacio
 	CImgList<T> H_ZEROS = h_zeros.get_FFT(); //obtengo el filtro en frecuencia a traves de el H rellenado con ceros
 
 	//aplicamos el filtro en frecuencia
@@ -51,8 +53,8 @@ CImg<T> filtrar_desde_tiempo(CImg<T> imagen_a_filtrar, CImg<T> h, CImg<T> &mag_H
 	mag_H.shift(H_ZEROS[0].width() / 2, H_ZEROS[0].height() / 2, 0, 0, 2);//centramos el filtro para ser mostrado
 
 	//calculamos la transformada inversa
-	CImg<T> imgf = imgfilt.get_FFT(true)[0].crop(0, 0, imagen_a_filtrar.width() - 1,
-			imagen_a_filtrar.height() - 1);
+	CImg<T> imgf = imgfilt.get_FFT(true)[0].crop(0, 0, imagen_a_filtrar.width()
+			- 1, imagen_a_filtrar.height() - 1);
 	return imgf;
 }
 
@@ -299,7 +301,21 @@ CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
 	 * El filtro debe estar diseñado centrado,
 	 * y ser de tipo homomorfico: get_homomorfico(...)
 	 * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
-	 * */
+	 1_    ____gh   1_ _---gh   1_    _-    gh
+	 *    |  _-          |_-         |  _-
+	 * gl |_-            |           |_-
+	 *    |_________     |________   |_________
+	 *
+	 *     0 < gl < 1    gh > 1
+	 *
+	 * gl   0 < gl < 1
+	 *   a >gl =>  mas  brillo medio (deja pasar  mas  bajas frec)
+	 *   a <gl => menos brillo medio (deja pasar menos bajas frec)
+	 * gh   gh > 1
+	 *   a >gh =>  mas  contraste ( aumenta  mas  las altas frec )
+	 *   a <gh => menos contraste ( aumenta menos las altas frec)
+	 */
+
 	CImgList<T> tdf = to_log<double> (img).get_FFT();
 	filtro.shift(filtro.width() / 2, filtro.height() / 2, 0, 0, 2);
 	cimg_forXY( filtro, x, y )
