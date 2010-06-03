@@ -211,3 +211,40 @@ CImg<T> filtro_pa_butter ( short w, short h, T wc, T n=(T)2.0, bool centrar=true
   return ( (filtro_pb_butter(w,h,wc,n,centrar)-1 )*(-1.0));
 }
 
+/**
+ * filtro homomórfico
+ */
+template<class T>
+CImg<T> filtro_homo ( short w, short h, T gl, T gh, T D0, T c=(T)2.0, bool centrar=true ) {
+  CImg<T> H(w,h,1,1,(T)0);
+  unsigned x,y;
+  T cx=w/2.0, cy=h/2.0;
+  cimg_forXY( H, x, y ) {
+    H(x,y) = (gh-gl) * ( 1-exp( -c*(d2(x,y,cx,cy)/pow(D0,2.0)) ) ) + gl;
+  }
+  if ( !centrar )
+    return H.shift( w/2, h/2, 0, 0, 2);
+  return H;
+}
+
+/**
+ * filtrar con filtro homomórfico
+ */
+template<class T>
+CImg<T> filtrar_homo ( const CImg<T> &imag, T gl, T gh, T D0, T c=(T)2.0 ) {
+  short w = imag.width(), h=imag.height();
+
+  CImgList<T> fft = (imag.get_channel(0) + 1.0).get_log().get_FFT();
+
+  CImg<T> filtro = filtro_homo( w, h, gl, gh, D0, c,false );
+
+  fft = realimag2magfase ( fft );
+
+  cimg_forXY( filtro, x, y ) {
+    fft[0](x,y) *= filtro(x,y);
+  }
+
+  fft = magfase2realimag ( fft );
+
+  return fft.get_FFT(true)[0].exp();
+}
