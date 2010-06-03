@@ -75,7 +75,7 @@ CImg<T> calcular_magnitud_fft ( const CImg<T> &imagen, bool shift=true, bool log
 template <class T>
 CImgList<T> realimag2magfase ( const CImgList<T> &realimag ) {
   CImg<T> magnitud = (realimag[0].get_sqr() + realimag[1].get_sqr()).sqrt();
-  CImg<T> fase = realimag[1].get_div( realimag[0] + 0.01).atan2();
+  CImg<T> fase = realimag[1].get_atan2( realimag[0] + 0.01);
   return CImgList<T>( magnitud, fase );;
 }
 
