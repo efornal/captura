@@ -32,10 +32,15 @@ int main(int argc, char *argv[]) {
 
   CImg<double> filtro = filtro_eaf( filtro_pa_butter<double>( imag.width(), imag.height(), 30.0, 6.0), a, b);
 
+  CImg<double> filtroap = filtro_ap( filtro_pa_butter<double>( imag.width(), imag.height(), 30.0, 6.0), A );
+
   CImgList<double>( imag.normalize(0,1),
 		    filtrar<double>(imag,filtro).normalize(0,1)
-		    ).display("imagen original / imagen filtrada");
+		    ).display("imagen original / imagen filtrada ENFASIS DE ALTA FRECUENCIA");
 
+  CImgList<double>( imag.normalize(0,1),
+		    filtrar<double>(imag,filtroap).normalize(0,1)
+		    ).display("imagen original / imagen filtrada ALTA POTENCIA");
   return 0;
 }
 
