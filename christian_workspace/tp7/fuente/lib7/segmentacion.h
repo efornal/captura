@@ -503,7 +503,7 @@ template<class T>
 void explorar_intensidad(int x_inicial, int y_inicial, T intensidad, int width,
 		int height, float tolerancia, CImg<T> &imagen,
 		CImg<T> &imagen_segmentada, int cant_vecinos = 4) {
-	/* <NO USAR ESTA FUNCION USAR segmentar()...
+	/* <NO USAR ESTA FUNCION USAR region_growing()...
 	 * segmenta una imagen segun la semilla inicial x,y, con uan cierta tolerancia y usa 4 vecinos para la comparacion
 	 * @param: x_inicial: posicion en x del pixel a segmentar
 	 * @param: y_inicial: posicion en y del pixel a segmentar
