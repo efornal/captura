@@ -111,7 +111,9 @@ void promedio_valores_rgb( CImg<T>imagen, T &r, T &g, T &b,
  * @param norma: norma usada para definir el entorno (notar que supone 0=inf)
  */
 template<class T>
-bool pertenece_entorno( T h, T s, T h0, T s0, T radio=(T)0.1, int norma=2 ){
+bool pertenece_entorno( T h, T s, T h0, T s0, T radio=(T)0.1, int norma=2, T centro=(T).0 ){
+  if ( h>(centro+(T)180.0) )
+    h -= (T)360.0;
   switch( norma ) {
   case 1:
     return ((abs(h-h0)/240.0+abs(s-s0))/2.0 <= radio )? true:false;
