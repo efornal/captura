@@ -1,8 +1,6 @@
 #define UNICODE
 #include <CImg.h>
-#include <iostream>
-//#include "comun.cpp"
-//#include "CPDSI_functions.h"
+#include <algorithm>
 
 using namespace cimg_library;
 using namespace std;
@@ -182,125 +180,15 @@ void promedio_valores_hsi( CImg<T>imagen, T &h, T &s, T &i,
 }
 
 
-// int main(int argc, char *argv[]) {
-
-//   const char *im = cimg_option( "-img", "../img/futbol.jpg", "imagen" );
-
-//   CImg<double> imagen( im );
-//   CImgDisplay d_imagen;
-
-//   double radio = 0.1;
-//   int norma = 2, entorno=2;
-
-//   double h, s, i;
-
-//   int x, y;
-
-//   //  imagen.RGBtoHSI();
-
-//   imagen.display( d_imagen );
-
-//   while( !d_imagen.is_closed() ) {
-//     d_imagen.wait_all();
-
-//     if ( d_imagen.button() && d_imagen.mouse_x() >=0 &&
-// 	 d_imagen.mouse_y() >=0 ) {
-//       x = d_imagen.mouse_x();
-//       y = d_imagen.mouse_y();
-//       promedio_valores_hsi( imagen, h, s, i, entorno, x, y );
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyN() ) {
-//       ++norma %= 3;
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWUP() ) {
-//       radio += 0.05;
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWDOWN() ) {
-//       radio -= 0.05;
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWLEFT() ) {
-//       --entorno;
-//       promedio_valores_hsi( imagen, h, s, i, entorno, x, y );
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWRIGHT() ) {
-//       ++entorno;
-//       promedio_valores_hsi( imagen, h, s, i, entorno, x, y );
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyR() ) {
-//       radio = 6;
-//       norma = 0;
-//       entorno = 2;
-//       promedio_valores_hsi( imagen, h, s, i, entorno, x, y );
-//       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
-//     }
-//   }
-//   return 0;
-// }
-
-// int main(int argc, char *argv[]) {
-
-//   const char *im = cimg_option( "-img", "../img/futbol.jpg", "imagen" );
-
-//   CImg<double> imagen( im );
-//   CImgDisplay d_imagen;
-
-//   double radio = 2;
-//   int norma = 2, entorno=2;
-
-//   double r, g, b;
-
-//   int x, y;
-
-//   imagen.display( d_imagen );
-
-//   while( !d_imagen.is_closed() ) {
-//     d_imagen.wait_all();
-
-//     if ( d_imagen.button() && d_imagen.mouse_x() >=0 &&
-// 	 d_imagen.mouse_y() >=0 ) {
-//       x = d_imagen.mouse_x();
-//       y = d_imagen.mouse_y();
-//       promedio_valores_rgb( imagen, r, g, b, entorno, x, y );
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyN() ) {
-//       ++norma %= 3;
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWUP() ) {
-//       ++radio;
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWDOWN() ) {
-//       --radio;
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWLEFT() ) {
-//       --entorno;
-//       promedio_valores_rgb( imagen, r, g, b, entorno, x, y );
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyARROWRIGHT() ) {
-//       ++entorno;
-//       promedio_valores_rgb( imagen, r, g, b, entorno, x, y );
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-//     if ( d_imagen.is_keyR() ) {
-//       radio = 6;
-//       norma = 0;
-//       entorno = 2;
-//       promedio_valores_rgb( imagen, r, g, b, entorno, x, y );
-//       segmentar_rgb( imagen, r, g, b, radio, norma ).display(d_imagen);
-//     }
-
-
-//   }
-
-//   return 0;
-// }
+template<class T>
+CImg<T> obtener_hue_180 ( const CImg<T> &im ) {
+  CImg<T> salida = im;
+  salida.RGBtoHSI();
+  salida.channel(0);
+  unsigned x,y;
+  cimg_forXY(salida,x,y) {
+    if ( salida(x,y)>180.0 )
+      salida(x,y)-=360.0;
+  }
+  return salida;
+}
