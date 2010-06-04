@@ -115,6 +115,9 @@ int main(int argc, char *argv[]) {
       x = d_imagen.mouse_x();
       y = d_imagen.mouse_y();
       promedio_valores_hsi( imagen, h, s, i, entorno, x, y );
+
+      printf("\n H=%f, S=%f, I=%f\n", h, s, i );
+
       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
     }
     if ( d_imagen.is_keyN() ) {
@@ -123,10 +126,12 @@ int main(int argc, char *argv[]) {
     }
     if ( d_imagen.is_keyARROWUP() ) {
       radio += 0.05;
+      printf("\n radio=%f\n", radio );
       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
     }
     if ( d_imagen.is_keyARROWDOWN() ) {
       radio -= 0.05;
+      printf("\n radio=%f\n", radio );
       segmentar_hs( imagen, h, s, radio, norma ).display(d_imagen);
     }
     if ( d_imagen.is_keyARROWLEFT() ) {
