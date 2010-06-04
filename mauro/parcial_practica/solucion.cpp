@@ -21,9 +21,9 @@ using namespace cimg_library;
 int main(int argc, char *argv[]) {
 
   const char *i1 = cimg_option( "-img", "imgs_train/blanco_3.jpg", "imagen entrada" );
-  double hue = cimg_option( "-h", 30.0, "hue" );
-  double sat = cimg_option( "-s", 1.0, "saturacion" );
-  double radio = cimg_option( "-r", 0.8, "radio" );
+  double hue = atof( cimg_option( "-h", "30.0", "hue" ));
+  double sat = atof( cimg_option( "-s", "0.3", "saturacion" ));
+  double radio = atof( cimg_option( "-r", "0.2", "radio" ));
 
   CImg<double> imagen ( i1 );
 
@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
 
   CImg<double> umbral( segm);
   umbral.RGBtoHSI();
+
   umbral.channel(2); 
   umbral.threshold( 0.2 );
   CImg<bool> umbralbin=umbral;
