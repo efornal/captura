@@ -1,0 +1,28 @@
+* Supongo que la altura de la copa alta es 158-11=147 (lo medi a pata) y la de la baja es 211-40=170
+
+* porcentaje llenado alta = altura medida/150
+
+* Supongo que la copa está entera en la foto
+
+* Pruebo de hacer una imagen de 1xalto con cada pixel igual a la suma una fila de la imagen entrada
+
+* según lo medido a pata, el límite inferior de la copa baja es 211 ~ 210 y el de la alta es 158 ~ 160
+
+* umbralizo la imagen y recorro de abajo para arriba hasta encontrar que tipo de copa es
+
+* la deteccion del vino usando intensidad es floja, pruebo de usar hue en su lugar
+
+* pruebo de segmantar el color.
+
+/// solucion en pseudocódigo, por si no llego:
+
+- tomar la imagen, aplicar segmentación hsi, con dos conjuntos de h,s: uno para vino tinto y otro para blanco (o un valor hs promedio para los dos vinos)
+- de la imagen segmentada, binarizarla (lo que no es negro a blanco) y calcular una tira vertical
+cuyo valor sea el máximo de la fila. me queda 1 donde había vino, 0 donde no
+- a partir del valor del máximo y tal que y==1, determino la base (de la parte que contiene vino) de la copa.
+-de la misma forma detecto el máximo valor de y para el que hay vino.
+- comparo los valores mínimos con las alturas conocidas de las copas
+- como conozco la copa, se hasta dónde se puede llenar. comparo el valor del borde superior del vino y obtengo el porcentaje de llenado de la copa.
+- detecto el tipo de vino calculando el hue medio del área segmentada: si me da algo cercano al rojo (0) digo que es vino tinto, si me da cercano al amarillo digo que es blanco
+- con los valores detectados (tipo de vino,porcentaje de llenado) doy como salida una advertencia de cortar o no.
+
