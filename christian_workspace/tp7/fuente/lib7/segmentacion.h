@@ -431,6 +431,7 @@ vector<T> get_pos_max(CImg<T> imagen) {
 	max.push_back(posy);
 	return max;
 }
+
 /* funciones para transformada de hough*/
 template<class T>
 vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
@@ -486,24 +487,34 @@ vector<T> obtener_maximos(CImg<T> imagen, int cantidad = 1,
 }
 
 template<class T>
-CImg<T> colorea_rojo(CImg<T> imagen) {
-	/* colorea los bordes de la imagen con rojo
+CImg<T> colorea_imagen(CImg<T> imagen, CImg<T> lineas_colorear, T r = 255, T g =
+		0, T b = 0) {
+	/* colorea una imagen con color rgb a partir de lineas_corear
+	 * @lineas colorear es una imagen binaria los pixels !=0 aparecen rojos ne la imagen devuelta
+	 * @imagen: es la imagen sobre la cual se dibuja las lineas_a_colorear
 	 * */
-	CImg<double> color(imagen.width(), imagen.height(), 1, 3, 0);
-	cimg_forXY(color,x,y)
+	//muestro la pista con las dos lineas de color arriba
+	CImg<float> img_color(imagen.width(), imagen.height(), 1, 3); // rgb channels
+	cimg_forXY(img_color, X, Y)
 		{
-			color(x, y, 0, 0) = imagen(x, y);
-			color(x, y, 0, 1) = 0.0;
-			color(x, y, 0, 2) = 0.0;
+			if (lineas_colorear(X, Y) != 0) {
+				img_color(X, Y, 0, 0) = r; //rojo
+				img_color(X, Y, 0, 1) = g; //verde
+				img_color(X, Y, 0, 2) = b;
+			} else {//dejo las cosas con el valor que estaban
+				img_color(X, Y, 0, 0) = imagen(X, Y, 0, 0);
+				img_color(X, Y, 0, 1) = imagen(X, Y, 0, 0);
+				img_color(X, Y, 0, 2) = imagen(X, Y, 0, 0);
+			}
 		}
-	return color;
+	return img_color;
 }
 
 template<class T>
 void explorar_intensidad(int x_inicial, int y_inicial, T intensidad, int width,
 		int height, float tolerancia, CImg<T> &imagen,
 		CImg<T> &imagen_segmentada, int cant_vecinos = 4) {
-	/* <NO USAR ESTA FUNCION USAR segmentar()...
+	/* <NO USAR ESTA FUNCION USAR region_growing()...
 	 * segmenta una imagen segun la semilla inicial x,y, con uan cierta tolerancia y usa 4 vecinos para la comparacion
 	 * @param: x_inicial: posicion en x del pixel a segmentar
 	 * @param: y_inicial: posicion en y del pixel a segmentar
@@ -674,88 +685,79 @@ double detectar_inclinacion(CImg<T> img, float umbral = 1.0) {
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 template<class T>
-CImg<T> filtrar_hough_theta( CImg<T> hough,
-                       double u_theta,
-                       double tol_theta) {
+CImg<T> filtrar_hough_theta(CImg<T> hough, double u_theta, double tol_theta) {
 	/**
 	 * Filtra la matriz de hough para valores de theta=tita
 	 * igual al especificado (mas/menos una tolerancia).
 	 * es decir: Deja solo lineas con un angulo de inclinacion
 	 * igual al especificado mas/menos una tolerancia
 	 * El angulo debe estar -90 y 90
-	*/
-	u_theta=(u_theta*M_PI)/180.0;
-    int M = hough.width(),
-        N = hough.height();
-    double theta, step_theta;
+	 */
+	u_theta = (u_theta * M_PI) / 180.0;
+	int M = hough.width(), N = hough.height();
+	double theta, step_theta;
 
-    step_theta = M_PI / (M - 1); //paso en eje theta (M_PI=pi) (theta=[-90,90]) */
+	step_theta = M_PI / (M - 1); //paso en eje theta (M_PI=pi) (theta=[-90,90]) */
 
-    cimg_forXY(hough,t,r) {
-        theta = t * step_theta - M_PI / 2;
-        if ( sqrt( pow(theta-u_theta,2) ) <= tol_theta ) {
-            /* printf("if %f <= %f   => %f   tomo: %f \n", */
-            /*        sqrt( pow(theta-u_theta,2) ) , */
-            /*        tol_theta, */
-            /*        hough(t,r), */
-            /*        theta ); */
-        } else {
-            hough(t,r) = 0;
-            /* printf("if %f <= %f   => %f   tomo: %f \n", */
-            /*        sqrt( pow(theta-u_theta,2) ) , */
-            /*        tol_theta, */
-            /*        hough(t,r), */
-            /*        theta ); */
-        }
-    }
-    return hough;
+	cimg_forXY(hough,t,r)
+		{
+			theta = t * step_theta - M_PI / 2;
+			if (sqrt(pow(theta - u_theta, 2)) <= tol_theta) {
+				/* printf("if %f <= %f   => %f   tomo: %f \n", */
+				/*        sqrt( pow(theta-u_theta,2) ) , */
+				/*        tol_theta, */
+				/*        hough(t,r), */
+				/*        theta ); */
+			} else {
+				hough(t, r) = 0;
+				/* printf("if %f <= %f   => %f   tomo: %f \n", */
+				/*        sqrt( pow(theta-u_theta,2) ) , */
+				/*        tol_theta, */
+				/*        hough(t,r), */
+				/*        theta ); */
+			}
+		}
+	return hough;
 }
 
-
 template<class T>
-CImg<T> filtrar_hough_rho( CImg<T> hough,
-                       double u_rho,
-                       double tol_rho) {
+CImg<T> filtrar_hough_rho(CImg<T> hough, double u_rho, double tol_rho) {
 	/**
 	 * Filtra la matriz de hough para valores de rho
 	 * igual al especificado (mas/menos una tolerancia).
 	 *
 	 * Es decir: Permite definir la posicion de la recta
 	 * en el plano x-y. mas/menos una tolerancia (no el largo!)
-	*/
-    int M = hough.width(),
-        N = hough.height();
-    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
-        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
-        rho;
+	 */
+	int M = hough.width(), N = hough.height();
+	double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))), step_rho = 2.
+			* max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+			rho;
 
-    cimg_forXY(hough,t,r) {
-        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
-        if ( sqrt( pow(rho-u_rho,2) ) <= tol_rho ) {
-            /* printf("if %f <= %f   => %f   tomo: %f \n", */
-            /*        sqrt( pow(rho-u_rho,2) ) , */
-            /*        tol_rho, */
-            /*        hough(t,r), */
-            /*        rho ); */
-        } else {
-            hough(t,r) = 0;
-            /* printf("if %f <= %f   => %f   tomo: %f \n", */
-            /*        sqrt( pow(rho-u_rho,2) ) , */
-            /*        tol_rho, */
-            /*        hough(t,r), */
-            /*        rho ); */
-        }
-    }
-    return hough;
+	cimg_forXY(hough,t,r)
+		{
+			rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+			if (sqrt(pow(rho - u_rho, 2)) <= tol_rho) {
+				/* printf("if %f <= %f   => %f   tomo: %f \n", */
+				/*        sqrt( pow(rho-u_rho,2) ) , */
+				/*        tol_rho, */
+				/*        hough(t,r), */
+				/*        rho ); */
+			} else {
+				hough(t, r) = 0;
+				/* printf("if %f <= %f   => %f   tomo: %f \n", */
+				/*        sqrt( pow(rho-u_rho,2) ) , */
+				/*        tol_rho, */
+				/*        hough(t,r), */
+				/*        rho ); */
+			}
+		}
+	return hough;
 }
 
-
 template<class T>
-CImg<T> filtrar_hough( CImg<T> hough,
-                       double u_rho,
-                       double u_theta,
-                       double tol_rho,
-                       double tol_theta) {
+CImg<T> filtrar_hough(CImg<T> hough, double u_rho, double u_theta,
+		double tol_rho, double tol_theta) {
 	/**
 	 * Filtra la matriz de hough para valores de rho y theta
 	 * igual al especificado (mas/menos una tolerancia).
@@ -765,58 +767,54 @@ CImg<T> filtrar_hough( CImg<T> hough,
 	 *
 	 * para combinaciones usar  funciones combinadas
 	 * (coomo lo hace esta)
-	*/
-	return filtrar_hough_rho( filtrar_hough_theta( hough, u_theta, tol_theta),
-                              u_rho, tol_rho );
+	 */
+	return filtrar_hough_rho(filtrar_hough_theta(hough, u_theta, tol_theta),
+			u_rho, tol_rho);
 }
 
-
 template<class T>
-CImg<T> filtrar_hough_rho_min( CImg<T> hough,
-                       double u_rho) {
+CImg<T> filtrar_hough_rho_min(CImg<T> hough, double u_rho) {
 	/**
 	 * Filtra la matriz de hough para valores de rho
 	 * mayores o iguales al especificado.
 	 * es decir: Toma solo las linas hubicadas de una determinada
 	 * posicion(umbral) en la imagen, en adelante
-	*/
-    int M = hough.width(),
-        N = hough.height();
-    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
-        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
-        rho;
+	 */
+	int M = hough.width(), N = hough.height();
+	double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))), step_rho = 2.
+			* max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+			rho;
 
-    cimg_forXY(hough,t,r) {
-        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
-        if ( abs(rho) >= u_rho ) {
-            hough(t,r) = 0;
-        }
-    }
-    return hough;
+	cimg_forXY(hough,t,r)
+		{
+			rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+			if (abs(rho) >= u_rho) {
+				hough(t, r) = 0;
+			}
+		}
+	return hough;
 }
 
-
 template<class T>
-CImg<T> filtrar_hough_rho_max( CImg<T> hough,
-                       double u_rho) {
+CImg<T> filtrar_hough_rho_max(CImg<T> hough, double u_rho) {
 	/**
 	 * Filtra la matriz de hough para valores de rho
 	 * menores o iguales al especificado.
 	 *
 	 * es decir: Toma solo las linas hubicadas de una determinada
 	 * posicion(umbral) en la imagen, hacia atrás. (hasta el umbral)
-	*/
-    int M = hough.width(),
-        N = hough.height();
-    double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))),
-        step_rho = 2. * max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
-        rho;
+	 */
+	int M = hough.width(), N = hough.height();
+	double max_rho = sqrt(float(pow(N, 2) + pow(M, 2))), step_rho = 2.
+			* max_rho / (N - 1), //paso en eje rho (rho=[-max_rho , max_rho])
+			rho;
 
-    cimg_forXY(hough,t,r) {
-        rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
-        if ( abs(rho) <= u_rho ) {
-            hough(t,r) = 0;
-        }
-    }
-    return hough;
+	cimg_forXY(hough,t,r)
+		{
+			rho = r * step_rho - max_rho; // mapea [0,N] en [-max_rho,max_rho]
+			if (abs(rho) <= u_rho) {
+				hough(t, r) = 0;
+			}
+		}
+	return hough;
 }

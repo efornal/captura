@@ -146,3 +146,27 @@ CImgList<T> magfase2realimag(const CImgList<T> &magfase) {
 	CImg<T> imag = magfase[1].get_sin().mul(magfase[0]);
 	return CImgList<T> (real, imag);;
 }
+
+template<class T>
+CImg<T> filtrar_M(const CImg<T>& imag, const CImg<T> &filtro,
+		bool filtro_esta_centrado = true) {
+	/**
+	 * imagen para filtrar genérica -- SOLO FILTRA UN CANAL!
+	 * @imag es la imagen en espacio
+	 * @filtro es el filtro en frecuencia
+	 */
+	short w = imag.width(), h = imag.height();
+	CImgList<T> fft;
+	unsigned x, y;
+	fft = realimag2magfase(imag.get_FFT());
+	CImg<T> fil = filtro;
+	if (filtro_esta_centrado)
+		fil.shift(w / 2, h / 2, 0, 0, 2);
+
+	cimg_forXY( filtro, x, y )
+		{
+			fft[0](x, y) *= fil(x, y);
+		}
+	fft = magfase2realimag(fft);
+	return fft.get_FFT(true)[0];
+}

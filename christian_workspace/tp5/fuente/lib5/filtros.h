@@ -8,6 +8,7 @@
  * */
 
 #include <CImg.h>
+#include "../lib5/lib5.h"
 #include "../../../tp4/fuente/lib4/CPDSI_functions.h"
 #include "../../../tp2/fuente/lib2/op_aritmeticos.h"
 #include "figuras.h"
@@ -195,14 +196,16 @@ CImg<T> aplicar_PB_ideal(CImg<T> imagen, float frec_corte = 10.0) {
 template<class T>
 CImg<T> aplicar_PB_Butter(CImg<T> imagen, CImg<T> &H, float frec_corte = 10.0,
 		float orden = 1.0) {
-	/*aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.
+	/* aplica un filtro pasa Bajos Butterwortch con frecuencia de corte: frec_corte y orden = orden.
 	 * Por defecto: frec_corte=10 y orden=1
 	 * Devuelve la imagen filtrada para ser mostrada.
 	 * devuelve por referencia H para poder plotear el filtro...
 	 */
 	H = get_PB_Butter<T> (imagen.width(), imagen.height(), frec_corte, orden);
 	CImg<T> Hf = H.get_shift(H.width() / 2.0, H.height() / 2.0, 0, 0, 2);
-	return filtrar<T> (imagen, Hf);
+	//return filtrar<T> (imagen, Hf);
+	return filtrar_M(imagen, H, true); //esta es la de M -> ojo si no anda comentarla y usar la otra de arriba
+
 }
 
 template<class T>
@@ -269,20 +272,6 @@ CImg<T> aplicar_PA_Gaussiano(CImg<T> imagen, CImg<T> &H, float varianza = 1.0) {
 
 //##########################################################################################
 
-
-//filtrado homomorfico: GRACIAS CHACO... :)
-template<class T>
-CImg<T> get_homomorfico(CImg<T> img, double wc = 1.0, double gl = 0.0,
-		double gh = 1.0, float orden = 1.0) {
-	/* retorna un filtro Homomorfico
-	 * Debe filtrarse con get_filtrado_homomorfico(filtro)
-	 * por defecto gh=1, gl=0 => pasaaltos normalizado
-	 * 1-) genero un PA con wc y orden dados
-	 * 2-) normalizo entre los valor gl y gh
-	 */
-	CImg<T> filtro = get_PA_Butter<T> (img.width(), img.height(), wc, orden);
-	return filtro.normalize(gl, gh);
-}
 template<class T>
 CImg<T> to_log(CImg<T> &img) {
 	/**
@@ -295,11 +284,36 @@ CImg<T> to_log(CImg<T> &img) {
 		}
 	return img;
 }
+
+template<class T, class U>
+U d2 ( T x, T y, U x0, U y0 ) {
+	/**
+	 * distancia euclídea
+	 */
+  return sqrt( pow((U)x-x0,2.0)+pow((U)y-y0,2.0) );
+}
+
 template<class T>
-CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
-	/* Retorna la imagen con filtrado Homomorfico con el filtro pasado
-	 * El filtro debe estar diseñado centrado,
-	 * y ser de tipo homomorfico: get_homomorfico(...)
+CImg<T> get_homomorfico(short w, short h, T gl, T gh, T D0, T c = (T) 2.0,
+		bool centrar = true) {
+	//devuelve un filtro del tipo homomorfico...
+	CImg<T> H(w, h, 1, 1, (T) 0);
+	unsigned x, y;
+	T cx = w / 2.0, cy = h / 2.0;
+	cimg_forXY( H, x, y )
+		{
+			H(x, y) = (gh - gl) * (1 - exp(-c * (d2(x, y, cx, cy)
+					/ pow(D0, 2.0)))) + gl;
+		}
+	if (!centrar)
+		return H.shift(w / 2, h / 2, 0, 0, 2);
+	return H;
+}
+
+template<class T>
+CImg<T> aplicar_filtro_homomorfico(const CImg<T> &imag, T gl, T gh, T D0, T c =
+		(T) 2.0) {
+	/* Retorna la imagen con filtrado Homomorfico
 	 * pasos: f(x,y) -> log{} -> F{} -> H*F(u,v) -> Finv.{} -> exp{} -> g(x,y)
 	 1_    ____gh   1_ _---gh   1_    _-    gh
 	 *    |  _-          |_-         |  _-
@@ -316,53 +330,35 @@ CImg<T> aplicar_filtrado_homomorfico(CImg<T> img, CImg<T> filtro) {
 	 *   a <gh => menos contraste ( aumenta menos las altas frec)
 	 */
 
-	CImgList<T> tdf = to_log<double> (img).get_FFT();
-	filtro.shift(filtro.width() / 2, filtro.height() / 2, 0, 0, 2);
+	short w = imag.width(), h = imag.height();
+	CImgList<T> fft = (imag.get_channel(0) + 1.0).get_log().get_FFT();
+	CImg<T> filtro = get_homomorfico(w, h, gl, gh, D0, c, false);
+	fft = realimag2magfase(fft);
 	cimg_forXY( filtro, x, y )
 		{
-			tdf[0](x, y) *= filtro(x, y);
-			tdf[1](x, y) *= filtro(x, y);
+			fft[0](x, y) *= filtro(x, y);
 		}
-	return tdf.get_FFT(true)[0].exp();
-}
 
+	fft = magfase2realimag(fft);
+
+	return fft.get_FFT(true)[0].exp();
+}
 /*################## FILTRADO ALTA POTENCIA #############################*/
-template<class T>
-CImg<T> aplicar_PA_alta_potencia(CImg<T> imagen, float varianza = 1.0, float A =
-		2.0) {
-	//fixme: esto no funciona!ver
-	/*aplica un filtro de alta potencia usando una mascara gaussiana
-	 * (A-1)+gaussiano(varianza)... USAR TIPO DE DATOS float para que no explote
-	 * */
-	CImg<T> h_pa = gaussian_mask(imagen.width(), varianza); //obtengo el filtro pasa altos gaussiano espacial
-	CImgList<T> H_PA = h_pa.get_FFT(); //obtengo el filtro en frecuencia
-	CImgList<T> H_AP(H_PA[0], H_PA[1]); // filtro de alta pontencia frecuencial... falta meterlo lod el A-1
-	cimg_forXY(H_PA[0], x, y)
-		{
-			H_AP[0](x, y) = (A - 1.0) + H_PA[0](x, y); //parte real
-			H_AP[1](x, y) = (A - 1.0) + H_PA[1](x, y); //parte imaginaria
-		}
-	//ya tengo el filtro de alta potencia
-	return filtrar_complejo<T> (imagen, H_AP);
-}
-/*################## FILTRADO Enfasis de alta frecuencia #############################*/
 
 template<class T>
-CImg<T> aplicar_PA_enfasis_AF(CImg<T> imagen, float varianza = 1.0, float a =
-		0.0, float b = 1.0) {
-	/*aplica un filtro de alta potencia:
-	 * 			Heaf=a+b*HPA
-	 *  con varianza 1.0 del fitlro gaussiano pasa altos
-	 * a=0.0 por defecto y b=1.0*/
-	CImg<T> h_pa = gaussian_mask(imagen.width(), varianza); //obtengo el filtro pasa altos gaussiano espacial
-	//fixme: debo normalizarlo entre 0 y 1? aca?
-	CImgList<T> H_PA = h_pa.get_FFT(); //obtengo el filtro en frecuencia
-	CImgList<T> H_EAF(H_PA[0], H_PA[1]); // filtro de alta pontencia frecuencial... falta meterlo lod el A-1
-	cimg_forXY(H_PA[0], x, y)
-		{
-			H_EAF[0](x, y) = a + b * H_PA[0](x, y); //parte real
-			H_EAF[1](x, y) = a + b * H_PA[1](x, y); //parte imaginaria
-		}
-	//ya tengo el filtro de alta potencia
-	return filtrar_complejo<T> (imagen, H_EAF);
+CImg<T> aplicar_filtro_alta_potencia(const CImg<T> &filtro_pa, T A) {
+	/**
+	 * filtro alta potencia
+	 */
+	return CImg<T> (filtro_pa + (A - 1.0));
 }
+
+/*################## ENFASIS ALTA FRECUENCIA #############################*/
+template<class T>
+CImg<T> aplicar_filtro_eaf(const CImg<T> &filtro_pa, T a, T b) {
+	/**
+	 * filtro énfasis de alta frecuencia
+	 */
+	return CImg<T> (((filtro_pa * b) + a));
+}
+

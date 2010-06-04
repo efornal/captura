@@ -15,10 +15,14 @@ using namespace cimg_library;
 int main(int argc, char **argv) {
 	CImg<float> imagen("../../imagenes/tablero.png");
 
-	CImg<float> resultado3 = imagen.get_convolve(generar_mascara<float> (3));
-	CImg<float> resultado15 = imagen.get_convolve(generar_mascara<float> (15));
-	CImg<float> resultado30 = imagen.get_convolve(generar_mascara<float> (30));
-	CImg<float> resultado50 = imagen.get_convolve(generar_mascara<float> (50));
+	CImg<float> resultado3 = imagen.get_convolve(generar_mascara_promediadora<
+			float> (3));
+	CImg<float> resultado15 = imagen.get_convolve(generar_mascara_promediadora<
+			float> (15));
+	CImg<float> resultado30 = imagen.get_convolve(generar_mascara_promediadora<
+			float> (30));
+	CImg<float> resultado50 = imagen.get_convolve(generar_mascara_promediadora<
+			float> (50));
 	/*POSTA: filtro de promedidado -  al aumentar el tamanio de la mascara promedias mas valores y por tanto
 	 * vas haciendo cada vez menos notoria la diferencia entre pixeles vecinos y por
 	 * lo tanto resulta en una imagen mas disfuminada */

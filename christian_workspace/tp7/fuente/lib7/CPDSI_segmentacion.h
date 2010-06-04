@@ -148,7 +148,6 @@ CImg<double> hough_directa(CImg<double> img, double dtita = 1, double dro = 1,
 /// Transformada Hough inversa
 ///****************************************
 CImg<double> hough_inversa(CImg<double> img) {
-
 	const double blanco[1] = { 255.f };
 	CImg<double> iHoughI(img);
 	iHoughI.fill(0.0);
