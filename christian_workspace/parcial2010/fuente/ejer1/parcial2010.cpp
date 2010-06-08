@@ -25,9 +25,13 @@ using namespace cimg_library;
 
 int main(int argc, char **argv) {
 	const char *filename =
-			cimg_option("-f", "../../imagenes/imgstrain/blanco_5.jpg",
+			cimg_option("-f", "../../imagenes/imgstrain/tinto_3.jpg",
 					"ruta archivo imagen");
 	CImg<float> imagen_color(filename);
+	CImgDisplay disph;
+	//parte_vino_seg.get_RGBtoHSI().get_channel(0).get_histogram(360).display_graph(disph, 3);
+
+	cout << "es tinto: " << es_tinto(imagen_color) << endl;
 	CImg<float> imagen(filename);
 	imagen = imagen.channel(0);
 	CImgDisplay disp1(imagen, "imagen");
