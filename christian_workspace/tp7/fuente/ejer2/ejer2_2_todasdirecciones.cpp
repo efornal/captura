@@ -72,9 +72,9 @@ int main(int argc, char **argv) {
 	CImgDisplay disp(deteccion, "inversaHough(maximos)");
 	CImgDisplay d5(deteccion_final, "and entre imagen y bordes");
 
-	CImg<> deteccion_final_coloreada = colorea_rojo(deteccion);
+	//CImg<> deteccion_final_coloreada = colorea_rojo(deteccion);
 	CImgDisplay disppp(img);
-	deteccion_final_coloreada.display();
+	//deteccion_final_coloreada.display();
 
 	while (!disp.is_closed()) {
 		disp.wait();
