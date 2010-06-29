@@ -59,7 +59,7 @@ int main( int argc, char **argv ) {
     disp5.set_title("sal");
     disp6.set_title("pimienta");
     disp7.set_title("sal y pimienta");
-
+    img.display("original-ver valores de los grises");
     while ( (!disp.is_closed() &&  !disp.is_keyQ()) ) {
         disp.wait();
     }
