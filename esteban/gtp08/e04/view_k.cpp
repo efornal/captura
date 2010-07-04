@@ -3,6 +3,8 @@
  * que preserva es el primero, posicion coef(0,0) = coef. DC 
  * (el gris medio o promedio), por lo tanto el bloque completo tiene una
  * única tonalidad luego en la descompresion?
+ *
+ * variando k, EL MSE no me dice nada en cuanto a la calidad visual!!??
 */
 #include <CImg.h>
 #include <compresion.h>
@@ -31,10 +33,12 @@ int main(int argc, char** argv) {
     if ( disp.is_keyARROWDOWN() ){
       jpeg( img, sizeblock, --N ).display(disp2);
       printf("N = %d \n", N);
+      printf("ECM = %f \n", img.MSE( jpeg( img, sizeblock, N ) ));
     }
     if ( disp.is_keyARROWUP() ){
       jpeg( img, sizeblock, ++N ).display(disp2);
       printf("N = %d \n", N);
+      printf("ECM = %f \n", img.MSE( jpeg( img, sizeblock, N ) ));
     }
 
   }
