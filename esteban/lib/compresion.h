@@ -108,9 +108,10 @@ CImg<TT> jpeg( CImg<TT> img, int sizeblock=8, int N=24 ) {
   for (int i = 0; i < sizeblock * sizeblock; i++) {
     for (int j = 0; j < nblocks; j++)
       fila(0, j) = bloques(j, i);
-    CImg<> estad(fila.stats());
+    //CImg<> estad(fila.stats());
     variance[i].index = i;
-    variance[i].var = estad(3, 0);
+    //variance[i].var = estad(3, 0); // no funciona para tamaños de bloque !=
+    variance[i].var = fila.variance(); // FIXME: es correcta esta forma ?
   }
 
   sort(variance.begin(), variance.end(), compare_variances);
