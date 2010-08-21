@@ -34,17 +34,24 @@ void limpiar_imagen(CImg<T> &imagen, float valor = 50.0) {
 
 int main(int argc, char **argv) {
 	const char *filename =
-			cimg_option("-f", "../../imagenes/huevos/orig22.bmp",
+			cimg_option("-f", "../../imagenes/huevos/orig30.bmp",
 					"ruta archivo imagen");
 	const float umbral_limpieza =
 			cimg_option("-umbral", 100.0, "umbral para limpieza de imagen");
-
+	CImg<float> vector(4, 1, 1);
+	vector(0, 0, 0) = 18.0;
+	vector(1, 0, 0) = 255.0;
+	vector(2, 0, 0) = 255.0;
+	vector(3, 0, 0) = 18.0;
 	CImg<float> imagen(filename);
 	CImg<float> imagen_tratada(filename);
 	imagen_tratada.channel(0); // obtengo un solo canal.
+	//imagen_tratada.display();
 	imagen_tratada.normalize(0, 255.0); //normalizo
 	//imagen_tratada.display();
 	limpiar_imagen<float> (imagen_tratada, umbral_limpieza); //limpio el ruido
+	imagen_tratada.convolve(vector);
+	imagen_tratada.normalize(0.0,255.0);
 	//imagen_tratada.display();
 	CImg_3x3(I, float);
 	float maximo = 0.0;
@@ -61,10 +68,11 @@ int main(int argc, char **argv) {
 					Inp), Inc), Inn);//saco el maximo de los vecinos
 			if (Icc > maximo) {
 				cant_huevos++;
-				imagen_tratada(x,y) = 255.0;
+				imagen_tratada(x, y) = 255.0;
 			}
 		}
-	cout << "*****************************" <<endl<<"Cantidad de huevos: "<< cant_huevos << endl;
+	cout << "*****************************" << endl << "Cantidad de huevos: "
+			<< cant_huevos << endl;
 	CImgDisplay disp1;
 	while (!disp1.is_closed()) {
 		disp1.wait();
